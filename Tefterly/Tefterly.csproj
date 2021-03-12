@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Tefterly</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ModernWpfUI" Version="0.9.3" />
+    <PackageReference Include="Prism.Unity" Version="8.0.0.1909" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\Tefterly.Modules.Notebook\Tefterly.Modules.Notebook.csproj" />
+    <ProjectReference Include="..\Modules\Tefterly.Modules.Notes\Tefterly.Modules.Notes.csproj" />
+    <ProjectReference Include="..\Modules\Tefterly.Modules.Note\Tefterly.Modules.Note.csproj" />
+    <ProjectReference Include="..\Tefterly.Core\Tefterly.Core.csproj" />
+  </ItemGroup>
+</Project>

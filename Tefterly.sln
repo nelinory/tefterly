@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly", "Tefterly\Tefterly.csproj", "{51C5A6AE-7DEF-465C-B377-A0F9178D55F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{E00A643E-ED62-4E0E-A291-CD23FB7FE7B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly.Modules.Notebook", "Modules\Tefterly.Modules.Notebook\Tefterly.Modules.Notebook.csproj", "{2F26CA00-1205-4C91-ABDC-6823BB0C765B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly.Modules.Notes", "Modules\Tefterly.Modules.Notes\Tefterly.Modules.Notes.csproj", "{C2386FE0-1F20-4550-ABC8-3B45D65D651C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly.Modules.Note", "Modules\Tefterly.Modules.Note\Tefterly.Modules.Note.csproj", "{DE1C9BB2-44E2-44D7-A454-1605E3B6C7B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly.Core", "Tefterly.Core\Tefterly.Core.csproj", "{3746CC8B-A086-4C4F-999E-C2AE5251D2E4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CFC5A1A1-E959-4632-93B6-12AC5AC061F2}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51C5A6AE-7DEF-465C-B377-A0F9178D55F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51C5A6AE-7DEF-465C-B377-A0F9178D55F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51C5A6AE-7DEF-465C-B377-A0F9178D55F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51C5A6AE-7DEF-465C-B377-A0F9178D55F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F26CA00-1205-4C91-ABDC-6823BB0C765B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F26CA00-1205-4C91-ABDC-6823BB0C765B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F26CA00-1205-4C91-ABDC-6823BB0C765B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F26CA00-1205-4C91-ABDC-6823BB0C765B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2386FE0-1F20-4550-ABC8-3B45D65D651C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2386FE0-1F20-4550-ABC8-3B45D65D651C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2386FE0-1F20-4550-ABC8-3B45D65D651C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2386FE0-1F20-4550-ABC8-3B45D65D651C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE1C9BB2-44E2-44D7-A454-1605E3B6C7B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE1C9BB2-44E2-44D7-A454-1605E3B6C7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE1C9BB2-44E2-44D7-A454-1605E3B6C7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE1C9BB2-44E2-44D7-A454-1605E3B6C7B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3746CC8B-A086-4C4F-999E-C2AE5251D2E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3746CC8B-A086-4C4F-999E-C2AE5251D2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3746CC8B-A086-4C4F-999E-C2AE5251D2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3746CC8B-A086-4C4F-999E-C2AE5251D2E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2F26CA00-1205-4C91-ABDC-6823BB0C765B} = {E00A643E-ED62-4E0E-A291-CD23FB7FE7B9}
+		{C2386FE0-1F20-4550-ABC8-3B45D65D651C} = {E00A643E-ED62-4E0E-A291-CD23FB7FE7B9}
+		{DE1C9BB2-44E2-44D7-A454-1605E3B6C7B8} = {E00A643E-ED62-4E0E-A291-CD23FB7FE7B9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {054F8412-21EE-4DBB-B639-A524259177D3}
+	EndGlobalSection
+EndGlobal

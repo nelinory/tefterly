@@ -1,0 +1,35 @@
+﻿<Window x:Class="Tefterly.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:core="clr-namespace:Tefterly.Core;assembly=Tefterly.Core"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True"  
+        ui:TitleBar.ExtendViewIntoTitleBar="True"
+        ui:ThemeManager.IsThemeAware="True"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        Title="{Binding Title}"
+        Width="1000"
+        Height="700"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip">
+    <Grid>
+        <!-- Main layout -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="270" MinWidth="200" MaxWidth="300"/>
+            <ColumnDefinition Width="*" MinWidth="360"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="gridNotebooks" Grid.Column="0">
+            <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.NotebookRegion}"/>
+        </Grid>
+        <Grid x:Name="gridNotes" Grid.Column="1">
+            <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.NotesRegion}"/>
+        </Grid>
+        <GridSplitter BorderThickness="1,1,0,1" BorderBrush="{DynamicResource TFTR_BorderBrush}" Grid.Column="1" Width="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+        <Grid x:Name="gridNote" Grid.Column="2">
+            <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.NoteRegion}"/>
+        </Grid>
+    </Grid>
+</Window>
