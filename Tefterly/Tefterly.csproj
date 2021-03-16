@@ -5,6 +5,9 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>Tefterly</AssemblyName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ModernWpfUI" Version="0.9.3" />
     <PackageReference Include="Prism.Unity" Version="8.0.0.1909" />
@@ -15,4 +18,7 @@
     <ProjectReference Include="..\Modules\Tefterly.Modules.Note\Tefterly.Modules.Note.csproj" />
     <ProjectReference Include="..\Tefterly.Core\Tefterly.Core.csproj" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="rd /s /q $(OutDir)cs&#xD;&#xA;rd /s /q $(OutDir)de&#xD;&#xA;rd /s /q $(OutDir)es&#xD;&#xA;rd /s /q $(OutDir)fa&#xD;&#xA;rd /s /q $(OutDir)fr&#xD;&#xA;rd /s /q $(OutDir)it&#xD;&#xA;rd /s /q $(OutDir)it&#xD;&#xA;rd /s /q $(OutDir)ja&#xD;&#xA;rd /s /q $(OutDir)ko&#xD;&#xA;rd /s /q $(OutDir)pl&#xD;&#xA;rd /s /q $(OutDir)pt-BR&#xD;&#xA;rd /s /q $(OutDir)ru&#xD;&#xA;rd /s /q $(OutDir)tr&#xD;&#xA;rd /s /q $(OutDir)zh-Hans&#xD;&#xA;rd /s /q $(OutDir)zh-Hant" />
+  </Target>
 </Project>
