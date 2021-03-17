@@ -32,7 +32,7 @@
                                 <Condition Property="IsMouseOver" Value="false"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="Foreground" Value="{DynamicResource SystemControlBackgroundChromeWhiteBrush}"/>
-                            <Setter Property="Opacity" Value="0.5"/>
+                            <Setter Property="Opacity" Value="0.7"/>
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -41,12 +41,10 @@
                             </MultiTrigger.Conditions>
                             <Setter TargetName="NotebookItemBorder" Property="Background" Value="{DynamicResource SystemControlBackgroundAccentBrush}"/>
                             <Setter Property="Foreground" Value="{DynamicResource SystemControlBackgroundChromeWhiteBrush}"/>
-                            <Setter Property="Opacity" Value="1"/>
                         </MultiTrigger>
                         <Trigger Property="IsSelected" Value="true">
                             <Setter TargetName="SelectionIndicator" Property="Opacity" Value="1.0" />
                             <Setter Property="Foreground" Value="{DynamicResource SystemControlBackgroundChromeWhiteBrush}"/>
-                            <Setter Property="Opacity" Value="1"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -16,7 +16,7 @@
     <Grid>
         <!-- Main layout -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="270" MinWidth="200" MaxWidth="300"/>
             <ColumnDefinition Width="*" MinWidth="360"/>
         </Grid.ColumnDefinitions>

@@ -25,7 +25,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
             NotebookList = new ObservableCollection<Core.Models.Notebook>();
             _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Notes", IconFont = "\xE8F1", TotalItems = 3 });
             _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Starred", IconFont = "\xE734", TotalItems = 5 });
-            _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Archived", IconFont = "\xE96A", TotalItems = 2 });
+            _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Archived", IconFont = "\xF12B", TotalItems = 2 });
             _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Deleted", IconFont = "\xE74D", TotalItems = 1 });
         }
     }
