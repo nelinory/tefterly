@@ -3,14 +3,14 @@
 
     <Style x:Key="ChromelessButton" TargetType="{x:Type ButtonBase}">
         <Setter Property="Background" Value="{DynamicResource SystemControlTransparentBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource SystemControlBackgroundChromeWhiteBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
-                    <Border
+                    <Grid
                         x:Name="Background"
                         Background="{TemplateBinding Background}"
                         SnapsToDevicePixels="True">
@@ -21,21 +21,20 @@
                               Opacity="0.75"
                               RecognizesAccessKey="True"
                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Background" Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
-                            <Setter TargetName="PART_ContentPresenter" Property="TextElement.Foreground" Value="{DynamicResource SystemControlForegroundChromeWhiteBrush}" />
+                            <Setter TargetName="PART_ContentPresenter" Property="TextElement.Foreground" Value="{DynamicResource SystemControlForegroundAccentBrush}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="1" />
                             <Setter Property="Cursor" Value="Hand" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="False">
-                            <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="0.5" />
+                            <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="0.6" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="#ADADAD" />
+                            <Setter Property="Foreground" Value="{DynamicResource SystemControlDisabledBaseHighBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

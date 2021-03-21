@@ -9,8 +9,9 @@
         ui:ThemeManager.IsThemeAware="True"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title}"
-        Width="1000"
-        Height="700"
+        Width="1100"
+        Height="750"
+        BorderBrush="{DynamicResource SystemControlForegroundAccentBrush}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResizeWithGrip">
     <Grid>
@@ -27,7 +28,7 @@
         <Grid x:Name="gridNotes" Grid.Column="1">
             <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.NotesRegion}"/>
         </Grid>
-        <GridSplitter BorderThickness="1,1,0,1" BorderBrush="{DynamicResource TFTR_BorderBrush}" Grid.Column="1" Width="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+        <GridSplitter BorderThickness="1,1,0,1" BorderBrush="{DynamicResource SystemControlForegroundAccentBrush}" Grid.Column="1" Width="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
         <Grid x:Name="gridNote" Grid.Column="2">
             <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.NoteRegion}"/>
         </Grid>
