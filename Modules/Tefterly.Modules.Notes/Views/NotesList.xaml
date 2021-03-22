@@ -3,12 +3,47 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://schemas.modernwpf.com/2019"             
+             xmlns:converters="clr-namespace:Tefterly.Core.Converters;assembly=Tefterly.Core"
              prism:ViewModelLocator.AutoWireViewModel="True">
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:DateTimeToFormattedStringConverter x:Key="DateTimeToFormattedStringConverter" />
+
+            <DataTemplate x:Key="NoteListboxDataTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="18"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="16"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Path=Title, Mode=TwoWay}" 
+                               Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontWeight="SemiBold"
+                               TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="{Binding Path=Content, Mode=TwoWay}" FontSize="13" Margin="0,3,0,0"
+                               Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" TextTrimming="WordEllipsis"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"
+                                HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2">
+                        <ContentControl Visibility="{Binding Path=IsStarred, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
+                                        IsHitTestVisible="False" Margin="0,0,9,0">
+                            <ui:FontIcon Glyph="&#xE735;" FontSize="13"/>
+                        </ContentControl>
+                        <Rectangle Width="11" Height="11" Margin="0,1,0,0"
+                                   Fill="Transparent"
+                                   IsHitTestVisible="False"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Path=UpdatedDateTime, Converter={StaticResource DateTimeToFormattedStringConverter}, Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="2" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{DynamicResource SystemControlDisabledBaseHighBrush}" Opacity="0.8"/>
+                </Grid>
+            </DataTemplate>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
+                <ResourceDictionary Source="/Tefterly.Modules.Notes;component/Styles/NotesListbox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -16,11 +51,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="16"/>
-            <RowDefinition Height="37"/>
-            <RowDefinition Height="1"/>
+            <RowDefinition Height="44"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <!-- Content Panels -->
         <Rectangle Fill="{DynamicResource NavigationViewDefaultPaneBackground}" IsHitTestVisible="False" Grid.Row="0" Grid.RowSpan="4"/>
 
@@ -30,10 +64,31 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="32"/>
             </Grid.ColumnDefinitions>
-            <ui:AutoSuggestBox Grid.Column="0" PlaceholderText="Search" QueryIcon="Find" Margin="7,0,3,0" />
-            <Button Grid.Column="1" ToolTip="Add a note" Padding="0,1,5,7" Style="{DynamicResource ChromelessButton}">
+            <ui:AutoSuggestBox Grid.Column="0" PlaceholderText="Search" QueryIcon="Find" Margin="7,0,1,0" />
+            <Button Grid.Column="1" ToolTip="Add a note" Margin="0,0,3,12" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xF164;" />
             </Button>
         </Grid>
+
+        <!-- Notes list -->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="3">
+            <ListBox
+                    ItemsSource="{Binding Path=NotesList}"                
+                    ItemContainerStyle="{StaticResource NoteListboxStyle}"
+                    ItemTemplate="{StaticResource NoteListboxDataTemplate}"
+                    SelectedItem="{Binding SelectedNote}" 
+                    SelectedIndex="1"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Margin="0"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                    VirtualizingStackPanel.IsVirtualizing="True"
+                    VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                    VirtualizingStackPanel.VirtualizationMode="Recycling">
+            </ListBox>
+        </ScrollViewer>
+
     </Grid>
+
 </UserControl>

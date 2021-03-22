@@ -11,6 +11,8 @@
         Title="{Binding Title}"
         Width="1100"
         Height="750"
+        MinWidth="900"
+        MinHeight="500"
         BorderBrush="{DynamicResource SystemControlForegroundAccentBrush}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResizeWithGrip">
@@ -28,7 +30,7 @@
         <Grid x:Name="gridNotes" Grid.Column="1">
             <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.NotesRegion}"/>
         </Grid>
-        <GridSplitter BorderThickness="1,1,0,1" BorderBrush="{DynamicResource SystemControlForegroundAccentBrush}" Grid.Column="1" Width="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+        <GridSplitter BorderThickness="1,1,0,1" BorderBrush="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" Grid.Column="1" Width="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
         <Grid x:Name="gridNote" Grid.Column="2">
             <ContentControl prism:RegionManager.RegionName="{x:Static core:RegionNames.NoteRegion}"/>
         </Grid>

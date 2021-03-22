@@ -9,8 +9,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <DataTemplate x:Key="NotebookListboxDataTemplate">
-                <!-- Background="Transparent" makes the grid hit testable so mouse-over event works fine -->
-                <DockPanel Background="Transparent" Cursor="Hand">
+                <DockPanel>
                     <ui:FontIcon Glyph="{Binding Path=IconFont}" VerticalAlignment="Center" Margin="12,0,0,0" />
                     <TextBlock Text="{Binding Path=Title}" VerticalAlignment="Center" Margin="8,0,0,0" />
                     <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -61,7 +60,7 @@
                 Grid.Row="2"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Left"
-                Margin="5,0,0,0"
+                Margin="7,0,0,0"
                 Style="{DynamicResource ChromelessButton}"         
                 ToolTip="Toggle Theme">
             <ui:FontIcon Glyph="&#xE771;" Margin="0,-2,0,0" />
@@ -69,7 +68,7 @@
         <Button Grid.Row="2"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
-                Margin="0,0,5,0"
+                Margin="0,0,7,0"
                 Style="{DynamicResource ChromelessButton}"         
                 ToolTip="Settings">
             <ui:SymbolIcon Symbol="Setting"/>
