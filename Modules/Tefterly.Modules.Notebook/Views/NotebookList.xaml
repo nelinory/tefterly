@@ -45,7 +45,7 @@
                     ItemTemplate="{StaticResource NotebookListboxDataTemplate}"                
                     SelectedItem="{Binding Path=SelectedNotebook}" 
                     SelectedIndex="0"
-                    Background="Transparent"
+                    Background="{DynamicResource SystemControlTransparentBrush}"
                     BorderThickness="0"
                     Margin="0"
                     ScrollViewer.VerticalScrollBarVisibility="Auto" 

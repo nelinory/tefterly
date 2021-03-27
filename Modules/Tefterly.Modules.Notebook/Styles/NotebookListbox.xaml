@@ -10,7 +10,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <StackPanel Background="Transparent">
+                    <StackPanel Background="{DynamicResource SystemControlTransparentBrush}">
                         <Border Name="NotebookItemBorder" Padding="2" SnapsToDevicePixels="true">
                             <Grid Margin="{TemplateBinding BorderThickness}">
                                 <Grid HorizontalAlignment="Left" VerticalAlignment="Center">

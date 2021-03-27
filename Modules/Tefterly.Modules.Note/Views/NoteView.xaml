@@ -1,11 +1,159 @@
 ﻿<UserControl x:Class="Tefterly.Modules.Note.Views.NoteView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource DataGridTextBoxStyle}">
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+            <Style TargetType="{x:Type RichTextBox}" BasedOn="{StaticResource DefaultRichTextBoxStyle}">
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
-        <TextBlock Text="{Binding Message}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Title edit box -->
+            <TextBox x:Name="txtTitle"
+                 Grid.Column="0"
+                 FontSize="20"
+                 Margin="12,0,12,0"
+                 Padding="5,0,5,0"
+                 TextWrapping="NoWrap"
+                 ToolTip="Click here to change the title"
+                 Foreground="{DynamicResource SystemControlHighlightListAccentVeryHighBrush}"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Bottom"
+                 Text="Test Note #2"
+                 SpellCheck.IsEnabled="True"
+                 ui:TextBoxHelper.IsDeleteButtonVisible="False"                 
+                 ui:ControlHelper.PlaceholderText="Note Title" />
+
+            <!-- Note text format command bar -->
+            <Button ToolTip="Note text format"
+                    Grid.Column="1"
+                    Style="{DynamicResource ChromelessButton}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,12,0">
+                <ui:FontIcon Glyph="&#xEE56;"/>
+                <ui:FlyoutService.Flyout>
+                    <ui:MenuFlyout Placement="LeftEdgeAlignedTop">
+                        <!-- Font styles -->
+                        <MenuItem Header="Bold" InputGestureText="Ctrl+B">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE8DD;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Italic" InputGestureText="Ctrl+I">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE8DB;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Underline" InputGestureText="Ctrl+U">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE8DC;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Strikethrough" InputGestureText="Ctrl+S">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xEDE0;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Highlight" InputGestureText="Ctrl+H">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE7E6;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <!-- Paragraph styles -->
+                        <MenuItem Header="Left" InputGestureText="Ctrl+L">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE8E4;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Center" InputGestureText="Ctrl+E">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE8E3;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Right" InputGestureText="Ctrl+R">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE8E2;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Justify" InputGestureText="Ctrl+J">
+                            <MenuItem.Icon>
+                                <ui:PathIcon Data="F1 M 0 1 L 20 1 L 20 2 L 0 2 Z M 0 4.50 L 20 4.50 L 20 5.50 L 0 5.50 Z M 0 8 L 20 8 L 20 9 L 0 9 Z M 0 11.50 L 20 11.50 L 20 12.50 L 0 12.50 Z M 0 15 L 20 15 L 20 16 L 0 16 Z" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Increase Indent" InputGestureText="Tab">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE291;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Decrease Indent" InputGestureText="Shift+Tab">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE290;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="List" InputGestureText="Ctrl+Shift+L">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE8FD;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Ordered List" InputGestureText="Ctrl+Shift+N">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE9D5;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ui:MenuFlyout>
+                </ui:FlyoutService.Flyout>
+            </Button>
+        </Grid>
+
+        <!-- Main note richtextbox -->
+        <RichTextBox
+                x:Name="rtbRichTextBox"
+                Grid.Row="1"
+                Margin="12,0,12,0"
+                Padding="5,5,5,0"            
+                AcceptsTab="True"
+                IsInactiveSelectionHighlightEnabled="True"
+                ui:ControlHelper.PlaceholderText="Note Text" />
+
+        <!-- Note actions -->
+        <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Spacing="5" Margin="0,0,15,0">
+            <Button ToolTip="Remove star from note" Style="{DynamicResource ChromelessButton}">
+                <ui:FontIcon Glyph="&#xE8D9;" />
+            </Button>
+            <Button ToolTip="Archive note" Style="{DynamicResource ChromelessButton}">
+                <ui:FontIcon Glyph="&#xF12B;" />
+            </Button>
+            <Button ToolTip="Delete note" Style="{DynamicResource ChromelessButton}">
+                <ui:FontIcon Glyph="&#xE74D;" />
+            </Button>
+        </ui:SimpleStackPanel>
     </Grid>
+
 </UserControl>

@@ -34,7 +34,7 @@
                             <ui:FontIcon Glyph="&#xE735;" FontSize="13"/>
                         </ContentControl>
                         <Rectangle Width="11" Height="11" Margin="0,1,0,0"
-                                   Fill="Transparent"
+                                   Fill="{DynamicResource SystemControlTransparentBrush}"
                                    IsHitTestVisible="False"/>
                     </StackPanel>
                     <TextBlock Text="{Binding Path=UpdatedDateTime, Converter={StaticResource DateTimeToFormattedStringConverter}, Mode=TwoWay}"
@@ -50,8 +50,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="16"/>
-            <RowDefinition Height="44"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="1"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -59,17 +59,19 @@
         <Rectangle Fill="{DynamicResource NavigationViewDefaultPaneBackground}" IsHitTestVisible="False" Grid.Row="0" Grid.RowSpan="4"/>
 
         <!-- Search panel -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="0" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="32"/>
             </Grid.ColumnDefinitions>
-            <ui:AutoSuggestBox Grid.Column="0" PlaceholderText="Search" QueryIcon="Find" Margin="7,0,1,0" />
-            <Button Grid.Column="1" ToolTip="Add a note" Margin="0,0,3,12" Style="{DynamicResource ChromelessButton}">
-                <ui:FontIcon Glyph="&#xF164;" />
+            <ui:AutoSuggestBox Grid.Column="0" PlaceholderText="Search" QueryIcon="Find" Margin="7,2,1,0" />
+            <Button Grid.Column="1" ToolTip="Add a note" Style="{DynamicResource ChromelessButton}">
+                <ui:FontIcon Glyph="&#xF164;" FontSize="24" />
             </Button>
         </Grid>
 
+        <Rectangle Fill="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" IsHitTestVisible="False" Grid.Row="1" />        
+        
         <!-- Notes list -->
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="3">
             <ListBox
@@ -78,7 +80,7 @@
                     ItemTemplate="{StaticResource NoteListboxDataTemplate}"
                     SelectedItem="{Binding SelectedNote}" 
                     SelectedIndex="1"
-                    Background="Transparent"
+                    Background="{DynamicResource SystemControlTransparentBrush}"
                     BorderThickness="0"
                     Margin="0"
                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
