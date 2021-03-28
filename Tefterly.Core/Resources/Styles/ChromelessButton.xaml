@@ -34,7 +34,8 @@
                             <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="0.7" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource SystemControlDisabledBaseHighBrush}" />
+                            <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="0.3" />
+                            <!--<Setter Property="Foreground" Value="{DynamicResource SystemControlDisabledBaseHighBrush}" />-->
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
+                <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/Scrollbar.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource DataGridTextBoxStyle}">
                 <Setter Property="BorderThickness" Value="0" />
@@ -23,18 +24,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            
-            <!-- Title edit box -->
-            <TextBox x:Name="txtTitle"
-                 Grid.Column="0"
+        <!-- Title edit box -->
+        <TextBox x:Name="txtTitle"
+                 Grid.Row="0"
                  FontSize="20"
                  Margin="12,0,12,0"
                  Padding="5,0,5,0"
@@ -45,19 +40,29 @@
                  VerticalAlignment="Bottom"
                  Text="Test Note #2"
                  SpellCheck.IsEnabled="True"
+                 ui:ScrollViewerHelper.AutoHideScrollBars="False"
                  ui:TextBoxHelper.IsDeleteButtonVisible="False"                 
                  ui:ControlHelper.PlaceholderText="Note Title" />
 
+        <!-- Main note richtextbox -->
+        <ui:ScrollViewerEx Grid.Row="1">
+            <RichTextBox
+                    x:Name="rtbRichTextBox"
+                    Margin="12,0,12,0"
+                    Padding="5,5,5,0"            
+                    AcceptsTab="True"
+                    IsInactiveSelectionHighlightEnabled="True"
+                    ui:ControlHelper.PlaceholderText="Note Text" />
+        </ui:ScrollViewerEx>
+        
+        <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="3" Spacing="5" Margin="0,0,15,0">
+            
             <!-- Note text format command bar -->
-            <Button ToolTip="Note text format"
-                    Grid.Column="1"
-                    Style="{DynamicResource ChromelessButton}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Margin="0,0,12,0">
+            <Button ToolTip="Font styles"
+                    Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xEE56;"/>
                 <ui:FlyoutService.Flyout>
-                    <ui:MenuFlyout Placement="LeftEdgeAlignedTop">
+                    <ui:MenuFlyout Placement="Top">
                         <!-- Font styles -->
                         <MenuItem Header="Bold" InputGestureText="Ctrl+B">
                             <MenuItem.Icon>
@@ -84,7 +89,14 @@
                                 <ui:FontIcon Glyph="&#xE7E6;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <Separator />
+                     </ui:MenuFlyout>
+                </ui:FlyoutService.Flyout>
+            </Button>
+
+            <Button ToolTip="Paragraph styles"
+                    Style="{DynamicResource ChromelessButton}">
+                <ui:FlyoutService.Flyout>
+                    <ui:MenuFlyout Placement="Top">
                         <!-- Paragraph styles -->
                         <MenuItem Header="Left" InputGestureText="Ctrl+L">
                             <MenuItem.Icon>
@@ -128,28 +140,31 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </ui:MenuFlyout>
-                </ui:FlyoutService.Flyout>
+                </ui:FlyoutService.Flyout>                
+                <ui:FontIcon Glyph="&#xE7BC;"/>
             </Button>
-        </Grid>
+            
+            <ui:AppBarSeparator Margin="-12,0,-9,0" />
 
-        <!-- Main note richtextbox -->
-        <RichTextBox
-                x:Name="rtbRichTextBox"
-                Grid.Row="1"
-                Margin="12,0,12,0"
-                Padding="5,5,5,0"            
-                AcceptsTab="True"
-                IsInactiveSelectionHighlightEnabled="True"
-                ui:ControlHelper.PlaceholderText="Note Text" />
-
-        <!-- Note actions -->
-        <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Spacing="5" Margin="0,0,15,0">
-            <Button ToolTip="Remove star from note" Style="{DynamicResource ChromelessButton}">
+            <!-- Note actions -->
+            <Button ToolTip="Set Color" Style="{DynamicResource ChromelessButton}" IsEnabled="False">
+                <ui:FontIcon Glyph="&#xE790;" />
+            </Button>
+            <Button ToolTip="Remove from starred" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xE8D9;" />
+            </Button>
+            <Button ToolTip="Copy to" Style="{DynamicResource ChromelessButton}" IsEnabled="False">
+                <ui:FontIcon Glyph="&#xF413;" />
+            </Button>
+            <Button ToolTip="Move to" Style="{DynamicResource ChromelessButton}" IsEnabled="False">
+                <ui:FontIcon Glyph="&#xE19C;" />
             </Button>
             <Button ToolTip="Archive note" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xF12B;" />
             </Button>
+            
+            <ui:AppBarSeparator Margin="-12,0,-9,0" />            
+            
             <Button ToolTip="Delete note" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xE74D;" />
             </Button>
