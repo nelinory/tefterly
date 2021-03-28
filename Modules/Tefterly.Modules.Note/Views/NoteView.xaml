@@ -11,12 +11,6 @@
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/Scrollbar.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource DataGridTextBoxStyle}">
-                <Setter Property="BorderThickness" Value="0" />
-            </Style>
-            <Style TargetType="{x:Type RichTextBox}" BasedOn="{StaticResource DefaultRichTextBoxStyle}">
-                <Setter Property="BorderThickness" Value="0" />
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -42,7 +36,13 @@
                  SpellCheck.IsEnabled="True"
                  ui:ScrollViewerHelper.AutoHideScrollBars="False"
                  ui:TextBoxHelper.IsDeleteButtonVisible="False"                 
-                 ui:ControlHelper.PlaceholderText="Note Title" />
+                 ui:ControlHelper.PlaceholderText="Note Title">
+            <TextBox.Resources>
+                <!-- Override the border for the textbox -->
+                <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+            </TextBox.Resources>
+        </TextBox>
 
         <!-- Main note richtextbox -->
         <ui:ScrollViewerEx Grid.Row="1">
@@ -52,10 +52,16 @@
                     Padding="5,5,5,0"            
                     AcceptsTab="True"
                     IsInactiveSelectionHighlightEnabled="True"
-                    ui:ControlHelper.PlaceholderText="Note Text" />
+                    ui:ControlHelper.PlaceholderText="Note Text">
+                <RichTextBox.Resources>
+                    <!-- Override the border for the richtextbox -->
+                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                </RichTextBox.Resources>
+            </RichTextBox>
         </ui:ScrollViewerEx>
         
-        <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="3" Spacing="5" Margin="0,0,15,0">
+        <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Spacing="5" Margin="0,0,15,0">
             
             <!-- Note text format command bar -->
             <Button ToolTip="Font styles"
@@ -168,6 +174,7 @@
             <Button ToolTip="Delete note" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xE74D;" />
             </Button>
+            
         </ui:SimpleStackPanel>
     </Grid>
 
