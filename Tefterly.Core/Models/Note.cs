@@ -12,7 +12,7 @@ namespace Tefterly.Core.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public string Color { get; set; }
-        public int Tag { get; set; }
+        public Guid Category { get; set; }
 
         // note state
         public bool IsStarred { get; set; }

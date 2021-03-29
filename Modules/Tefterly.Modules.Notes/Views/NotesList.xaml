@@ -62,10 +62,10 @@
         <Grid Grid.Row="0" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="32"/>
+                <ColumnDefinition Width="38"/>
             </Grid.ColumnDefinitions>
             <ui:AutoSuggestBox Grid.Column="0" PlaceholderText="Search" QueryIcon="Find" Margin="7,2,1,0" />
-            <Button Grid.Column="1" ToolTip="Add a note" Style="{DynamicResource ChromelessButton}">
+            <Button Grid.Column="1" ToolTip="Add a note" Style="{DynamicResource ChromelessButton}" Margin="0,1,2,0">
                 <ui:FontIcon Glyph="&#xF164;" FontSize="24" />
             </Button>
         </Grid>
