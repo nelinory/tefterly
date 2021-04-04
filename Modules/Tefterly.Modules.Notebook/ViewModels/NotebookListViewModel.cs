@@ -1,13 +1,13 @@
 ﻿using Prism.Mvvm;
-using System;
 using System.Collections.ObjectModel;
+using Tefterly.Services;
 
 namespace Tefterly.Modules.Notebook.ViewModels
 {
     public class NotebookListViewModel : BindableBase
     {
-        private ObservableCollection<Core.Models.Notebook> _notebookList;
-        public ObservableCollection<Core.Models.Notebook> NotebookList
+        private ObservableCollection<Business.Models.Notebook> _notebookList;
+        public ObservableCollection<Business.Models.Notebook> NotebookList
         {
             get { return _notebookList; }
             set { SetProperty(ref _notebookList, value); }
@@ -20,13 +20,13 @@ namespace Tefterly.Modules.Notebook.ViewModels
             set { SetProperty(ref _version, value); }
         }
 
-        public NotebookListViewModel()
+        private INoteService _noteService;
+
+        public NotebookListViewModel(INoteService noteService)
         {
-            NotebookList = new ObservableCollection<Core.Models.Notebook>();
-            _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Notes", IconFont = "\xE8F1", TotalItems = 4 });
-            _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Starred", IconFont = "\xE734", TotalItems = 1 });
-            _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Archived", IconFont = "\xF12B", TotalItems = 2 });
-            _notebookList.Add(new Core.Models.Notebook() { Id = Guid.NewGuid(), Title = "Deleted", IconFont = "\xE74D", TotalItems = 1 });
+            _noteService = noteService;
+
+            NotebookList = new ObservableCollection<Business.Models.Notebook>(_noteService.GetAllNotebookCategories());
         }
     }
 }

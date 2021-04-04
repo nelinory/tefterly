@@ -22,14 +22,14 @@
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="16"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="{Binding Path=Title, Mode=TwoWay}" 
+                    <TextBlock Text="{Binding Path=Title}" 
                                Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontWeight="SemiBold"
                                TextTrimming="CharacterEllipsis"/>
-                    <TextBlock Text="{Binding Path=Content, Mode=TwoWay}" FontSize="13" Margin="0,3,0,0"
+                    <TextBlock Text="{Binding Path=Content}" FontSize="13" Margin="0,3,0,0"
                                Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" TextTrimming="WordEllipsis"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"
                                 HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2">
-                        <ContentControl Visibility="{Binding Path=IsStarred, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
+                        <ContentControl Visibility="{Binding Path=IsStarred, Converter={StaticResource BooleanToVisibilityConverter}}"
                                         IsHitTestVisible="False" Margin="0,0,9,0">
                             <ui:FontIcon Glyph="&#xE735;" FontSize="13"/>
                         </ContentControl>
@@ -37,7 +37,7 @@
                                    Fill="{DynamicResource SystemControlTransparentBrush}"
                                    IsHitTestVisible="False"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Path=UpdatedDateTime, Converter={StaticResource DateTimeToFormattedStringConverter}, Mode=TwoWay}"
+                    <TextBlock Text="{Binding Path=UpdatedDateTime, Converter={StaticResource DateTimeToFormattedStringConverter}}"
                                Grid.Column="1" Grid.Row="2" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{DynamicResource SystemControlDisabledBaseHighBrush}" Opacity="0.8"/>
                 </Grid>
             </DataTemplate>
@@ -70,8 +70,8 @@
             </Button>
         </Grid>
 
-        <Rectangle Fill="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" IsHitTestVisible="False" Grid.Row="1" />        
-        
+        <Rectangle Fill="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" IsHitTestVisible="False" Grid.Row="1" />
+
         <!-- Notes list -->
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="3">
             <ListBox

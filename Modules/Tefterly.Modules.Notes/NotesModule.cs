@@ -5,6 +5,7 @@ using Prism.Regions;
 using Tefterly.Core;
 using Tefterly.Modules.Notes.ViewModels;
 using Tefterly.Modules.Notes.Views;
+using Tefterly.Services;
 
 namespace Tefterly.Modules.Notebook
 {
@@ -25,6 +26,8 @@ namespace Tefterly.Modules.Notebook
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             ViewModelLocationProvider.Register<NotesList, NotesListViewModel>();
+
+            containerRegistry.RegisterSingleton<INoteService, NoteService>();
         }
     }
 }

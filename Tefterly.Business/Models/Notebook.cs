@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tefterly.Core.Models
+namespace Tefterly.Business.Models
 {
     public class Notebook
     {
@@ -8,5 +8,6 @@ namespace Tefterly.Core.Models
         public string Title { get; set; }
         public string IconFont { get; set; }
         public int TotalItems { get; set; }
+        public bool IsSystem { get; set; }
     }
 }

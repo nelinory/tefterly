@@ -13,7 +13,7 @@
                     <ui:FontIcon Glyph="{Binding Path=IconFont}" VerticalAlignment="Center" Margin="12,0,0,0" />
                     <TextBlock Text="{Binding Path=Title}" VerticalAlignment="Center" Margin="8,0,0,0" />
                     <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding Path=TotalItems, Mode=TwoWay}" Margin="10,0,10,0"/>
+                        <TextBlock Text="{Binding Path=TotalItems}" Margin="10,0,10,0"/>
                     </Grid>
                 </DockPanel>
             </DataTemplate>
