@@ -6,9 +6,9 @@ namespace Tefterly.Modules.Notebook.Views
     /// <summary>
     /// Interaction logic for NotebookList
     /// </summary>
-    public partial class NotebookList : UserControl
+    public partial class Notebook : UserControl
     {
-        public NotebookList()
+        public Notebook()
         {
             InitializeComponent();
         }

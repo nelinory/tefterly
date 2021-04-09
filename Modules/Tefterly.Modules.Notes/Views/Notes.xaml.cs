@@ -5,9 +5,9 @@ namespace Tefterly.Modules.Notes.Views
     /// <summary>
     /// Interaction logic for NotesList
     /// </summary>
-    public partial class NotesList : UserControl
+    public partial class Notes : UserControl
     {
-        public NotesList()
+        public Notes()
         {
             InitializeComponent();
         }

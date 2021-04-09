@@ -3,8 +3,6 @@ using Prism.Modularity;
 using Prism.Mvvm;
 using Prism.Regions;
 using Tefterly.Core;
-using Tefterly.Modules.Note.ViewModels;
-using Tefterly.Modules.Note.Views;
 
 namespace Tefterly.Modules.Note
 {
@@ -19,12 +17,12 @@ namespace Tefterly.Modules.Note
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            _regionManager.RegisterViewWithRegion(RegionNames.NoteRegion, typeof(NoteView));
+            _regionManager.RegisterViewWithRegion(RegionNames.NoteRegion, typeof(Views.Note));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            ViewModelLocationProvider.Register<NoteView, NoteViewModel>();
+            ViewModelLocationProvider.Register<Views.Note, ViewModels.NoteViewModel>();
         }
     }
 }

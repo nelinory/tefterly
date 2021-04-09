@@ -3,6 +3,7 @@ using Prism.Modularity;
 using System.Windows;
 using Tefterly.Modules.Note;
 using Tefterly.Modules.Notebook;
+using Tefterly.Modules.Notes;
 using Tefterly.Views;
 
 namespace Tefterly

@@ -4,7 +4,7 @@ using Tefterly.Services;
 
 namespace Tefterly.Modules.Notebook.ViewModels
 {
-    public class NotebookListViewModel : BindableBase
+    public class NotebookViewModel : BindableBase
     {
         private ObservableCollection<Business.Models.Notebook> _notebookList;
         public ObservableCollection<Business.Models.Notebook> NotebookList
@@ -22,7 +22,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
 
         private INoteService _noteService;
 
-        public NotebookListViewModel(INoteService noteService)
+        public NotebookViewModel(INoteService noteService)
         {
             _noteService = noteService;
 
