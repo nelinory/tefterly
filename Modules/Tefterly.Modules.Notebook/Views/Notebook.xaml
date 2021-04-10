@@ -56,8 +56,8 @@
                 </ListBox>
             </ScrollViewer>
         </DockPanel>
-        <Button Click="Button_Click"
-                Grid.Row="2"
+        <Button Grid.Row="2"
+                Command="{Binding ChangeThemeCommand}"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Left"
                 Margin="7,0,0,0"

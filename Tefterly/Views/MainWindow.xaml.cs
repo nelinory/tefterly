@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 
 namespace Tefterly.Views
 {
@@ -11,12 +10,6 @@ namespace Tefterly.Views
         public MainWindow()
         {
             InitializeComponent();
-
-            MouseDown += (sender, e) =>
-            {
-                if (e.LeftButton == MouseButtonState.Pressed)
-                    DragMove();
-            };
         }
     }
 }
