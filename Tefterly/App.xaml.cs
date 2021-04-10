@@ -4,6 +4,7 @@ using System.Windows;
 using Tefterly.Modules.Note;
 using Tefterly.Modules.Notebook;
 using Tefterly.Modules.Notes;
+using Tefterly.Services;
 using Tefterly.Views;
 
 namespace Tefterly
@@ -20,7 +21,8 @@ namespace Tefterly
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            // shared services across all modules
+            containerRegistry.RegisterSingleton<INoteService, NoteService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
