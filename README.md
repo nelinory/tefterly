@@ -8,6 +8,7 @@ Project updates:
 - 03/21/2021 - Notes list UI mock complete 
 - 03/27/2021 - Note UI mock complete
 - 04/05/2021 - Note service added, still using data mocks
+- 04/10/2021 - Navigation across notebook/notes/note complete, added flow document bound richtextbox
 
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>
