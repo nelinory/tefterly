@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:controls="clr-namespace:Tefterly.Core.Resources.Controls;assembly=Tefterly.Core"             
              xmlns:ui="http://schemas.modernwpf.com/2019"
              prism:ViewModelLocator.AutoWireViewModel="True">
 
@@ -32,13 +33,13 @@
                  Foreground="{DynamicResource SystemControlHighlightListAccentVeryHighBrush}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Bottom"
-                 Text="Test Note #2"
+                 Text="{Binding NoteTitle}"
                  SpellCheck.IsEnabled="True"
                  ui:ScrollViewerHelper.AutoHideScrollBars="False"
                  ui:TextBoxHelper.IsDeleteButtonVisible="False"                 
                  ui:ControlHelper.PlaceholderText="Note Title">
             <TextBox.Resources>
-                <!-- Override the border for the textbox -->
+                <!-- Override the border style for the textbox -->
                 <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                 <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
             </TextBox.Resources>
@@ -46,23 +47,51 @@
 
         <!-- Main note richtextbox -->
         <ui:ScrollViewerEx Grid.Row="1">
-            <RichTextBox
-                    x:Name="rtbRichTextBox"
-                    Margin="12,0,12,0"
-                    Padding="5,5,5,0"            
+            <controls:NoteEditor
+                    Margin="10,0,12,0"
+                    Padding="5,0,5,0"                
                     AcceptsTab="True"
+                    Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    BorderThickness="0"
+                    VerticalScrollBarVisibility="Auto"
+                    IsDocumentEnabled="True"
+                    AllowDrop="True"    
+                    BoundFlowDocument="{Binding NoteContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsInactiveSelectionHighlightEnabled="True"
+                    Style="{StaticResource DefaultRichTextBoxStyle}"                
                     ui:ControlHelper.PlaceholderText="Note Text">
-                <RichTextBox.Resources>
-                    <!-- Override the border for the richtextbox -->
-                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
-                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
-                </RichTextBox.Resources>
-            </RichTextBox>
+                <controls:NoteEditor.Resources>
+                    <ResourceDictionary>
+                        <!-- Override the border style for the richtextbox -->
+                        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="3" />
+                        </Style>
+                        <Style TargetType="{x:Type Table}">
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+                        <Style TargetType="{x:Type List}">
+                            <Setter Property="Margin" Value="3"/>
+                            <Style.Resources>
+                                <Style TargetType="{x:Type ListItem}">
+                                    <Style.Resources>
+                                        <Style TargetType="{x:Type Paragraph}">
+                                            <Setter Property="Margin" Value="3"/>
+                                        </Style>
+                                    </Style.Resources>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </ResourceDictionary>
+                </controls:NoteEditor.Resources>
+            </controls:NoteEditor>
         </ui:ScrollViewerEx>
-        
+
         <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Spacing="5" Margin="0,0,15,0">
-            
+
             <!-- Note text format command bar -->
             <Button ToolTip="Font styles"
                     Style="{DynamicResource ChromelessButton}">
@@ -95,7 +124,7 @@
                                 <ui:FontIcon Glyph="&#xE7E6;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                     </ui:MenuFlyout>
+                    </ui:MenuFlyout>
                 </ui:FlyoutService.Flyout>
             </Button>
 
@@ -146,10 +175,10 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </ui:MenuFlyout>
-                </ui:FlyoutService.Flyout>                
+                </ui:FlyoutService.Flyout>
                 <ui:FontIcon Glyph="&#xE7BC;"/>
             </Button>
-            
+
             <ui:AppBarSeparator Margin="-12,0,-9,0" />
 
             <!-- Note actions -->
@@ -168,13 +197,13 @@
             <Button ToolTip="Archive note" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xF12B;" />
             </Button>
-            
-            <ui:AppBarSeparator Margin="-12,0,-9,0" />            
-            
+
+            <ui:AppBarSeparator Margin="-12,0,-9,0" />
+
             <Button ToolTip="Delete note" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xE74D;" />
             </Button>
-            
+
         </ui:SimpleStackPanel>
     </Grid>
 

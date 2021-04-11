@@ -48,6 +48,11 @@ namespace Tefterly.Services
             return notes;
         }
 
+        public Note GetNote(Guid id)
+        {
+            return _notes.Where(p => p.Id == id).FirstOrDefault<Note>();
+        }
+
         #region Private Methods
 
         private void LoadNotebooks()

@@ -89,7 +89,6 @@ namespace Tefterly.Modules.Notebook.ViewModels
                 NavigationPath = NavigationPaths.Notes,
                 NavigationRegion = RegionNames.NotesRegion,
                 NavigationParameters = new NavigationParameters { { "id", id } }
-
             };
 
             _applicationCommands.NavigateCommand.Execute(navigationItem);

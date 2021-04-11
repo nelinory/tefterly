@@ -23,6 +23,8 @@ namespace Tefterly.Modules.Note
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             ViewModelLocationProvider.Register<Views.Note, ViewModels.NoteViewModel>();
+
+            containerRegistry.RegisterForNavigation<Views.Note, ViewModels.NoteViewModel>();
         }
     }
 }

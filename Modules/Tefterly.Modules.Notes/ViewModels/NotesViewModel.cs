@@ -2,6 +2,7 @@
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using Tefterly.Business;
 using Tefterly.Core;
 using Tefterly.Core.Commands;
 using Tefterly.Services;
@@ -21,7 +22,14 @@ namespace Tefterly.Modules.Notes.ViewModels
         public Business.Models.Note SelectedNote
         {
             get { return _selectedNote; }
-            set { SetProperty(ref _selectedNote, value); }
+            set
+            {
+                SetProperty(ref _selectedNote, value);
+
+                // signal selected note changed
+                if (_selectedNote != null)
+                    ExecuteNavigation(_selectedNote.Id);
+            }
         }
 
         // services
@@ -44,6 +52,18 @@ namespace Tefterly.Modules.Notes.ViewModels
             NoteList = new ObservableCollection<Business.Models.Note>(_noteService.GetNotes(notebookGategory));
             if (NoteList.Count > 0)
                 SelectedNote = NoteList[0]; // select the first item
+        }
+
+        private void ExecuteNavigation(Guid id)
+        {
+            NavigationItem navigationItem = new NavigationItem
+            {
+                NavigationPath = NavigationPaths.Note,
+                NavigationRegion = RegionNames.NoteRegion,
+                NavigationParameters = new NavigationParameters { { "id", id } }
+            };
+
+            _applicationCommands.NavigateCommand.Execute(navigationItem);
         }
 
         #region Navigation Logic

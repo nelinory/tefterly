@@ -9,5 +9,6 @@ namespace Tefterly.Services
         IList<Notebook> GetAllNotebookCategories();
         int GetCategoryCount(Guid category);
         IList<Note> GetNotes(Guid category);
+        Note GetNote(Guid id);
     }
 }

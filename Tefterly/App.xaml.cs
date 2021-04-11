@@ -32,9 +32,9 @@ namespace Tefterly
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             // register modules
-            moduleCatalog.AddModule<NotebookModule>();
-            moduleCatalog.AddModule<NotesModule>();
             moduleCatalog.AddModule<NoteModule>();
+            moduleCatalog.AddModule<NotesModule>();
+            moduleCatalog.AddModule<NotebookModule>();
         }
     }
 }
