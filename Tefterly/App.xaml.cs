@@ -1,6 +1,7 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
 using System.Windows;
+using Tefterly.Core.Commands;
 using Tefterly.Modules.Note;
 using Tefterly.Modules.Notebook;
 using Tefterly.Modules.Notes;
@@ -21,12 +22,16 @@ namespace Tefterly
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            // shared services across all modules
+            // register shared services
             containerRegistry.RegisterSingleton<INoteService, NoteService>();
+
+            // register composite commands
+            containerRegistry.RegisterSingleton<IApplicationCommands, ApplicationCommands>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
+            // register modules
             moduleCatalog.AddModule<NotebookModule>();
             moduleCatalog.AddModule<NotesModule>();
             moduleCatalog.AddModule<NoteModule>();

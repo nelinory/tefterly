@@ -10,10 +10,10 @@
         <ResourceDictionary>
             <DataTemplate x:Key="NotebookListboxDataTemplate">
                 <DockPanel>
-                    <ui:FontIcon Glyph="{Binding Path=IconFont}" VerticalAlignment="Center" Margin="12,0,0,0" />
-                    <TextBlock Text="{Binding Path=Title}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                    <ui:FontIcon Glyph="{Binding IconFont}" VerticalAlignment="Center" Margin="12,0,0,0" />
+                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="8,0,0,0" />
                     <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding Path=TotalItems}" Margin="10,0,10,0"/>
+                        <TextBlock Text="{Binding TotalItems}" Margin="10,0,10,0"/>
                     </Grid>
                 </DockPanel>
             </DataTemplate>
@@ -35,16 +35,15 @@
 
         <TextBlock Text="tefterly"
                        FontSize="19" FontWeight="DemiBold" FontStyle="Italic" VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Margin="0" Foreground="{DynamicResource SystemControlBackgroundChromeWhiteBrush}" Grid.Row="0" Grid.Column="1" ToolTip="{Binding Path=Version}"/>
+                       Margin="0" Foreground="{DynamicResource SystemControlBackgroundChromeWhiteBrush}" Grid.Row="0" Grid.Column="1" ToolTip="{Binding Version}"/>
 
         <DockPanel Grid.Row="1">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top">
                 <ListBox
-                    ItemsSource="{Binding Path=NotebookList}"                
+                    ItemsSource="{Binding NotebookList}"                
                     ItemContainerStyle="{StaticResource NotebookListboxStyle}"
                     ItemTemplate="{StaticResource NotebookListboxDataTemplate}"                
-                    SelectedItem="{Binding Path=SelectedNotebook}" 
-                    SelectedIndex="0"
+                    SelectedItem="{Binding SelectedNotebook}" 
                     Background="{DynamicResource SystemControlTransparentBrush}"
                     BorderThickness="0"
                     Margin="0"

@@ -1,8 +1,12 @@
 ﻿using ModernWpf;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
+using System;
 using System.Collections.ObjectModel;
+using Tefterly.Business;
 using Tefterly.Core;
+using Tefterly.Core.Commands;
 using Tefterly.Services;
 
 namespace Tefterly.Modules.Notebook.ViewModels
@@ -16,6 +20,20 @@ namespace Tefterly.Modules.Notebook.ViewModels
             set { SetProperty(ref _notebookList, value); }
         }
 
+        private Business.Models.Notebook _selectedNotebook;
+        public Business.Models.Notebook SelectedNotebook
+        {
+            get { return _selectedNotebook; }
+            set
+            {
+                SetProperty(ref _selectedNotebook, value);
+
+                // signal selected notebook changed
+                if (_selectedNotebook != null)
+                    ExecuteNavigation(_selectedNotebook.Id);
+            }
+        }
+
         public string Version
         {
             get
@@ -26,22 +44,34 @@ namespace Tefterly.Modules.Notebook.ViewModels
         }
 
         // services
-        private INoteService _noteService;
+        private readonly INoteService _noteService;
+        private readonly IApplicationCommands _applicationCommands;
 
         // commands
         public DelegateCommand ChangeThemeCommand { get; set; }
 
-        public NotebookViewModel(INoteService noteService)
+        public NotebookViewModel(INoteService noteService, IApplicationCommands applicationCommands)
         {
             // attach all required services
             _noteService = noteService;
 
+            // attach all composite commands
+            _applicationCommands = applicationCommands;
+
             // attach all commands
             ChangeThemeCommand = new DelegateCommand(() => ExecuteChangeThemeCommand());
 
-            NotebookList = new ObservableCollection<Business.Models.Notebook>(_noteService.GetAllNotebookCategories());
+            LoadNotebookList();
 
             RefreshCategoryCounts();
+        }
+
+        private void LoadNotebookList()
+        {
+            NotebookList = new ObservableCollection<Business.Models.Notebook>(_noteService.GetAllNotebookCategories());
+
+            if (NotebookList.Count > 0)
+                SelectedNotebook = NotebookList[0]; // select the first item
         }
 
         private void RefreshCategoryCounts()
@@ -50,6 +80,19 @@ namespace Tefterly.Modules.Notebook.ViewModels
             {
                 notebook.TotalItems = _noteService.GetCategoryCount(notebook.Id);
             }
+        }
+
+        private void ExecuteNavigation(Guid id)
+        {
+            NavigationItem navigationItem = new NavigationItem
+            {
+                NavigationPath = NavigationPaths.Notes,
+                NavigationRegion = RegionNames.NotesRegion,
+                NavigationParameters = new NavigationParameters { { "id", id } }
+
+            };
+
+            _applicationCommands.NavigateCommand.Execute(navigationItem);
         }
 
         private void ExecuteChangeThemeCommand()

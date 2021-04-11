@@ -2,7 +2,9 @@
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
+using Tefterly.Business;
 using Tefterly.Core;
+using Tefterly.Core.Commands;
 
 namespace Tefterly.ViewModels
 {
@@ -15,22 +17,24 @@ namespace Tefterly.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        private DelegateCommand<string> _navigateCommand;
         private readonly IRegionManager _regionManager;
 
-        public DelegateCommand<string> NavigateCommand => _navigateCommand ?? (_navigateCommand = new DelegateCommand<string>(ExecuteCommandName));
+        private DelegateCommand<NavigationItem> _globalNavigateCommand;
+        public DelegateCommand<NavigationItem> GlobalNavigateCommand => _globalNavigateCommand ?? (_globalNavigateCommand = new DelegateCommand<NavigationItem>(ExecuteGlobalNavigateCommand));
 
-        public MainWindowViewModel(IRegionManager regionManager)
+        public MainWindowViewModel(IRegionManager regionManager, IApplicationCommands applicationCommands)
         {
             _regionManager = regionManager;
+
+            applicationCommands.NavigateCommand.RegisterCommand(GlobalNavigateCommand);
         }
 
-        void ExecuteCommandName(string navigationPath)
+        private void ExecuteGlobalNavigateCommand(NavigationItem navigationItem)
         {
-            if (string.IsNullOrWhiteSpace(navigationPath) == true)
+            if (navigationItem == null)
                 throw new ArgumentNullException();
 
-            _regionManager.RequestNavigate(RegionNames.NotesRegion, navigationPath);
+            _regionManager.RequestNavigate(navigationItem.NavigationRegion, navigationItem.NavigationPath, navigationItem.NavigationParameters);
         }
     }
 }
