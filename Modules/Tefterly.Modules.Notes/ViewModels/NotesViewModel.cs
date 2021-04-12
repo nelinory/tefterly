@@ -32,6 +32,34 @@ namespace Tefterly.Modules.Notes.ViewModels
             }
         }
 
+        private Guid _selectedNotebookCategoryId;
+        public Guid SelectedNotebookCategoryId
+        {
+            get { return _selectedNotebookCategoryId; }
+            set { SetProperty(ref _selectedNotebookCategoryId, value); }
+        }
+
+        private bool _showNotesNotFoundPanel = false;
+        public bool ShowNotesNotFoundPanel
+        {
+            get { return _showNotesNotFoundPanel; }
+            set { SetProperty(ref _showNotesNotFoundPanel, value); }
+        }
+
+        private bool _showAddNoteButton;
+        public bool ShowAddNoteButton
+        {
+            get { return _showAddNoteButton; }
+            set { SetProperty(ref _showAddNoteButton, value); }
+        }
+
+        private string _notesNofFoundMessage;
+        public string NotesNotFoundMessage
+        {
+            get { return _notesNofFoundMessage; }
+            set { SetProperty(ref _notesNofFoundMessage, value); }
+        }
+
         // services
         private readonly INoteService _noteService;
         private readonly IApplicationCommands _applicationCommands;
@@ -43,8 +71,6 @@ namespace Tefterly.Modules.Notes.ViewModels
 
             // attach all composite commands
             _applicationCommands = applicationCommands;
-
-            LoadNoteList(NotebookCategories.Default);
         }
 
         private void LoadNoteList(Guid notebookGategory)
@@ -52,6 +78,17 @@ namespace Tefterly.Modules.Notes.ViewModels
             NoteList = new ObservableCollection<Business.Models.Note>(_noteService.GetNotes(notebookGategory));
             if (NoteList.Count > 0)
                 SelectedNote = NoteList[0]; // select the first item
+
+            // update the default message if no notes found for the selected type or search criteria 
+            ShowAddNoteButton = false;
+            NotesNotFoundMessage = "No notes found";
+            ShowNotesNotFoundPanel = (NoteList.Count == 0);
+
+            if (SelectedNotebookCategoryId == NotebookCategories.Default)
+            {
+                NotesNotFoundMessage = String.Empty;
+                ShowAddNoteButton = true;
+            }
         }
 
         private void ExecuteNavigation(Guid id)
@@ -70,7 +107,9 @@ namespace Tefterly.Modules.Notes.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            LoadNoteList(navigationContext.Parameters.GetValue<Guid>("id"));
+            SelectedNotebookCategoryId = navigationContext.Parameters.GetValue<Guid>("id");
+
+            LoadNoteList(SelectedNotebookCategoryId);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) { return true; }

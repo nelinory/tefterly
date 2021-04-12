@@ -38,7 +38,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
         {
             get
             {
-                System.Version versionObject = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
+                Version versionObject = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
                 return $"v{versionObject.Major}.{versionObject.Minor}.{versionObject.Build}";
             }
         }
