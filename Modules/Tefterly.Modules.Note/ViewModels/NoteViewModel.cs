@@ -22,6 +22,13 @@ namespace Tefterly.Modules.Note.ViewModels
             set { SetProperty(ref _noteContent, value); }
         }
 
+        private bool _showNoteComponents;
+        public bool ShowNoteComponents
+        {
+            get { return _showNoteComponents; }
+            set { SetProperty(ref _showNoteComponents, value); }
+        }
+
         // services
         private readonly INoteService _noteService;
 
@@ -34,14 +41,21 @@ namespace Tefterly.Modules.Note.ViewModels
         private void LoadNote(Guid noteId)
         {
             Business.Models.Note note = _noteService.GetNote(noteId);
-            
-            NoteTitle = note.Title;
 
-            Paragraph paragraph = new Paragraph();
-            paragraph.Inlines.Add(note.Content);
-            FlowDocument tempNoteContent = new FlowDocument(paragraph);
+            if (note != null)
+            {
+                NoteTitle = note.Title;
 
-            NoteContent = tempNoteContent;
+                Paragraph paragraph = new Paragraph();
+                paragraph.Inlines.Add(note.Content);
+                FlowDocument tempNoteContent = new FlowDocument(paragraph);
+
+                NoteContent = tempNoteContent;
+
+                ShowNoteComponents = true;
+            }
+            else
+                ShowNoteComponents = false;
         }
 
         #region Navigation Logic

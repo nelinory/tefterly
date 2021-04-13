@@ -90,8 +90,8 @@
             </ListBox>
         </ScrollViewer>
 
-        <!-- No notes found -->
-        <Grid Margin="5,0,5,0" Visibility="{Binding ShowNotesNotFoundPanel, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="2">
+        <!-- Notes not found message -->
+        <Grid Margin="5,0,5,0" Grid.Row="2" Visibility="{Binding ShowNotesNotFoundPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ui:SimpleStackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
                 <TextBlock Text="{Binding NotesNotFoundMessage}" TextWrapping="WrapWithOverflow"
                            TextAlignment="Center" Foreground="{DynamicResource SystemControlDisabledBaseHighBrush}" />

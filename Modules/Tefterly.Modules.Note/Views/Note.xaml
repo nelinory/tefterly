@@ -2,12 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:controls="clr-namespace:Tefterly.Core.Resources.Controls;assembly=Tefterly.Core"             
              xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:controls="clr-namespace:Tefterly.Core.Resources.Controls;assembly=Tefterly.Core" 
+             xmlns:converters="clr-namespace:Tefterly.Core.Converters;assembly=Tefterly.Core"                          
              prism:ViewModelLocator.AutoWireViewModel="True">
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/Scrollbar.xaml" />
@@ -37,7 +41,8 @@
                  SpellCheck.IsEnabled="True"
                  ui:ScrollViewerHelper.AutoHideScrollBars="False"
                  ui:TextBoxHelper.IsDeleteButtonVisible="False"                 
-                 ui:ControlHelper.PlaceholderText="Note Title">
+                 ui:ControlHelper.PlaceholderText="Note Title"
+                 Visibility="{Binding ShowNoteComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBox.Resources>
                 <!-- Override the border style for the textbox -->
                 <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
@@ -58,7 +63,8 @@
                     BoundFlowDocument="{Binding NoteContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsInactiveSelectionHighlightEnabled="True"
                     Style="{StaticResource DefaultRichTextBoxStyle}"                
-                    ui:ControlHelper.PlaceholderText="Note Text">
+                    ui:ControlHelper.PlaceholderText="Note Text"
+                    Visibility="{Binding ShowNoteComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <controls:NoteEditor.Resources>
                     <ResourceDictionary>
                         <!-- Override the border style for the richtextbox -->
@@ -88,7 +94,8 @@
             </controls:NoteEditor>
         </ui:ScrollViewerEx>
 
-        <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Spacing="5" Margin="0,0,15,0">
+        <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Spacing="5" Margin="0,0,15,0"
+                             Visibility="{Binding ShowNoteComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <!-- Note text format command bar -->
             <Button ToolTip="Font styles"
@@ -148,7 +155,7 @@
                         </MenuItem>
                         <MenuItem Header="Justify" InputGestureText="Ctrl+J">
                             <MenuItem.Icon>
-                                <ui:PathIcon Data="F1 M 0 1 L 20 1 L 20 2 L 0 2 Z M 0 4.50 L 20 4.50 L 20 5.50 L 0 5.50 Z M 0 8 L 20 8 L 20 9 L 0 9 Z M 0 11.50 L 20 11.50 L 20 12.50 L 0 12.50 Z M 0 15 L 20 15 L 20 16 L 0 16 Z" />
+                                <ui:PathIcon Data="M 0 1 L 20 1 L 20 2 L 0 2 Z M 0 4.50 L 20 4.50 L 20 5.50 L 0 5.50 Z M 0 8 L 20 8 L 20 9 L 0 9 Z M 0 11.50 L 20 11.50 L 20 12.50 L 0 12.50 Z M 0 15 L 20 15 L 20 16 L 0 16 Z" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Increase Indent" InputGestureText="Tab">
@@ -203,6 +210,14 @@
             </Button>
 
         </ui:SimpleStackPanel>
+
+        <!-- Note not found message -->
+        <Grid Margin="5,0,5,0" Grid.Row="1" Grid.RowSpan="2" Visibility="{Binding ShowNoteComponents, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+            <TextBlock Text="Please, select a category with notes or create a new note" TextWrapping="WrapWithOverflow" VerticalAlignment="Center"
+                           TextAlignment="Center" Foreground="{DynamicResource SystemControlDisabledBaseHighBrush}" />
+            <ui:PathIcon Width="80" Height="80" Opacity="0.1" Margin="0, 0, 0, 20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Data="M72 232.989 72 466 89 466 106 466 106 490.5 106 515 108.929 515C110.539 515 112.532 514.325 113.357 513.5C114.182 512.675 115.465 512 116.208 512C116.951 512 118.207 511.1 119 510C119.793 508.9 121.143 508 122 508C122.857 508 124.207 507.1 125 506C125.793 504.9 127.242 504 128.221 504C129.199 504 130 503.626 130 503.169C130 502.712 131.238 501.699 132.75 500.919C134.263 500.139 136.372 498.713 137.439 497.75C139.523 495.868 144 495.356 144 497C144 497.55 144.801 498 145.779 498C146.758 498 148.207 498.9 149 500C149.793 501.1 151.143 502 152 502C152.857 502 154.207 502.9 155 504C155.793 505.1 157.143 506 158 506C158.857 506 160.207 506.9 161 508C161.793 509.1 163.077 510 163.853 510C164.63 510 166.046 510.9 167.001 512.001C168.039 513.198 170.597 514.257 173.368 514.637L178 515.272 178 490.636 178 466 298.5 466C378.167 466 419 465.661 419 465C419 464.45 420.35 464 422 464C423.65 464 425 463.55 425 463C425 462.45 425.626 462 426.392 462C428.914 462 437.549 453.273 439.906 448.341C441.178 445.678 442.62 442.719 443.109 441.764C444.392 439.263 444.283 24.293 443 23.5C442.45 23.16 442 22 442 20.921C442 16.214 430.624 3 426.572 3C425.799 3 424.979 2.438 424.75 1.75C424.419.758 388.025.446 248.167.239L72-.022 72 232.989M337 232.5 337 446 214.5 446 92 446 92 383.5 92 321 212.5 321 333 321 333 232.5 333 144 212.5 144 92 144 92 81.5 92 19 214.5 19 337 19 337 232.5M412 20C412 20.55 412.72 21 413.6 21C415.676 21 422 27.324 422 29.4C422 30.28 422.45 31 423 31C423.655 31 424 50.492 424 87.476L424 143.953 406.75 144.226 389.5 144.5 389.5 232.5 389.5 320.5 406.75 320.774 424 321.047 424 376.965C424 413.164 423.647 433.1 423 433.5C422.45 433.84 422 434.781 422 435.592C422 437.759 415.388 444 413.092 444C412.006 444 410.84 444.45 410.5 445C410.138 445.586 404.323 446 396.441 446L383 446 383 232.5 383 19 397.5 19C406.5 19 412 19.379 412 20M156 472C156 475.333 155.556 478 155 478C154.45 478 154 477.626 154 477.169C154 476.712 152.762 475.699 151.25 474.919C149.738 474.139 147.628 472.712 146.561 471.75C144.499 469.888 138 469.319 138 471C138 471.55 137.41 472 136.689 472C135.967 472 134.482 472.788 133.388 473.75C131.305 475.582 127.394 478 126.514 478C126.231 478 126 475.3 126 472L126 466 141 466 156 466 156 472Z" />
+        </Grid>
     </Grid>
 
 </UserControl>

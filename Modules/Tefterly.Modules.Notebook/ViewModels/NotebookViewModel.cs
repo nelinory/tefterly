@@ -27,10 +27,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
             set
             {
                 SetProperty(ref _selectedNotebook, value);
-
-                // signal selected notebook changed
-                if (_selectedNotebook != null)
-                    ExecuteNavigation(_selectedNotebook.Id);
+                ExecuteNavigation(_selectedNotebook);
             }
         }
 
@@ -72,6 +69,8 @@ namespace Tefterly.Modules.Notebook.ViewModels
 
             if (NotebookList.Count > 0)
                 SelectedNotebook = NotebookList[0]; // select the first item
+            else
+                SelectedNotebook = null; // no notebook found
         }
 
         private void RefreshCategoryCounts()
@@ -82,8 +81,10 @@ namespace Tefterly.Modules.Notebook.ViewModels
             }
         }
 
-        private void ExecuteNavigation(Guid id)
+        private void ExecuteNavigation(Business.Models.Notebook selectedNotebook)
         {
+            Guid id = (selectedNotebook == null) ? Guid.Empty : selectedNotebook.Id;
+
             NavigationItem navigationItem = new NavigationItem
             {
                 NavigationPath = NavigationPaths.Notes,

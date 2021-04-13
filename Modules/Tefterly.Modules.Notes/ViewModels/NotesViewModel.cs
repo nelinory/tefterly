@@ -25,10 +25,7 @@ namespace Tefterly.Modules.Notes.ViewModels
             set
             {
                 SetProperty(ref _selectedNote, value);
-
-                // signal selected note changed
-                if (_selectedNote != null)
-                    ExecuteNavigation(_selectedNote.Id);
+                ExecuteNavigation(_selectedNote);
             }
         }
 
@@ -78,8 +75,10 @@ namespace Tefterly.Modules.Notes.ViewModels
             NoteList = new ObservableCollection<Business.Models.Note>(_noteService.GetNotes(notebookGategory));
             if (NoteList.Count > 0)
                 SelectedNote = NoteList[0]; // select the first item
+            else
+                SelectedNote = null; // no notes found in the selected category
 
-            // update the default message if no notes found for the selected type or search criteria 
+            // update the default message if no notes found 
             ShowAddNoteButton = false;
             NotesNotFoundMessage = "No notes found";
             ShowNotesNotFoundPanel = (NoteList.Count == 0);
@@ -91,8 +90,10 @@ namespace Tefterly.Modules.Notes.ViewModels
             }
         }
 
-        private void ExecuteNavigation(Guid id)
+        private void ExecuteNavigation(Business.Models.Note selectedNote)
         {
+            Guid id = (selectedNote == null) ? Guid.Empty : selectedNote.Id;
+            
             NavigationItem navigationItem = new NavigationItem
             {
                 NavigationPath = NavigationPaths.Note,
