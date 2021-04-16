@@ -155,17 +155,17 @@
                         </MenuItem>
                         <MenuItem Header="Justify" InputGestureText="Ctrl+J">
                             <MenuItem.Icon>
-                                <ui:PathIcon Data="M 0 1 L 20 1 L 20 2 L 0 2 Z M 0 4.50 L 20 4.50 L 20 5.50 L 0 5.50 Z M 0 8 L 20 8 L 20 9 L 0 9 Z M 0 11.50 L 20 11.50 L 20 12.50 L 0 12.50 Z M 0 15 L 20 15 L 20 16 L 0 16 Z" />
+                                <ui:PathIcon Data="M3 3H21V4.25H3V3M3 7H21V8.25H3V7M3 11H21V12.25H3V11M3 15H21V16.25H3V15M3 19H21V20.25H3V19Z" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Increase Indent" InputGestureText="Tab">
                             <MenuItem.Icon>
-                                <ui:FontIcon Glyph="&#xE291;" />
+                                <ui:PathIcon Data="M11 12.25H21V11H11M11 8.25H21V7H11M3 3V4.25H21V3M11 16.25H21V15H11M3 8V16L7 12M3 20.25H21V19H3V20.25Z" />                                
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Decrease Indent" InputGestureText="Shift+Tab">
                             <MenuItem.Icon>
-                                <ui:FontIcon Glyph="&#xE290;" />
+                                <ui:PathIcon Data="M11 12.25H21V11H11M11 8.25H21V7H11M3 3V4.25H21V3M11 16.25H21V15H11M7 8V16L3 12M3 20.25H21V19H3V20.25Z" />                                
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
@@ -187,22 +187,28 @@
             <ui:AppBarSeparator Margin="-12,0,-9,0" />
 
             <!-- Note actions -->
-            <Button ToolTip="Set Color" Style="{DynamicResource ChromelessButton}" IsEnabled="False">
+            <Button ToolTip="Set note color" Style="{DynamicResource ChromelessButton}" Visibility="Collapsed">
                 <ui:FontIcon Glyph="&#xE790;" />
             </Button>
-            <Button ToolTip="Remove from starred" Style="{DynamicResource ChromelessButton}">
+            <Button ToolTip="Add note to starred" Style="{DynamicResource ChromelessButton}">
+                <ui:FontIcon Glyph="&#xE113;" />
+            </Button>
+            <Button ToolTip="Remove note from starred" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xE8D9;" />
             </Button>
-            <Button ToolTip="Copy to" Style="{DynamicResource ChromelessButton}" IsEnabled="False">
+            <Button ToolTip="Duplicate note" Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xF413;" />
             </Button>
-            <Button ToolTip="Move to" Style="{DynamicResource ChromelessButton}" IsEnabled="False">
+            <Button ToolTip="Move note to..." Style="{DynamicResource ChromelessButton}" Visibility="Collapsed">
                 <ui:FontIcon Glyph="&#xE19C;" />
             </Button>
-            <Button ToolTip="Archive note" Style="{DynamicResource ChromelessButton}">
-                <ui:FontIcon Glyph="&#xF12B;" />
+            <Button ToolTip="Add note to archive" Style="{DynamicResource ChromelessButton}">
+                <ui:PathIcon Data="M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 11V14H8L12 18 16 14H13.5V11" />
             </Button>
-
+            <Button ToolTip="Remove note from archive" Style="{DynamicResource ChromelessButton}">
+                <ui:PathIcon Data="M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 18V15H8L12 11 16 15H13.5V18" />
+            </Button>
+            
             <ui:AppBarSeparator Margin="-12,0,-9,0" />
 
             <Button ToolTip="Delete note" Style="{DynamicResource ChromelessButton}">
