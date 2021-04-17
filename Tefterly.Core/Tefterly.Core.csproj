@@ -16,8 +16,4 @@
     </Page>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Resources\Controls\" />
-  </ItemGroup>
-
 </Project>

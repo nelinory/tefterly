@@ -4,6 +4,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://schemas.modernwpf.com/2019"             
              xmlns:converters="clr-namespace:Tefterly.Core.Converters;assembly=Tefterly.Core"
+             xmlns:controls="clr-namespace:Tefterly.Core.Resources.Controls;assembly=Tefterly.Core"           
              prism:ViewModelLocator.AutoWireViewModel="True">
 
     <UserControl.Resources>
@@ -43,6 +44,7 @@
             </DataTemplate>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
+                <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/Scrollbar.xaml" />
                 <ResourceDictionary Source="/Tefterly.Modules.Notes;component/Styles/NotesListbox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -73,8 +75,15 @@
         <Rectangle Fill="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" IsHitTestVisible="False" Grid.Row="1" />
 
         <!-- Notes list -->
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="3">
-            <ListBox
+        <ui:ScrollViewerEx HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="3">
+            <ui:ScrollViewerEx.Resources>
+                <Style TargetType="{x:Type ScrollViewer}">
+                    <Style.Setters>
+                        <Setter Property="controls:ScrollViewerCorrector.FixScrolling" Value="True" />
+                    </Style.Setters>
+                </Style>
+            </ui:ScrollViewerEx.Resources>
+            <ListBox 
                     ItemsSource="{Binding NoteList}"                
                     ItemContainerStyle="{StaticResource NoteListboxStyle}"
                     ItemTemplate="{StaticResource NoteListboxDataTemplate}"
@@ -88,7 +97,7 @@
                     VirtualizingPanel.IsVirtualizingWhenGrouping="True"
                     VirtualizingStackPanel.VirtualizationMode="Recycling">
             </ListBox>
-        </ScrollViewer>
+        </ui:ScrollViewerEx>
 
         <!-- Notes not found message -->
         <Grid Margin="5,0,5,0" Grid.Row="2" Visibility="{Binding ShowNotesNotFoundPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
