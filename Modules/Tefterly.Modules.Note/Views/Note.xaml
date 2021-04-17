@@ -9,8 +9,8 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" IsInverted="False" />
+            <converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
@@ -160,12 +160,12 @@
                         </MenuItem>
                         <MenuItem Header="Increase Indent" InputGestureText="Tab">
                             <MenuItem.Icon>
-                                <ui:PathIcon Data="M11 12.25H21V11H11M11 8.25H21V7H11M3 3V4.25H21V3M11 16.25H21V15H11M3 8V16L7 12M3 20.25H21V19H3V20.25Z" />                                
+                                <ui:PathIcon Data="M11 12.25H21V11H11M11 8.25H21V7H11M3 3V4.25H21V3M11 16.25H21V15H11M3 8V16L7 12M3 20.25H21V19H3V20.25Z" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Decrease Indent" InputGestureText="Shift+Tab">
                             <MenuItem.Icon>
-                                <ui:PathIcon Data="M11 12.25H21V11H11M11 8.25H21V7H11M3 3V4.25H21V3M11 16.25H21V15H11M7 8V16L3 12M3 20.25H21V19H3V20.25Z" />                                
+                                <ui:PathIcon Data="M11 12.25H21V11H11M11 8.25H21V7H11M3 3V4.25H21V3M11 16.25H21V15H11M7 8V16L3 12M3 20.25H21V19H3V20.25Z" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
@@ -190,25 +190,25 @@
             <Button ToolTip="Set note color" Style="{DynamicResource ChromelessButton}" Visibility="Collapsed">
                 <ui:FontIcon Glyph="&#xE790;" />
             </Button>
-            <Button ToolTip="Add note to starred" Style="{DynamicResource ChromelessButton}">
-                <ui:FontIcon Glyph="&#xE113;" />
+            <Button ToolTip="{Binding CurrentNote.IsStarred, Converter={converters:BooleanToIconStateConverter TrueValue='Remove note from starred', FalseValue='Add note to starred'}}"
+                    Style="{DynamicResource ChromelessButton}" Command="{Binding MarkNoteAsStarredCommand}">
+                <ui:FontIcon Glyph="{Binding CurrentNote.IsStarred, Converter={converters:BooleanToIconStateConverter
+                    TrueValue='&#xE8D9;',
+                    FalseValue='&#xE113;'}}" />
             </Button>
-            <Button ToolTip="Remove note from starred" Style="{DynamicResource ChromelessButton}">
-                <ui:FontIcon Glyph="&#xE8D9;" />
-            </Button>
-            <Button ToolTip="Duplicate note" Style="{DynamicResource ChromelessButton}">
+            <Button ToolTip="Duplicate note" Style="{DynamicResource ChromelessButton}" Command="{Binding DuplicateNoteCommand}">
                 <ui:FontIcon Glyph="&#xF413;" />
             </Button>
             <Button ToolTip="Move note to..." Style="{DynamicResource ChromelessButton}" Visibility="Collapsed">
                 <ui:FontIcon Glyph="&#xE19C;" />
             </Button>
-            <Button ToolTip="Add note to archive" Style="{DynamicResource ChromelessButton}">
-                <ui:PathIcon Data="M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 11V14H8L12 18 16 14H13.5V11" />
+            <Button ToolTip="{Binding IsArchived, Converter={converters:BooleanToIconStateConverter TrueValue='Remove note from archive', FalseValue='Add note to archive'}}"
+                    Style="{DynamicResource ChromelessButton}" Command="{Binding MarkNoteAsArchivedCommand}">
+                <ui:PathIcon Data="{Binding IsArchived, Converter={converters:BooleanToIconStateConverter
+                    TrueValue='M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 18V15H8L12 11 16 15H13.5V18',
+                    FalseValue='M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 11V14H8L12 18 16 14H13.5V11'}}" />
             </Button>
-            <Button ToolTip="Remove note from archive" Style="{DynamicResource ChromelessButton}">
-                <ui:PathIcon Data="M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 18V15H8L12 11 16 15H13.5V18" />
-            </Button>
-            
+
             <ui:AppBarSeparator Margin="-12,0,-9,0" />
 
             <Button ToolTip="Delete note" Style="{DynamicResource ChromelessButton}">
@@ -218,7 +218,7 @@
         </ui:SimpleStackPanel>
 
         <!-- Note not found message -->
-        <Grid Margin="5,0,5,0" Grid.Row="1" Grid.RowSpan="2" Visibility="{Binding ShowNoteComponents, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+        <Grid Margin="5,0,5,0" Grid.Row="1" Grid.RowSpan="2" Visibility="{Binding ShowNoteComponents, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
             <TextBlock Text="Please, select a category with notes or create a new note" TextWrapping="WrapWithOverflow" VerticalAlignment="Center"
                            TextAlignment="Center" Foreground="{DynamicResource SystemControlDisabledBaseHighBrush}" />
             <ui:PathIcon Width="80" Height="80" Opacity="0.1" Margin="0, 0, 0, 20" HorizontalAlignment="Right" VerticalAlignment="Bottom"

@@ -1,7 +1,11 @@
-﻿using Prism.Mvvm;
+﻿using Prism.Commands;
+using Prism.Events;
+using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Windows.Documents;
+using Tefterly.Core;
+using Tefterly.Core.Events;
 using Tefterly.Services;
 
 namespace Tefterly.Modules.Note.ViewModels
@@ -29,25 +33,60 @@ namespace Tefterly.Modules.Note.ViewModels
             set { SetProperty(ref _showNoteComponents, value); }
         }
 
+        private Business.Models.Note _currentNote;
+        public Business.Models.Note CurrentNote
+        {
+            get { return _currentNote; }
+            set { SetProperty(ref _currentNote, value); }
+        }
+
+        private bool _isStarred;
+        public bool IsStarred
+        {
+            get { return _isStarred; }
+            set { SetProperty(ref _isStarred, value); }
+        }
+
+        private bool _isArchived;
+        public bool IsArchived
+        {
+            get { return _isArchived; }
+            set { SetProperty(ref _isArchived, value); }
+        }
+
         // services
         private readonly INoteService _noteService;
+        private readonly IEventAggregator _eventAggregator;
 
-        public NoteViewModel(INoteService noteService)
+        // commands
+        public DelegateCommand MarkNoteAsStarredCommand { get; set; }
+        public DelegateCommand DuplicateNoteCommand { get; set; }
+        public DelegateCommand MarkNoteAsArchivedCommand { get; set; }
+
+        public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator)
         {
             // attach all required services
             _noteService = noteService;
+            _eventAggregator = eventAggregator;
+
+            // attach all commands
+            MarkNoteAsStarredCommand = new DelegateCommand(() => ChangeNotebookCategory(NotebookCategories.Starred));
+            DuplicateNoteCommand = new DelegateCommand(() => ExecuteDuplicateNoteCommand());
+            MarkNoteAsArchivedCommand = new DelegateCommand(() => ChangeNotebookCategory(NotebookCategories.Archived));
         }
 
         private void LoadNote(Guid noteId)
         {
-            Business.Models.Note note = _noteService.GetNote(noteId);
+            CurrentNote = _noteService.GetNote(noteId);
 
-            if (note != null)
+            if (CurrentNote != null)
             {
-                NoteTitle = note.Title;
+                NoteTitle = CurrentNote.Title;
+                IsStarred = (CurrentNote.NotebookCategory == NotebookCategories.Starred);
+                IsArchived = (CurrentNote.NotebookCategory == NotebookCategories.Archived);
 
                 Paragraph paragraph = new Paragraph();
-                paragraph.Inlines.Add(note.Content);
+                paragraph.Inlines.Add(CurrentNote.Content);
                 FlowDocument tempNoteContent = new FlowDocument(paragraph);
 
                 NoteContent = tempNoteContent;
@@ -56,6 +95,29 @@ namespace Tefterly.Modules.Note.ViewModels
             }
             else
                 ShowNoteComponents = false;
+        }
+
+        private void ChangeNotebookCategory(Guid notebookCategory)
+        {
+            if (CurrentNote == null || notebookCategory == null)
+                return;
+
+            if (CurrentNote.NotebookCategory == notebookCategory)
+                CurrentNote.NotebookCategory = NotebookCategories.Default;
+            else
+                CurrentNote.NotebookCategory = notebookCategory;
+
+            if (_noteService.UpdateNotebookCategory(CurrentNote.Id, CurrentNote.NotebookCategory) == true)
+                _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+        }
+
+        private void ExecuteDuplicateNoteCommand()
+        {
+            if (CurrentNote == null)
+                return;
+
+            if (_noteService.DuplicateNote(CurrentNote.Id) == true)
+                _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
         }
 
         #region Navigation Logic

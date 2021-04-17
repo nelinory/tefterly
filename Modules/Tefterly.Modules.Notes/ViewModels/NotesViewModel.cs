@@ -1,10 +1,12 @@
-﻿using Prism.Mvvm;
+﻿using Prism.Events;
+using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
 using Tefterly.Business;
 using Tefterly.Core;
 using Tefterly.Core.Commands;
+using Tefterly.Core.Events;
 using Tefterly.Services;
 
 namespace Tefterly.Modules.Notes.ViewModels
@@ -60,21 +62,32 @@ namespace Tefterly.Modules.Notes.ViewModels
         // services
         private readonly INoteService _noteService;
         private readonly IApplicationCommands _applicationCommands;
+        private readonly IEventAggregator _eventAggregator;
 
-        public NotesViewModel(INoteService noteService, IApplicationCommands applicationCommands)
+        public NotesViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator)
         {
             // attach all required services
             _noteService = noteService;
+            _eventAggregator = eventAggregator;
 
             // attach all composite commands
             _applicationCommands = applicationCommands;
+
+            // subscribe to important events
+            _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { LoadNoteList(SelectedNotebookCategoryId); });
         }
 
         private void LoadNoteList(Guid notebookGategory)
         {
             NoteList = new ObservableCollection<Business.Models.Note>(_noteService.GetNotes(notebookGategory));
             if (NoteList.Count > 0)
-                SelectedNote = NoteList[0]; // select the first item
+            {
+                int selectedNoteIndex = NoteList.IndexOf(SelectedNote);
+                if (SelectedNote != null && selectedNoteIndex > -1)
+                    SelectedNote = NoteList[selectedNoteIndex]; // keep existing selection if note state changed
+                else
+                    SelectedNote = NoteList[0]; // select the first item
+            }
             else
                 SelectedNote = null; // no notes found in the selected category
 
@@ -93,7 +106,7 @@ namespace Tefterly.Modules.Notes.ViewModels
         private void ExecuteNavigation(Business.Models.Note selectedNote)
         {
             Guid id = (selectedNote == null) ? Guid.Empty : selectedNote.Id;
-            
+
             NavigationItem navigationItem = new NavigationItem
             {
                 NavigationPath = NavigationPaths.Note,

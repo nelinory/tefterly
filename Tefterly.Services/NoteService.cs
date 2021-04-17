@@ -48,9 +48,51 @@ namespace Tefterly.Services
             return notes;
         }
 
-        public Note GetNote(Guid id)
+        public Note GetNote(Guid noteId)
         {
-            return _notes.Where(p => p.Id == id).FirstOrDefault<Note>();
+            return _notes.Where(p => p.Id == noteId).FirstOrDefault<Note>();
+        }
+
+        public bool UpdateNotebookCategory(Guid noteId, Guid category)
+        {
+            bool success = false;
+            Note targetNote = _notes.Where(p => p.Id == noteId).FirstOrDefault();
+
+            if (targetNote != null)
+            {
+                targetNote.NotebookCategory = category;
+                targetNote.UpdatedDateTime = DateTime.Now;
+
+                success = true;
+            }
+
+            return success;
+        }
+
+        public bool DuplicateNote(Guid noteId)
+        {
+            bool success = false;
+            Note targetNote = _notes.Where(p => p.Id == noteId).FirstOrDefault();
+
+            if (targetNote != null)
+            {
+                Note newNote = new Note
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedDateTime = DateTime.Now,
+                    UpdatedDateTime = DateTime.Now,
+                    Title = "Duplicate - " + targetNote.Title,
+                    Content = targetNote.Content,
+                    Color = targetNote.Color,
+                    NotebookCategory = targetNote.NotebookCategory
+                };
+
+                _notes.Add(newNote);
+
+                success = true;
+            }
+
+            return success;
         }
 
         #region Private Methods

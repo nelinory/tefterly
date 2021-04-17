@@ -1,5 +1,6 @@
 ﻿using ModernWpf;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
@@ -7,6 +8,7 @@ using System.Collections.ObjectModel;
 using Tefterly.Business;
 using Tefterly.Core;
 using Tefterly.Core.Commands;
+using Tefterly.Core.Events;
 using Tefterly.Services;
 
 namespace Tefterly.Modules.Notebook.ViewModels
@@ -43,14 +45,16 @@ namespace Tefterly.Modules.Notebook.ViewModels
         // services
         private readonly INoteService _noteService;
         private readonly IApplicationCommands _applicationCommands;
+        private readonly IEventAggregator _eventAggregator;
 
         // commands
         public DelegateCommand ChangeThemeCommand { get; set; }
 
-        public NotebookViewModel(INoteService noteService, IApplicationCommands applicationCommands)
+        public NotebookViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator)
         {
             // attach all required services
             _noteService = noteService;
+            _eventAggregator = eventAggregator;
 
             // attach all composite commands
             _applicationCommands = applicationCommands;
@@ -58,9 +62,10 @@ namespace Tefterly.Modules.Notebook.ViewModels
             // attach all commands
             ChangeThemeCommand = new DelegateCommand(() => ExecuteChangeThemeCommand());
 
-            LoadNotebookList();
+            // subscribe to important events
+            _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { RefreshCategoryCounts(); });
 
-            RefreshCategoryCounts();
+            LoadNotebookList();
         }
 
         private void LoadNotebookList()
@@ -70,7 +75,9 @@ namespace Tefterly.Modules.Notebook.ViewModels
             if (NotebookList.Count > 0)
                 SelectedNotebook = NotebookList[0]; // select the first item
             else
-                SelectedNotebook = null; // no notebook found
+                SelectedNotebook = null; // no notebooks found
+
+            RefreshCategoryCounts();
         }
 
         private void RefreshCategoryCounts()
