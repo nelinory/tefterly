@@ -202,9 +202,9 @@
             <Button ToolTip="Move note to..." Style="{DynamicResource ChromelessButton}" Visibility="Collapsed">
                 <ui:FontIcon Glyph="&#xE19C;" />
             </Button>
-            <Button ToolTip="{Binding IsArchived, Converter={converters:BooleanToIconStateConverter TrueValue='Remove note from archive', FalseValue='Add note to archive'}}"
+            <Button ToolTip="{Binding CurrentNote.IsArchived, Converter={converters:BooleanToIconStateConverter TrueValue='Remove note from archive', FalseValue='Add note to archive'}}"
                     Style="{DynamicResource ChromelessButton}" Command="{Binding MarkNoteAsArchivedCommand}">
-                <ui:PathIcon Data="{Binding IsArchived, Converter={converters:BooleanToIconStateConverter
+                <ui:PathIcon Data="{Binding CurrentNote.IsArchived, Converter={converters:BooleanToIconStateConverter
                     TrueValue='M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 18V15H8L12 11 16 15H13.5V18',
                     FalseValue='M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 11V14H8L12 18 16 14H13.5V11'}}" />
             </Button>

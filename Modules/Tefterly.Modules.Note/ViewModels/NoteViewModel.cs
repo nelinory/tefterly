@@ -40,20 +40,6 @@ namespace Tefterly.Modules.Note.ViewModels
             set { SetProperty(ref _currentNote, value); }
         }
 
-        private bool _isStarred;
-        public bool IsStarred
-        {
-            get { return _isStarred; }
-            set { SetProperty(ref _isStarred, value); }
-        }
-
-        private bool _isArchived;
-        public bool IsArchived
-        {
-            get { return _isArchived; }
-            set { SetProperty(ref _isArchived, value); }
-        }
-
         // services
         private readonly INoteService _noteService;
         private readonly IEventAggregator _eventAggregator;
@@ -82,8 +68,6 @@ namespace Tefterly.Modules.Note.ViewModels
             if (CurrentNote != null)
             {
                 NoteTitle = CurrentNote.Title;
-                IsStarred = (CurrentNote.NotebookCategory == NotebookCategories.Starred);
-                IsArchived = (CurrentNote.NotebookCategory == NotebookCategories.Archived);
 
                 Paragraph paragraph = new Paragraph();
                 paragraph.Inlines.Add(CurrentNote.Content);
