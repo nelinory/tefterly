@@ -52,13 +52,6 @@ namespace Tefterly.Modules.Notes.ViewModels
             set { SetProperty(ref _showAddNoteButton, value); }
         }
 
-        private string _notesNofFoundMessage;
-        public string NotesNotFoundMessage
-        {
-            get { return _notesNofFoundMessage; }
-            set { SetProperty(ref _notesNofFoundMessage, value); }
-        }
-
         // services
         private readonly INoteService _noteService;
         private readonly IApplicationCommands _applicationCommands;
@@ -93,14 +86,10 @@ namespace Tefterly.Modules.Notes.ViewModels
 
             // update the default message if no notes found 
             ShowAddNoteButton = false;
-            NotesNotFoundMessage = "No notes found";
             ShowNotesNotFoundPanel = (NoteList.Count == 0);
 
             if (SelectedNotebookCategoryId == NotebookCategories.Default)
-            {
-                NotesNotFoundMessage = String.Empty;
                 ShowAddNoteButton = true;
-            }
         }
 
         private void ExecuteNavigation(Business.Models.Note selectedNote)

@@ -10,6 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
             <converters:DateTimeToFormattedStringConverter x:Key="DateTimeToFormattedStringConverter" />
 
             <DataTemplate x:Key="NoteListboxDataTemplate">
@@ -102,7 +103,8 @@
         <!-- Notes not found message -->
         <Grid Margin="5,0,5,0" Grid.Row="2" Visibility="{Binding ShowNotesNotFoundPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ui:SimpleStackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
-                <TextBlock Text="{Binding NotesNotFoundMessage}" TextWrapping="WrapWithOverflow"
+                <TextBlock Text="No notes found" TextWrapping="WrapWithOverflow"
+                           Visibility="{Binding ShowAddNoteButton, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
                            TextAlignment="Center" Foreground="{DynamicResource SystemControlDisabledBaseHighBrush}" />
                 <Button Content="Add a note" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{DynamicResource AccentButtonStyle}"
                         Visibility="{Binding ShowAddNoteButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
