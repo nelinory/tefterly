@@ -73,6 +73,7 @@ namespace Tefterly.Modules.Notes.ViewModels
         private void LoadNoteList(Guid notebookGategory)
         {
             NoteList = new ObservableCollection<Business.Models.Note>(_noteService.GetNotes(notebookGategory));
+           
             if (NoteList.Count > 0)
             {
                 int selectedNoteIndex = NoteList.IndexOf(SelectedNote);
@@ -84,12 +85,8 @@ namespace Tefterly.Modules.Notes.ViewModels
             else
                 SelectedNote = null; // no notes found in the selected category
 
-            // update the default message if no notes found 
-            ShowAddNoteButton = false;
             ShowNotesNotFoundPanel = (NoteList.Count == 0);
-
-            if (SelectedNotebookCategoryId == NotebookCategories.Default)
-                ShowAddNoteButton = true;
+            ShowAddNoteButton = (SelectedNotebookCategoryId == NotebookCategories.Default);
         }
 
         private void ExecuteNavigation(Business.Models.Note selectedNote)
@@ -111,6 +108,7 @@ namespace Tefterly.Modules.Notes.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             SelectedNotebookCategoryId = navigationContext.Parameters.GetValue<Guid>("id");
+            SelectedNote = null; // reset selected note on category change
 
             LoadNoteList(SelectedNotebookCategoryId);
         }

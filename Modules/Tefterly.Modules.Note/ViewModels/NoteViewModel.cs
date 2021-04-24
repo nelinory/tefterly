@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using ModernWpf.Controls;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -48,6 +49,8 @@ namespace Tefterly.Modules.Note.ViewModels
         public DelegateCommand MarkNoteAsStarredCommand { get; set; }
         public DelegateCommand DuplicateNoteCommand { get; set; }
         public DelegateCommand MarkNoteAsArchivedCommand { get; set; }
+        public DelegateCommand DeleteNoteCommand { get; set; }
+        public DelegateCommand PermanentlyDeleteNoteCommand { get; set; }
 
         public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator)
         {
@@ -56,9 +59,11 @@ namespace Tefterly.Modules.Note.ViewModels
             _eventAggregator = eventAggregator;
 
             // attach all commands
-            MarkNoteAsStarredCommand = new DelegateCommand(() => ChangeNotebookCategory(NotebookCategories.Starred));
+            MarkNoteAsStarredCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Starred));
             DuplicateNoteCommand = new DelegateCommand(() => ExecuteDuplicateNoteCommand());
-            MarkNoteAsArchivedCommand = new DelegateCommand(() => ChangeNotebookCategory(NotebookCategories.Archived));
+            MarkNoteAsArchivedCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Archived));
+            DeleteNoteCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Deleted));
+            PermanentlyDeleteNoteCommand = new DelegateCommand(() => ExecutePermanentlyDeleteNoteCommand());
         }
 
         private void LoadNote(Guid noteId)
@@ -81,7 +86,7 @@ namespace Tefterly.Modules.Note.ViewModels
                 ShowNoteComponents = false;
         }
 
-        private void ChangeNotebookCategory(Guid notebookCategory)
+        private void ExecuteChangeNotebookCategory(Guid notebookCategory)
         {
             if (CurrentNote == null || notebookCategory == null)
                 return;
@@ -102,6 +107,31 @@ namespace Tefterly.Modules.Note.ViewModels
 
             if (_noteService.DuplicateNote(CurrentNote.Id) == true)
                 _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+        }
+
+        private async void ExecutePermanentlyDeleteNoteCommand()
+        {
+            if (CurrentNote == null)
+                return;
+
+            ContentDialog dialog = new ContentDialog
+            {
+                Title="Permanently delete note",
+                PrimaryButtonText="Yes", 
+                CloseButtonText ="No",
+                DefaultButton = ContentDialogButton.Close,
+                Content="Are you sure you want to delete this note?"
+                            + Environment.NewLine
+                            + Environment.NewLine
+                            + "This action cannot be undone."
+            };
+
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                if (_noteService.DeleteNote(CurrentNote.Id) == true)
+                    _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+            }
         }
 
         #region Navigation Logic

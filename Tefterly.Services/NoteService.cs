@@ -27,7 +27,12 @@ namespace Tefterly.Services
             int categoryCount = 0;
 
             if (String.IsNullOrEmpty(category.ToString()) == false)
+            {
                 categoryCount = _notes.Where(p => p.NotebookCategory == category).Count();
+
+                if (category == NotebookCategories.Default) // summary of default + starred categories
+                    categoryCount += _notes.Where(p => p.NotebookCategory == NotebookCategories.Starred).Count();
+            }
 
             return categoryCount;
         }
@@ -88,6 +93,21 @@ namespace Tefterly.Services
                 };
 
                 _notes.Add(newNote);
+
+                success = true;
+            }
+
+            return success;
+        }
+
+        public bool DeleteNote(Guid noteId)
+        {
+            bool success = false;
+            Note targetNote = _notes.Where(p => p.Id == noteId).FirstOrDefault();
+
+            if (targetNote != null)
+            {
+                _notes.Remove(targetNote);
 
                 success = true;
             }

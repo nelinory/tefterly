@@ -10,6 +10,7 @@ Project updates:
 - 04/05/2021 - Note service added, still using data mocks
 - 04/10/2021 - Navigation across notebook/notes/note complete, added flow document bound richtextbox
 - 04/17/2021 - Implemented most of the note actions
+- 04/24/2021 - All note actions implemented
 
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>

@@ -57,6 +57,7 @@ namespace Tefterly.Business.Models
                 SetProperty(ref _notebookCategory, value);
                 RaisePropertyChanged("IsStarred");
                 RaisePropertyChanged("IsArchived");
+                RaisePropertyChanged("IsDeleted");
             }
         }
 
@@ -68,6 +69,10 @@ namespace Tefterly.Business.Models
         public bool IsArchived
         {
             get { return NotebookCategory == NotebookCategories.Archived; }
+        }
+        public bool IsDeleted
+        {
+            get { return NotebookCategory == NotebookCategories.Deleted; }
         }
     }
 }

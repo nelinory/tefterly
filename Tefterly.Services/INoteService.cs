@@ -12,5 +12,6 @@ namespace Tefterly.Services
         Note GetNote(Guid noteId);
         bool UpdateNotebookCategory(Guid noteId, Guid category);
         bool DuplicateNote(Guid noteId);
+        bool DeleteNote(Guid noteId);
     }
 }
