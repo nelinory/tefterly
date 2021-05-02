@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
 
         <!-- Title edit box -->
-        <TextBox x:Name="txtTitle"
+        <TextBox
                  Grid.Row="0"
                  FontSize="20"
                  Margin="12,0,12,0"
@@ -104,27 +104,27 @@
                 <ui:FlyoutService.Flyout>
                     <ui:MenuFlyout Placement="Top">
                         <!-- Font styles -->
-                        <MenuItem Header="Bold" InputGestureText="Ctrl+B">
+                        <MenuItem Header="Bold" InputGestureText="Ctrl+B" Command="{x:Static controls:NoteEditor.FontStylesCommand}" CommandParameter="Bold">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8DD;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Italic" InputGestureText="Ctrl+I">
+                        <MenuItem Header="Italic" InputGestureText="Ctrl+I" Command="{x:Static controls:NoteEditor.FontStylesCommand}" CommandParameter="Italic">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8DB;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Underline" InputGestureText="Ctrl+U">
+                        <MenuItem Header="Underline" InputGestureText="Ctrl+U" Command="{x:Static controls:NoteEditor.FontStylesCommand}" CommandParameter="Underline">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8DC;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Strikethrough" InputGestureText="Ctrl+S">
+                        <MenuItem Header="Strikethrough" InputGestureText="Ctrl+S" Command="{x:Static controls:NoteEditor.FontStylesCommand}" CommandParameter="Strikethrough">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xEDE0;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Highlight" InputGestureText="Ctrl+H">
+                        <MenuItem Header="Highlight" InputGestureText="Ctrl+H" Command="{x:Static controls:NoteEditor.FontStylesCommand}" CommandParameter="Highlight">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE7E6;" />
                             </MenuItem.Icon>
@@ -138,43 +138,43 @@
                 <ui:FlyoutService.Flyout>
                     <ui:MenuFlyout Placement="Top">
                         <!-- Paragraph styles -->
-                        <MenuItem Header="Left" InputGestureText="Ctrl+L">
+                        <MenuItem Header="Left" InputGestureText="Ctrl+L" Command="{x:Static controls:NoteEditor.ParagraphStylesCommand}" CommandParameter="Left">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8E4;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Center" InputGestureText="Ctrl+E">
+                        <MenuItem Header="Center" InputGestureText="Ctrl+E" Command="{x:Static controls:NoteEditor.ParagraphStylesCommand}" CommandParameter="Center">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8E3;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Right" InputGestureText="Ctrl+R">
+                        <MenuItem Header="Right" InputGestureText="Ctrl+R" Command="{x:Static controls:NoteEditor.ParagraphStylesCommand}" CommandParameter="Right">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8E2;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Justify" InputGestureText="Ctrl+J">
+                        <MenuItem Header="Justify" InputGestureText="Ctrl+J" Command="{x:Static controls:NoteEditor.ParagraphStylesCommand}" CommandParameter="Justify">
                             <MenuItem.Icon>
                                 <ui:PathIcon Data="M3 3H21V4.25H3V3M3 7H21V8.25H3V7M3 11H21V12.25H3V11M3 15H21V16.25H3V15M3 19H21V20.25H3V19Z" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Increase Indent" InputGestureText="Tab">
+                        <MenuItem Header="Increase Indent" InputGestureText="Tab" Command="{x:Static controls:NoteEditor.ParagraphStylesCommand}" CommandParameter="IncreaseIndent">
                             <MenuItem.Icon>
                                 <ui:PathIcon Data="M11 12.25H21V11H11M11 8.25H21V7H11M3 3V4.25H21V3M11 16.25H21V15H11M3 8V16L7 12M3 20.25H21V19H3V20.25Z" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Decrease Indent" InputGestureText="Shift+Tab">
+                        <MenuItem Header="Decrease Indent" InputGestureText="Shift+Tab" Command="{x:Static controls:NoteEditor.ParagraphStylesCommand}" CommandParameter="DecreaseIndent">
                             <MenuItem.Icon>
                                 <ui:PathIcon Data="M11 12.25H21V11H11M11 8.25H21V7H11M3 3V4.25H21V3M11 16.25H21V15H11M7 8V16L3 12M3 20.25H21V19H3V20.25Z" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="List" InputGestureText="Ctrl+Shift+L">
+                        <MenuItem Header="List" InputGestureText="Ctrl+Shift+L" Command="{x:Static controls:NoteEditor.ParagraphStylesCommand}" CommandParameter="List">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8FD;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Ordered List" InputGestureText="Ctrl+Shift+N">
+                        <MenuItem Header="Ordered List" InputGestureText="Ctrl+Shift+N" Command="{x:Static controls:NoteEditor.ParagraphStylesCommand}" CommandParameter="OrderedList">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xE9D5;" />
                             </MenuItem.Icon>
