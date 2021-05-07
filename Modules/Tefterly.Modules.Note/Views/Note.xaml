@@ -60,7 +60,7 @@
                     VerticalScrollBarVisibility="Auto"
                     IsDocumentEnabled="True"
                     AllowDrop="True"    
-                    BoundFlowDocument="{Binding NoteContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    BoundFlowDocument="{Binding NoteDocument, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsInactiveSelectionHighlightEnabled="True"
                     Style="{StaticResource DefaultRichTextBoxStyle}"                
                     ui:ControlHelper.PlaceholderText="Note Text"

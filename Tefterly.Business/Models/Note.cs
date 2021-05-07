@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System;
+using System.Windows.Documents;
 using Tefterly.Core;
 
 namespace Tefterly.Business.Models
@@ -41,11 +42,11 @@ namespace Tefterly.Business.Models
             set { SetProperty(ref _content, value); }
         }
 
-        private string _color;
-        public string Color
+        public FlowDocument _document;
+        public FlowDocument Document
         {
-            get { return _color; }
-            set { SetProperty(ref _color, value); }
+            get { return _document; }
+            set { SetProperty(ref _document, value); }
         }
 
         private Guid _notebookCategory;

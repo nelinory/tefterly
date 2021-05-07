@@ -31,13 +31,9 @@
                                Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" TextTrimming="WordEllipsis"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"
                                 HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2">
-                        <ContentControl Visibility="{Binding IsStarred, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        IsHitTestVisible="False" Margin="0,0,9,0" Foreground="{DynamicResource SystemControlHighlightListAccentVeryHighBrush}">
-                            <ui:FontIcon Glyph="&#xE735;" FontSize="13"/>
-                        </ContentControl>
-                        <Rectangle Width="11" Height="11" Margin="0,1,0,0"
-                                   Fill="{DynamicResource SystemControlTransparentBrush}"
-                                   IsHitTestVisible="False"/>
+                        <ui:FontIcon Glyph="&#xE735;" FontSize="13"
+                                     Visibility="{Binding IsStarred, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                     IsHitTestVisible="False" Foreground="{DynamicResource SystemControlHighlightListAccentVeryHighBrush}"/>
                     </StackPanel>
                     <TextBlock Text="{Binding UpdatedDateTime, Converter={StaticResource DateTimeToFormattedStringConverter}}"
                                Grid.Column="1" Grid.Row="2" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{DynamicResource SystemControlDisabledBaseHighBrush}" Opacity="0.8"/>

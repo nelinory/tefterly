@@ -20,11 +20,11 @@ namespace Tefterly.Modules.Note.ViewModels
             set { SetProperty(ref _noteTitle, value); }
         }
 
-        private FlowDocument _noteContent;
-        public FlowDocument NoteContent
+        private FlowDocument _noteDocument;
+        public FlowDocument NoteDocument
         {
-            get { return _noteContent; }
-            set { SetProperty(ref _noteContent, value); }
+            get { return _noteDocument; }
+            set { SetProperty(ref _noteDocument, value); }
         }
 
         private bool _showNoteComponents;
@@ -73,12 +73,7 @@ namespace Tefterly.Modules.Note.ViewModels
             if (CurrentNote != null)
             {
                 NoteTitle = CurrentNote.Title;
-
-                Paragraph paragraph = new Paragraph();
-                paragraph.Inlines.Add(CurrentNote.Content);
-                FlowDocument tempNoteContent = new FlowDocument(paragraph);
-
-                NoteContent = tempNoteContent;
+                NoteDocument = CurrentNote.Document;
 
                 ShowNoteComponents = true;
             }
@@ -116,11 +111,11 @@ namespace Tefterly.Modules.Note.ViewModels
 
             ContentDialog dialog = new ContentDialog
             {
-                Title="Permanently delete note",
-                PrimaryButtonText="Yes", 
-                CloseButtonText ="No",
+                Title = "Permanently delete note",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
                 DefaultButton = ContentDialogButton.Close,
-                Content="Are you sure you want to delete this note?"
+                Content = "Are you sure you want to delete this note?"
                             + Environment.NewLine
                             + Environment.NewLine
                             + "This action cannot be undone."
