@@ -67,24 +67,25 @@ namespace Tefterly.Modules.Notes.ViewModels
             _applicationCommands = applicationCommands;
 
             // subscribe to important events
-            _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { LoadNoteList(SelectedNotebookCategoryId); });
+            _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { LoadNoteList(SelectedNotebookCategoryId, isNavigationAction: false); });
         }
 
-        private void LoadNoteList(Guid notebookGategory)
+        private void LoadNoteList(Guid notebookGategory, bool isNavigationAction)
         {
-            NoteList = new ObservableCollection<Business.Models.Note>(_noteService.GetNotes(notebookGategory));
-           
-            if (NoteList.Count > 0)
+            ObservableCollection<Business.Models.Note> tempNoteList = new ObservableCollection<Business.Models.Note>(_noteService.GetNotes(notebookGategory));
+
+            if (tempNoteList.Count > 0)
             {
-                int selectedNoteIndex = NoteList.IndexOf(SelectedNote);
-                if (SelectedNote != null && selectedNoteIndex > -1)
-                    SelectedNote = NoteList[selectedNoteIndex]; // keep existing selection if note state changed
+                int selectedNoteIndex = tempNoteList.IndexOf(SelectedNote);
+                if (SelectedNote != null && selectedNoteIndex > -1 && isNavigationAction == false)
+                    SelectedNote = tempNoteList[selectedNoteIndex]; // keep existing selection if note state changed
                 else
-                    SelectedNote = NoteList[0]; // select the first item
+                    SelectedNote = tempNoteList[0]; // select the first item
             }
             else
                 SelectedNote = null; // no notes found in the selected category
 
+            NoteList = tempNoteList; // bind it to the live NoteList
             ShowNotesNotFoundPanel = (NoteList.Count == 0);
             ShowAddNoteButton = (SelectedNotebookCategoryId == NotebookCategories.Default);
         }
@@ -108,9 +109,8 @@ namespace Tefterly.Modules.Notes.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             SelectedNotebookCategoryId = navigationContext.Parameters.GetValue<Guid>("id");
-            SelectedNote = null; // reset selected note on category change
 
-            LoadNoteList(SelectedNotebookCategoryId);
+            LoadNoteList(SelectedNotebookCategoryId, isNavigationAction: true);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) { return true; }
