@@ -64,7 +64,8 @@
                 <ColumnDefinition Width="38"/>
             </Grid.ColumnDefinitions>
             <ui:AutoSuggestBox Grid.Column="0" PlaceholderText="Search" QueryIcon="Find" Margin="7,2,1,0" />
-            <Button Grid.Column="1" ToolTip="Add a note" Style="{DynamicResource ChromelessButton}" Margin="0,1,2,0">
+            <Button Grid.Column="1" Command="{Binding AddNoteCommand}"
+                    ToolTip="Add a note" Style="{DynamicResource ChromelessButton}" Margin="0,1,2,0">
                 <ui:FontIcon Glyph="&#xF164;" FontSize="24" />
             </Button>
         </Grid>
@@ -102,7 +103,8 @@
                 <TextBlock Text="No notes found" TextWrapping="WrapWithOverflow"
                            Visibility="{Binding ShowAddNoteButton, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
                            TextAlignment="Center" Foreground="{DynamicResource SystemControlDisabledBaseHighBrush}" />
-                <Button Content="Add a note" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{DynamicResource AccentButtonStyle}"
+                <Button Content="Add a note" Command="{Binding AddNoteCommand}"
+                        VerticalAlignment="Center" HorizontalAlignment="Center" Style="{DynamicResource AccentButtonStyle}"
                         Visibility="{Binding ShowAddNoteButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </ui:SimpleStackPanel>
         </Grid>

@@ -116,6 +116,21 @@ namespace Tefterly.Services
             return success;
         }
 
+        public bool AddNote(Note note)
+        {
+            bool success = false;
+            Note targetNote = _notes.Where(p => p.Id == note.Id).FirstOrDefault();
+
+            if (targetNote == null)
+            {
+                _notes.Add(note);
+
+                success = true;
+            }
+
+            return success;
+        }
+
         #region Private Methods
 
         private void LoadNotebooks()

@@ -4,6 +4,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Tefterly.Business;
 using Tefterly.Core;
@@ -70,13 +71,14 @@ namespace Tefterly.Modules.Notebook.ViewModels
 
         private void LoadNotebookList()
         {
-            NotebookList = new ObservableCollection<Business.Models.Notebook>(_noteService.GetAllNotebookCategories());
+            List<Business.Models.Notebook> notebooks = new List<Business.Models.Notebook>(_noteService.GetAllNotebookCategories());
 
-            if (NotebookList.Count > 0)
-                SelectedNotebook = NotebookList[0]; // select the first item
+            if (notebooks.Count > 0)
+                SelectedNotebook = notebooks[0]; // select the first item
             else
                 SelectedNotebook = null; // no notebooks found
 
+            NotebookList = new ObservableCollection<Business.Models.Notebook>(notebooks);
             RefreshCategoryCounts();
         }
 
