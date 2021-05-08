@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Windows.Documents;
 using Tefterly.Business.Models;
 using Tefterly.Core;
 
@@ -139,7 +137,7 @@ namespace Tefterly.Services
             {
                 new Notebook() { Id = NotebookCategories.Default, Title = "Notes", IconFont = "\xE8F1", IsSystem = true },
                 new Notebook() { Id = NotebookCategories.Starred, Title = "Starred", IconFont = "\xE734", IsSystem = true },
-                new Notebook() { Id = NotebookCategories.Archived, Title = "Archived", IconFont = "\xF12B", IsSystem = true },
+                new Notebook() { Id = NotebookCategories.Archived, Title = "Archived", IconFont = "\xE7B8", IsSystem = true }, // xF12B
                 new Notebook() { Id = NotebookCategories.Deleted, Title = "Deleted", IconFont = "\xE74D", IsSystem = true }
             };
         }
@@ -158,7 +156,7 @@ namespace Tefterly.Services
                     CreatedDateTime = DateTime.Now,
                     UpdatedDateTime = DateTime.Now,
                     Title = "Demo Note #1",
-                    Document = GetFlowDocumentFromText("This is demo note #1 - just made. " + demoNoteText),
+                    Document = Utilities.GetFlowDocumentFromText("This is demo note #1 - just made. " + demoNoteText),
                     NotebookCategory = NotebookCategories.Default
                 },
                 // note #2 - 5 days old, starred
@@ -168,7 +166,7 @@ namespace Tefterly.Services
                     CreatedDateTime = DateTime.Now.AddDays(-5),
                     UpdatedDateTime = DateTime.Now.AddDays(-5),
                     Title = "Demo Note #2 With A Long Title",
-                    Document = GetFlowDocumentFromText("This is demo note #2 - 5 days old, starred. " + demoNoteText),
+                    Document = Utilities.GetFlowDocumentFromText("This is demo note #2 - 5 days old, starred. " + demoNoteText),
                     NotebookCategory = NotebookCategories.Starred
                 },
                 // note #3 - 15 days old
@@ -178,7 +176,7 @@ namespace Tefterly.Services
                     CreatedDateTime = DateTime.Now.AddDays(-15),
                     UpdatedDateTime = DateTime.Now.AddDays(-15),
                     Title = "Demo Note #3",
-                    Document = GetFlowDocumentFromText("This is demo note #3 - 15 days old. " + demoNoteText),
+                    Document = Utilities.GetFlowDocumentFromText("This is demo note #3 - 15 days old. " + demoNoteText),
                     NotebookCategory = NotebookCategories.Default
                 },
                 // note #4 - 20 days old, archived
@@ -188,7 +186,7 @@ namespace Tefterly.Services
                     CreatedDateTime = DateTime.Now.AddDays(-20),
                     UpdatedDateTime = DateTime.Now.AddDays(-20),
                     Title = "Demo Note #4",
-                    Document = GetFlowDocumentFromText("This is demo note #4 - 20 days old - archived. " + demoNoteText),
+                    Document = Utilities.GetFlowDocumentFromText("This is demo note #4 - 20 days old - archived. " + demoNoteText),
                     NotebookCategory = NotebookCategories.Default
                 },
                 // note #5 - over an year old
@@ -198,51 +196,15 @@ namespace Tefterly.Services
                     CreatedDateTime = DateTime.Now.AddMonths(-15),
                     UpdatedDateTime = DateTime.Now.AddMonths(-15),
                     Title = "Demo Note #5",
-                    Document = GetFlowDocumentFromText("This is demo note #5 - over an year old. " + demoNoteText),
+                    Document = Utilities.GetFlowDocumentFromText("This is demo note #5 - over an year old. " + demoNoteText),
                     NotebookCategory = NotebookCategories.Default
                 }
             };
 
             foreach (Note note in _notes)
             {
-                note.Content = GetTextFromFlowDocument(note.Document);
+                note.Content = Utilities.GetTextFromFlowDocument(note.Document);
             }
-        }
-
-        private FlowDocument GetFlowDocumentFromText(string text)
-        {
-            Paragraph paragraph = new Paragraph();
-            paragraph.Inlines.Add(text);
-
-            return new FlowDocument(paragraph);
-        }
-
-        private string GetTextFromFlowDocument(FlowDocument document)
-        {
-            string returnResult = String.Empty;
-
-            if (document != null)
-            {
-                TextRange textRange = new TextRange(document.ContentStart, document.ContentEnd);
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    textRange.Save(memoryStream, System.Windows.DataFormats.Text);
-                    returnResult = RemoveBulletsFromText(textRange.Text);
-                }
-            }
-
-            return returnResult;
-        }
-
-        // fix some bad looking bullet points in the plain text
-        private string RemoveBulletsFromText(string inputText)
-        {
-            string returnValue = String.Empty;
-
-            returnValue = inputText.Replace("•\t", String.Empty);
-            returnValue = returnValue.Replace("•", String.Empty);
-
-            return returnValue;
         }
 
         #endregion

@@ -12,7 +12,7 @@ Project updates:
 - 03/27/2021
   - Note UI mock complete
 - 04/05/2021
-  - Note service added, still using data mocks
+  - Note service added
 - 04/10/2021
   - Navigation across notebook/notes/note complete
   - Added flow document bound richtextbox
@@ -23,9 +23,11 @@ Project updates:
 - 05/02/2021
   - Note font/paragraph styles implemented.
   - Global font/paragraph styles commands added to NoteEditor control.
-- 05/02/2021
+- 05/07/2021
   - Refactored the Note model.
   - Optimized the navigation action in Notes module.
+- 05/08/2021
+  - Add new note implemented
   
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>

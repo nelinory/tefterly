@@ -65,20 +65,20 @@ namespace Tefterly.Modules.Notebook.ViewModels
 
             // subscribe to important events
             _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { RefreshCategoryCounts(); });
+            _eventAggregator.GetEvent<ResetNotebookCategoryEvent>().Subscribe(x => { SelectedNotebook = NotebookList[0]; });
 
             LoadNotebookList();
         }
 
         private void LoadNotebookList()
         {
-            List<Business.Models.Notebook> notebooks = new List<Business.Models.Notebook>(_noteService.GetAllNotebookCategories());
+            NotebookList = new ObservableCollection<Business.Models.Notebook>(_noteService.GetAllNotebookCategories());
 
-            if (notebooks.Count > 0)
-                SelectedNotebook = notebooks[0]; // select the first item
+            if (NotebookList.Count > 0)
+                SelectedNotebook = NotebookList[0]; // select the first item
             else
                 SelectedNotebook = null; // no notebooks found
 
-            NotebookList = new ObservableCollection<Business.Models.Notebook>(notebooks);
             RefreshCategoryCounts();
         }
 

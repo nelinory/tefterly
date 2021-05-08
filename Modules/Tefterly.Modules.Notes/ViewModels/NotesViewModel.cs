@@ -5,7 +5,7 @@ using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Documents;
+using System.Linq;
 using Tefterly.Business;
 using Tefterly.Core;
 using Tefterly.Core.Commands;
@@ -76,21 +76,15 @@ namespace Tefterly.Modules.Notes.ViewModels
             _applicationCommands = applicationCommands;
 
             // subscribe to important events
-            _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { LoadNoteList(SelectedNotebookCategoryId, isNavigationAction: false); });
+            _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { LoadNoteList(SelectedNotebookCategoryId); });
         }
 
-        private void LoadNoteList(Guid notebookGategory, bool isNavigationAction)
+        private void LoadNoteList(Guid notebookGategory)
         {
-            List<Business.Models.Note> notes = new List<Business.Models.Note>(_noteService.GetNotes(notebookGategory));
+            List<Business.Models.Note> notes = new List<Business.Models.Note>(_noteService.GetNotes(notebookGategory).OrderByDescending(p => p.UpdatedDateTime));
 
             if (notes.Count > 0)
-            {
-                int selectedNoteIndex = notes.IndexOf(SelectedNote);
-                if (SelectedNote != null && selectedNoteIndex > -1 && isNavigationAction == false)
-                    SelectedNote = notes[selectedNoteIndex]; // keep existing selection if note state changed
-                else
-                    SelectedNote = notes[0]; // select the first item
-            }
+                SelectedNote = notes[0]; // select the first item
             else
                 SelectedNote = null; // no notes found in the selected category
 
@@ -115,22 +109,23 @@ namespace Tefterly.Modules.Notes.ViewModels
 
         private void ExecuteAddNoteCommand()
         {
-            // add some simple text for content
-            Paragraph paragraph = new Paragraph();
-            paragraph.Inlines.Add("Please, type your note content here...");
-
             Business.Models.Note newNote = new Business.Models.Note()
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.Now,
                 UpdatedDateTime = DateTime.Now,
                 Title = String.Format("New Note - {0:F}", DateTime.Now),
-                Document = new FlowDocument(paragraph),
+                Document = Utilities.GetFlowDocumentFromText("Please, type your note content here..."),
                 NotebookCategory = NotebookCategories.Default
             };
 
+            newNote.Content = Utilities.GetTextFromFlowDocument(newNote.Document);
+
             if (_noteService.AddNote(newNote) == true)
                 _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+
+            if (SelectedNotebookCategoryId != NotebookCategories.Default)
+                _eventAggregator.GetEvent<ResetNotebookCategoryEvent>().Publish(String.Empty);
         }
 
         #region Navigation Logic
@@ -139,7 +134,7 @@ namespace Tefterly.Modules.Notes.ViewModels
         {
             SelectedNotebookCategoryId = navigationContext.Parameters.GetValue<Guid>("id");
 
-            LoadNoteList(SelectedNotebookCategoryId, isNavigationAction: true);
+            LoadNoteList(SelectedNotebookCategoryId);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) { return true; }
