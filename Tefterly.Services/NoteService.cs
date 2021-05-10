@@ -11,8 +11,14 @@ namespace Tefterly.Services
         private static IList<Notebook> _notebooks = new List<Notebook>();
         private static IList<Note> _notes = new List<Note>();
 
-        public NoteService()
+        // services
+        private readonly ISettingsService _settingsService;
+
+        public NoteService(ISettingsService settingsService)
         {
+            // attach all required services
+            _settingsService = settingsService;
+
             LoadNotebooks();
             LoadNotes();
         }

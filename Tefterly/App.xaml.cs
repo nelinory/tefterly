@@ -24,6 +24,7 @@ namespace Tefterly
         {
             // register shared services
             containerRegistry.RegisterSingleton<INoteService, NoteService>();
+            containerRegistry.RegisterSingleton<ISettingsService, SettingsService>();
 
             // register composite commands
             containerRegistry.RegisterSingleton<IApplicationCommands, ApplicationCommands>();
