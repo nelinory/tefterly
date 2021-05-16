@@ -22,12 +22,14 @@ Project updates:
   - All note actions implemented
 - 05/02/2021
   - Note font/paragraph styles implemented.
-  - Global font/paragraph styles commands added to NoteEditor control.
+  - Global font/paragraph styles commands added to NoteEditor control
 - 05/07/2021
-  - Refactored the Note model.
-  - Optimized the navigation action in Notes module.
+  - Refactored the Note model
+  - Optimized the navigation action in Notes module
 - 05/08/2021
   - Add new note implemented
+- 05/16/2021
+  - Refactored NoteViewModel bindings to properly reflect changes to the model values
   
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>

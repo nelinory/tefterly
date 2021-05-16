@@ -35,18 +35,19 @@ namespace Tefterly.Business.Models
             set { SetProperty(ref _title, value); }
         }
 
-        private string _content;
         public string Content
         {
-            get { return _content; }
-            set { SetProperty(ref _content, value); }
+            get { return Utilities.GetTextFromFlowDocument(Document); }
         }
-
         public FlowDocument _document;
         public FlowDocument Document
         {
             get { return _document; }
-            set { SetProperty(ref _document, value); }
+            set
+            {
+                SetProperty(ref _document, value);
+                RaisePropertyChanged("Content");
+            }
         }
 
         private Guid _notebookCategory;

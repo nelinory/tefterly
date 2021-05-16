@@ -4,7 +4,6 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
-using System.Windows.Documents;
 using Tefterly.Core;
 using Tefterly.Core.Events;
 using Tefterly.Services;
@@ -13,18 +12,11 @@ namespace Tefterly.Modules.Note.ViewModels
 {
     public class NoteViewModel : BindableBase, INavigationAware
     {
-        private string _noteTitle;
-        public string NoteTitle
+        private Business.Models.Note _currentNote;
+        public Business.Models.Note CurrentNote
         {
-            get { return _noteTitle; }
-            set { SetProperty(ref _noteTitle, value); }
-        }
-
-        private FlowDocument _noteDocument;
-        public FlowDocument NoteDocument
-        {
-            get { return _noteDocument; }
-            set { SetProperty(ref _noteDocument, value); }
+            get { return _currentNote; }
+            set { SetProperty(ref _currentNote, value); }
         }
 
         private bool _showNoteComponents;
@@ -32,13 +24,6 @@ namespace Tefterly.Modules.Note.ViewModels
         {
             get { return _showNoteComponents; }
             set { SetProperty(ref _showNoteComponents, value); }
-        }
-
-        private Business.Models.Note _currentNote;
-        public Business.Models.Note CurrentNote
-        {
-            get { return _currentNote; }
-            set { SetProperty(ref _currentNote, value); }
         }
 
         // services
@@ -70,15 +55,7 @@ namespace Tefterly.Modules.Note.ViewModels
         {
             CurrentNote = _noteService.GetNote(noteId);
 
-            if (CurrentNote != null)
-            {
-                NoteTitle = CurrentNote.Title;
-                NoteDocument = CurrentNote.Document;
-
-                ShowNoteComponents = true;
-            }
-            else
-                ShowNoteComponents = false;
+            ShowNoteComponents = (CurrentNote != null);
         }
 
         private void ExecuteChangeNotebookCategory(Guid notebookCategory)

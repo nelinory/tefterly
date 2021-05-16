@@ -206,11 +206,6 @@ namespace Tefterly.Services
                     NotebookCategory = NotebookCategories.Default
                 }
             };
-
-            foreach (Note note in _notes)
-            {
-                note.Content = Utilities.GetTextFromFlowDocument(note.Document);
-            }
         }
 
         #endregion

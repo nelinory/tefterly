@@ -119,8 +119,6 @@ namespace Tefterly.Modules.Notes.ViewModels
                 NotebookCategory = NotebookCategories.Default
             };
 
-            newNote.Content = Utilities.GetTextFromFlowDocument(newNote.Document);
-
             if (_noteService.AddNote(newNote) == true)
                 _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
 
