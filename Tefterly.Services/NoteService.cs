@@ -64,22 +64,6 @@ namespace Tefterly.Services
             return _notes.Where(p => p.Id == noteId).FirstOrDefault<Note>();
         }
 
-        public bool UpdateNotebookCategory(Guid noteId, Guid category)
-        {
-            bool success = false;
-            Note targetNote = _notes.Where(p => p.Id == noteId).FirstOrDefault();
-
-            if (targetNote != null)
-            {
-                targetNote.NotebookCategory = category;
-                targetNote.UpdatedDateTime = DateTime.Now;
-
-                success = true;
-            }
-
-            return success;
-        }
-
         public bool DuplicateNote(Guid noteId)
         {
             bool success = false;

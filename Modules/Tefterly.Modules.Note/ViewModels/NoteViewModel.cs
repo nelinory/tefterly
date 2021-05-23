@@ -54,7 +54,7 @@ namespace Tefterly.Modules.Note.ViewModels
         private void LoadNote(Guid noteId)
         {
             CurrentNote = _noteService.GetNote(noteId);
-
+            CurrentNote.TrackChanges = (CurrentNote != null);
             ShowNoteComponents = (CurrentNote != null);
         }
 
@@ -68,8 +68,7 @@ namespace Tefterly.Modules.Note.ViewModels
             else
                 CurrentNote.NotebookCategory = notebookCategory;
 
-            if (_noteService.UpdateNotebookCategory(CurrentNote.Id, CurrentNote.NotebookCategory) == true)
-                _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+            SendNoteChangedEvent();
         }
 
         private void ExecuteDuplicateNoteCommand()
@@ -78,7 +77,7 @@ namespace Tefterly.Modules.Note.ViewModels
                 return;
 
             if (_noteService.DuplicateNote(CurrentNote.Id) == true)
-                _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+                SendNoteChangedEvent();
         }
 
         private async void ExecutePermanentlyDeleteNoteCommand()
@@ -102,8 +101,13 @@ namespace Tefterly.Modules.Note.ViewModels
             if (result == ContentDialogResult.Primary)
             {
                 if (_noteService.DeleteNote(CurrentNote.Id) == true)
-                    _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+                    SendNoteChangedEvent();
             }
+        }
+
+        private void SendNoteChangedEvent()
+        {
+            _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
         }
 
         #region Navigation Logic

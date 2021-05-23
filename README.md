@@ -30,6 +30,8 @@ Project updates:
   - Add new note implemented
 - 05/16/2021
   - Refactored NoteViewModel bindings to properly reflect changes to the model values
+- 05/23/2021
+  - Implemented model change tracking base class
   
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>

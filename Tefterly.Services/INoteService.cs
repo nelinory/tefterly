@@ -10,7 +10,6 @@ namespace Tefterly.Services
         int GetCategoryCount(Guid category);
         IList<Note> GetNotes(Guid category);
         Note GetNote(Guid noteId);
-        bool UpdateNotebookCategory(Guid noteId, Guid category);
         bool DuplicateNote(Guid noteId);
         bool DeleteNote(Guid noteId);
         bool AddNote(Note note);
