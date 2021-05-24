@@ -14,6 +14,7 @@ namespace Tefterly.Business
     {
         private static readonly IEnumerable<string> _propertiesToIgnore = new List<string> { "IsChanged" };
 
+        public event EventHandler ModelChanged;
         public ConcurrentDictionary<string, object> Changes { get; private set; }
 
         private DateTime _createdDateTime;
@@ -55,8 +56,19 @@ namespace Tefterly.Business
 
         private void ModelChangeTrackingBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (TrackChanges == true && _propertiesToIgnore.Contains(e.PropertyName) == false)
+            if (TrackChanges == true && IsChanged == false && _propertiesToIgnore.Contains(e.PropertyName) == false)
+            {
+                OnModelChanged(EventArgs.Empty);
                 IsChanged = true;
+            }
+        }
+
+        protected virtual void OnModelChanged(EventArgs e)
+        {
+            EventHandler eventHandler = ModelChanged;
+
+            if (eventHandler != null)
+                eventHandler(this, e);
         }
 
         #region BindableBase Implementation

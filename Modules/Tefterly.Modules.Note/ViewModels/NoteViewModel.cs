@@ -54,7 +54,13 @@ namespace Tefterly.Modules.Note.ViewModels
         private void LoadNote(Guid noteId)
         {
             CurrentNote = _noteService.GetNote(noteId);
-            CurrentNote.TrackChanges = (CurrentNote != null);
+
+            if (CurrentNote != null)
+            {
+                CurrentNote.TrackChanges = true;
+                CurrentNote.ModelChanged += OnModelChanged;
+            }
+
             ShowNoteComponents = (CurrentNote != null);
         }
 
@@ -108,6 +114,11 @@ namespace Tefterly.Modules.Note.ViewModels
         private void SendNoteChangedEvent()
         {
             _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+        }
+
+        private void OnModelChanged(object sender, EventArgs e)
+        {
+            SendNoteChangedEvent();
         }
 
         #region Navigation Logic
