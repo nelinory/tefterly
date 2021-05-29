@@ -12,6 +12,7 @@ namespace Tefterly.Services
         Note GetNote(Guid noteId);
         bool DuplicateNote(Guid noteId);
         bool DeleteNote(Guid noteId);
-        bool AddNote(Note note);
+        bool AddNote();
+        void SaveNotes();
     }
 }

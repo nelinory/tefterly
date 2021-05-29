@@ -4,6 +4,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
+using System.Windows.Threading;
 using Tefterly.Core;
 using Tefterly.Core.Events;
 using Tefterly.Services;
@@ -25,6 +26,8 @@ namespace Tefterly.Modules.Note.ViewModels
             get { return _showNoteComponents; }
             set { SetProperty(ref _showNoteComponents, value); }
         }
+
+        private readonly DispatcherTimer _autoSaveNoteTimer;
 
         // services
         private readonly INoteService _noteService;
@@ -49,6 +52,12 @@ namespace Tefterly.Modules.Note.ViewModels
             MarkNoteAsArchivedCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Archived));
             DeleteNoteCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Deleted));
             PermanentlyDeleteNoteCommand = new DelegateCommand(() => ExecutePermanentlyDeleteNoteCommand());
+
+            // autosave
+            _autoSaveNoteTimer = new DispatcherTimer();
+            _autoSaveNoteTimer.Interval = TimeSpan.FromSeconds(7); // TODO: Add to settings
+            _autoSaveNoteTimer.Tick += AutoSaveNoteHandler;
+            _autoSaveNoteTimer.Start();
         }
 
         private void LoadNote(Guid noteId)
@@ -114,6 +123,14 @@ namespace Tefterly.Modules.Note.ViewModels
         private void SendNoteChangedEvent()
         {
             _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+        }
+
+        private void AutoSaveNoteHandler(object sender, EventArgs e)
+        {
+            if (CurrentNote == null)
+                return;
+
+            _noteService.SaveNotes();
         }
 
         private void OnModelChanged(object sender, EventArgs e)

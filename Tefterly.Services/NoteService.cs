@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Windows.Documents;
 using Tefterly.Business.Models;
 using Tefterly.Core;
 
@@ -10,6 +13,7 @@ namespace Tefterly.Services
     {
         private static IList<Notebook> _notebooks = new List<Notebook>();
         private static IList<Note> _notes = new List<Note>();
+        private static JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
 
         // services
         private readonly ISettingsService _settingsService;
@@ -71,15 +75,11 @@ namespace Tefterly.Services
 
             if (targetNote != null)
             {
-                Note newNote = new Note
-                {
-                    Id = Guid.NewGuid(),
-                    CreatedDateTime = DateTime.Now,
-                    UpdatedDateTime = DateTime.Now,
-                    Title = "Duplicate - " + targetNote.Title,
-                    Document = targetNote.Document,
-                    NotebookCategory = targetNote.NotebookCategory
-                };
+                Note newNote = CreateNewNote();
+
+                newNote.Title = "Duplicate - " + targetNote.Title;
+                newNote.Document = targetNote.Document;
+                newNote.NotebookCategory = targetNote.NotebookCategory;
 
                 _notes.Add(newNote);
 
@@ -98,25 +98,56 @@ namespace Tefterly.Services
             {
                 _notes.Remove(targetNote);
 
+                DeleteNoteXaml(targetNote);
+
                 success = true;
             }
 
             return success;
         }
 
-        public bool AddNote(Note note)
+        public bool AddNote()
         {
             bool success = false;
-            Note targetNote = _notes.Where(p => p.Id == note.Id).FirstOrDefault();
+            Note newNote = CreateNewNote();
 
-            if (targetNote == null)
+            if (newNote != null)
             {
-                _notes.Add(note);
+                newNote.Title = String.Format("New Note - {0:F}", DateTime.Now);
+                newNote.Document = Utilities.GetFlowDocumentFromText("Please, type your note content here...");
+                newNote.NotebookCategory = NotebookCategories.Default;
+
+                _notes.Add(newNote);
 
                 success = true;
             }
 
             return success;
+        }
+
+        public void SaveNotes()
+        {
+            bool changesSaved = false;
+
+            try
+            {
+                foreach (Note note in _notes)
+                {
+                    if (note.IsChanged == true)
+                    {
+                        SaveNoteXaml(note);
+
+                        changesSaved = true;
+                    }
+                }
+
+                if (changesSaved == true)
+                    SaveNoteCatalog();
+            }
+            catch (Exception ex)
+            {
+                // TODO: Logging
+            }
         }
 
         #region Private Methods
@@ -127,69 +158,163 @@ namespace Tefterly.Services
             {
                 new Notebook() { Id = NotebookCategories.Default, Title = "Notes", IconFont = "\xE8F1", IsSystem = true },
                 new Notebook() { Id = NotebookCategories.Starred, Title = "Starred", IconFont = "\xE734", IsSystem = true },
-                new Notebook() { Id = NotebookCategories.Archived, Title = "Archived", IconFont = "\xE7B8", IsSystem = true }, // xF12B
+                new Notebook() { Id = NotebookCategories.Archived, Title = "Archived", IconFont = "\xE7B8", IsSystem = true },
                 new Notebook() { Id = NotebookCategories.Deleted, Title = "Deleted", IconFont = "\xE74D", IsSystem = true }
             };
         }
 
         private void LoadNotes()
         {
-            // TODO: Load the real notes
-            var demoNoteText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet tincidunt magna, ac lacinia mauris. Phasellus et mi eget orci pellentesque vehicula. Suspendisse scelerisque efficitur lectus et sodales. Cras nibh diam, varius quis odio in, varius dictum orci. Cras condimentum tellus magna, maximus volutpat nunc egestas in. Quisque id elementum dolor. Integer suscipit magna dolor, quis placerat quam blandit ac. Nam venenatis sem in lorem tincidunt dictum. Maecenas ac pharetra enim. Ut mollis eros ut neque luctus molestie. Nam tempor ipsum velit, ac lobortis dolor fringilla in. Vivamus et auctor risus. Pellentesque lobortis leo quis convallis dignissim. In enim justo, aliquet vitae consectetur aliquam, ullamcorper eget nisi.";
-
-            _notes = new List<Note>
+            if (File.Exists(_settingsService.Settings.NotesFileLocation) == true)
             {
-                // note #1 - new one
-                new Note()
+                _notes = JsonSerializer.Deserialize<IList<Note>>(File.ReadAllText(_settingsService.Settings.NotesFileLocation));
+
+                foreach (Note note in _notes)
                 {
-                    Id = Guid.NewGuid(),
-                    CreatedDateTime = DateTime.Now,
-                    UpdatedDateTime = DateTime.Now,
-                    Title = "Demo Note #1",
-                    Document = Utilities.GetFlowDocumentFromText("This is demo note #1 - just made. " + demoNoteText),
-                    NotebookCategory = NotebookCategories.Default
-                },
-                // note #2 - 5 days old, starred
-                new Note()
-                {
-                    Id = Guid.NewGuid(),
-                    CreatedDateTime = DateTime.Now.AddDays(-5),
-                    UpdatedDateTime = DateTime.Now.AddDays(-5),
-                    Title = "Demo Note #2 With A Long Title",
-                    Document = Utilities.GetFlowDocumentFromText("This is demo note #2 - 5 days old, starred. " + demoNoteText),
-                    NotebookCategory = NotebookCategories.Starred
-                },
-                // note #3 - 15 days old
-                new Note()
-                {
-                    Id = Guid.NewGuid(),
-                    CreatedDateTime = DateTime.Now.AddDays(-15),
-                    UpdatedDateTime = DateTime.Now.AddDays(-15),
-                    Title = "Demo Note #3",
-                    Document = Utilities.GetFlowDocumentFromText("This is demo note #3 - 15 days old. " + demoNoteText),
-                    NotebookCategory = NotebookCategories.Default
-                },
-                // note #4 - 20 days old, archived
-                new Note()
-                {
-                    Id = Guid.NewGuid(),
-                    CreatedDateTime = DateTime.Now.AddDays(-20),
-                    UpdatedDateTime = DateTime.Now.AddDays(-20),
-                    Title = "Demo Note #4",
-                    Document = Utilities.GetFlowDocumentFromText("This is demo note #4 - 20 days old - archived. " + demoNoteText),
-                    NotebookCategory = NotebookCategories.Default
-                },
-                // note #5 - over an year old
-                new Note()
-                {
-                    Id = Guid.NewGuid(),
-                    CreatedDateTime = DateTime.Now.AddMonths(-15),
-                    UpdatedDateTime = DateTime.Now.AddMonths(-15),
-                    Title = "Demo Note #5",
-                    Document = Utilities.GetFlowDocumentFromText("This is demo note #5 - over an year old. " + demoNoteText),
-                    NotebookCategory = NotebookCategories.Default
+                    note.Document = LoadNoteXaml(note.Id);
                 }
+            }
+            else
+            {
+                var demoNoteText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet tincidunt magna, ac lacinia mauris. Phasellus et mi eget orci pellentesque vehicula. Suspendisse scelerisque efficitur lectus et sodales. Cras nibh diam, varius quis odio in, varius dictum orci. Cras condimentum tellus magna, maximus volutpat nunc egestas in. Quisque id elementum dolor. Integer suscipit magna dolor, quis placerat quam blandit ac. Nam venenatis sem in lorem tincidunt dictum. Maecenas ac pharetra enim. Ut mollis eros ut neque luctus molestie. Nam tempor ipsum velit, ac lobortis dolor fringilla in. Vivamus et auctor risus. Pellentesque lobortis leo quis convallis dignissim. In enim justo, aliquet vitae consectetur aliquam, ullamcorper eget nisi.";
+
+                _notes = new List<Note>
+                {
+                    // note #1 - new one
+                    new Note()
+                    {
+                        TrackChanges = true,
+                        Id = Guid.NewGuid(),
+                        Title = "Demo Note #1",
+                        Document = Utilities.GetFlowDocumentFromText("This is demo note #1 - just made. " + demoNoteText),
+                        NotebookCategory = NotebookCategories.Default,
+                        CreatedDateTime = DateTime.Now,
+                        UpdatedDateTime = DateTime.Now
+                    },
+                    // note #2 - 5 days old, starred
+                    new Note()
+                    {
+                        TrackChanges = true,
+                        Id = Guid.NewGuid(),
+                        Title = "Demo Note #2 With A Long Title",
+                        Document = Utilities.GetFlowDocumentFromText("This is demo note #2 - 5 days old, starred. " + demoNoteText),
+                        NotebookCategory = NotebookCategories.Starred,
+                        CreatedDateTime = DateTime.Now.AddDays(-5),
+                        UpdatedDateTime = DateTime.Now.AddDays(-5)
+                    },
+                    // note #3 - 15 days old
+                    new Note()
+                    {
+                        TrackChanges = true,
+                        Id = Guid.NewGuid(),
+                        Title = "Demo Note #3",
+                        Document = Utilities.GetFlowDocumentFromText("This is demo note #3 - 15 days old. " + demoNoteText),
+                        NotebookCategory = NotebookCategories.Default,
+                        CreatedDateTime = DateTime.Now.AddDays(-15),
+                        UpdatedDateTime = DateTime.Now.AddDays(-15)
+                    },
+                    // note #4 - 20 days old, archived
+                    new Note()
+                    {
+                        TrackChanges = true,
+                        Id = Guid.NewGuid(),
+                        Title = "Demo Note #4",
+                        Document = Utilities.GetFlowDocumentFromText("This is demo note #4 - 20 days old - archived. " + demoNoteText),
+                        NotebookCategory = NotebookCategories.Default,
+                        CreatedDateTime = DateTime.Now.AddDays(-20),
+                        UpdatedDateTime = DateTime.Now.AddDays(-20)
+                    },
+                    // note #5 - over an year old
+                    new Note()
+                    {
+                        TrackChanges = true,
+                        Id = Guid.NewGuid(),
+                        Title = "Demo Note #5",
+                        Document = Utilities.GetFlowDocumentFromText("This is demo note #5 - over an year old. " + demoNoteText),
+                        NotebookCategory = NotebookCategories.Default,
+                        CreatedDateTime = DateTime.Now.AddMonths(-15),
+                        UpdatedDateTime = DateTime.Now.AddMonths(-15)
+                    }
+                };
+            }
+        }
+
+        private void SaveNoteXaml(Note note)
+        {
+            EnsureTargetFolderExists(_settingsService.Settings.NotesFileLocation);
+
+            string noteFileName = GetNoteFileName(note.Id, _settingsService.Settings.NotesLocation);
+            TextRange textRange = new TextRange(note.Document.ContentStart, note.Document.ContentEnd);
+
+            using (FileStream fileStream = new FileStream(noteFileName, FileMode.Create))
+            {
+                textRange.Save(fileStream, System.Windows.DataFormats.XamlPackage);
+            }
+
+            note.AcceptChanges(); // marked as saved
+        }
+
+        private FlowDocument LoadNoteXaml(Guid noteId)
+        {
+            FlowDocument document = new FlowDocument();
+            string noteFileName = Path.Combine(_settingsService.Settings.NotesLocation, noteId + ".xaml");
+
+            if (File.Exists(noteFileName) == true)
+            {
+                TextRange textRange = new TextRange(document.ContentStart, document.ContentEnd);
+                using (FileStream fileStream = new FileStream(noteFileName, FileMode.Open))
+                {
+                    textRange.Load(fileStream, System.Windows.DataFormats.XamlPackage);
+                }
+            }
+            else
+                document = Utilities.GetFlowDocumentFromText($"Xaml note file with id:{noteId} not found !");
+
+            return document;
+        }
+
+        public void DeleteNoteXaml(Note note)
+        {
+            string noteFileName = GetNoteFileName(note.Id, _settingsService.Settings.NotesLocation);
+
+            if (File.Exists(noteFileName) == true)
+                File.Delete(noteFileName);
+        }
+
+        private void SaveNoteCatalog()
+        {
+            EnsureTargetFolderExists(_settingsService.Settings.NotesFileLocation);
+
+            string jsonNotes = JsonSerializer.Serialize(_notes, _jsonSerializerOptions);
+
+            File.WriteAllText(_settingsService.Settings.NotesFileLocation, jsonNotes);
+        }
+
+        private void EnsureTargetFolderExists(string fileName)
+        {
+            string folderName = Path.GetDirectoryName(fileName);
+            if (Directory.Exists(folderName) == false)
+                Directory.CreateDirectory(folderName);
+        }
+
+        private string GetNoteFileName(Guid noteId, string filePath)
+        {
+            return Path.Combine(filePath, noteId + ".xaml");
+        }
+
+        private Note CreateNewNote()
+        {
+            Note note = new Note
+            {
+                TrackChanges = true,
+
+                // load default fields
+                Id = Guid.NewGuid(),
+                CreatedDateTime = DateTime.Now,
+                UpdatedDateTime = DateTime.Now
             };
+
+            return note;
         }
 
         #endregion

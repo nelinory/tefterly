@@ -109,17 +109,7 @@ namespace Tefterly.Modules.Notes.ViewModels
 
         private void ExecuteAddNoteCommand()
         {
-            Business.Models.Note newNote = new Business.Models.Note()
-            {
-                Id = Guid.NewGuid(),
-                CreatedDateTime = DateTime.Now,
-                UpdatedDateTime = DateTime.Now,
-                Title = String.Format("New Note - {0:F}", DateTime.Now),
-                Document = Utilities.GetFlowDocumentFromText("Please, type your note content here..."),
-                NotebookCategory = NotebookCategories.Default
-            };
-
-            if (_noteService.AddNote(newNote) == true)
+            if (_noteService.AddNote() == true)
                 _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
 
             if (SelectedNotebookCategoryId != NotebookCategories.Default)

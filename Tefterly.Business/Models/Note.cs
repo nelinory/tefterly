@@ -1,5 +1,5 @@
-﻿using Prism.Mvvm;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 using System.Windows.Documents;
 using Tefterly.Core;
 
@@ -21,11 +21,14 @@ namespace Tefterly.Business.Models
             set { SetProperty(ref _title, value); }
         }
 
+        [JsonIgnore]
         public string Content
         {
             get { return Utilities.GetTextFromFlowDocument(Document); }
         }
-        public FlowDocument _document;
+
+        private FlowDocument _document;
+        [JsonIgnore]
         public FlowDocument Document
         {
             get { return _document; }
@@ -50,14 +53,17 @@ namespace Tefterly.Business.Models
         }
 
         // state
+        [JsonIgnore]
         public bool IsStarred
         {
             get { return NotebookCategory == NotebookCategories.Starred; }
         }
+        [JsonIgnore]
         public bool IsArchived
         {
             get { return NotebookCategory == NotebookCategories.Archived; }
         }
+        [JsonIgnore]
         public bool IsDeleted
         {
             get { return NotebookCategory == NotebookCategories.Deleted; }

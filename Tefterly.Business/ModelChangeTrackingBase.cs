@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 using System.Windows.Documents;
 
 namespace Tefterly.Business
@@ -14,8 +15,9 @@ namespace Tefterly.Business
     {
         private static readonly IEnumerable<string> _propertiesToIgnore = new List<string> { "IsChanged" };
 
-        public event EventHandler ModelChanged;
+        [JsonIgnore]
         public ConcurrentDictionary<string, object> Changes { get; private set; }
+        public event EventHandler ModelChanged;
 
         private DateTime _createdDateTime;
         public DateTime CreatedDateTime
@@ -32,6 +34,7 @@ namespace Tefterly.Business
         }
 
         private bool _trackChanges;
+        [JsonIgnore]
         public bool TrackChanges
         {
             get { return _trackChanges; }
@@ -88,12 +91,13 @@ namespace Tefterly.Business
             // change tracking support
             if (TrackChanges == true)
             {
-                // store field initial value
                 StoreInitialValue(fieldValue, propertyName);
 
                 // updatedDateTime support
                 StoreInitialValue(_updatedDateTime, nameof(UpdatedDateTime));
-                _updatedDateTime = DateTime.Now;
+                // update updatedDateTime when every other property change
+                if (propertyName != "UpdatedDateTime")
+                    _updatedDateTime = DateTime.Now;
                 RaisePropertyChanged(nameof(UpdatedDateTime));
             }
 
@@ -113,6 +117,7 @@ namespace Tefterly.Business
 
         #region IRevertibleChangeTracking Implementation
 
+        [JsonIgnore]
         public bool IsChanged { get; private set; }
 
         public void AcceptChanges()

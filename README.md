@@ -32,6 +32,11 @@ Project updates:
   - Refactored NoteViewModel bindings to properly reflect changes to the model values
 - 05/23/2021
   - Implemented model change tracking base class
+- 05/29/2021
+  - Settings service added
+  - Refactored the Note service
+  - Implemented notes automatic save/load support
+  - Demo/Guide notes will be auto-generated when you run the application for first time
   
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>

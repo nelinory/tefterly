@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text.Json;
 using Tefterly.Business.Models;
 
@@ -14,39 +13,36 @@ namespace Tefterly.Services
             Load();
         }
 
-        public string SettingsFileLocation
-        {
-            get { return Path.Combine(Environment.CurrentDirectory, "Tefterly.config"); }
-        }
-
         public Settings Settings { get; private set; }
 
-        public void Get<T>(string settingNamespace, string settingName, ref T value)
+        public void Get<T>(string settingName, ref T value)
         {
-            throw new NotImplementedException();
+            // TODO: Is it needed
+            value = (T)Settings.GetType().GetProperty(settingName).GetValue(Settings, null);
         }
 
-        public void Set<T>(string settingNamespace, string settingName, T value)
+        public void Set<T>(string settingName, T value)
         {
-            throw new NotImplementedException();
+            // TODO: Is it needed
+            Settings.GetType().GetProperty(settingName).SetValue(Settings, value);
         }
 
         public void Load()
         {
-            if (File.Exists(SettingsFileLocation) == true)
+            Settings = new Settings();
+
+            if (File.Exists(Settings.SettingsFileLocation) == true)
             {
-                using (FileStream fs = File.OpenRead(SettingsFileLocation))
+                using (FileStream fs = File.OpenRead(Settings.SettingsFileLocation))
                 {
                     Settings = JsonSerializer.DeserializeAsync<Settings>(fs).Result;
                 }
             }
-            else
-                Settings = new Settings();
         }
 
         public void Save()
         {
-            using (FileStream fs = File.Create(SettingsFileLocation))
+            using (FileStream fs = File.Create(Settings.SettingsFileLocation))
             {
                 JsonSerializer.SerializeAsync(fs, Settings, _jsonSerializerOptions);
             }
