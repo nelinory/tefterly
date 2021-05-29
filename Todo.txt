@@ -1,0 +1,37 @@
+Notes Features:
+===============
+[X] Rich text font styles: Bold/Italic/Underline/Strikethrough and Highlight
+[X] Rich text paragraph styles: Left/Right/Center/Justify align, Increase/Decrease indent and Bullet/Ordered list
+[X] Note operation: Starred/Unstarred, Delete/Restore/Permanently Delete, Archive/Restore and Duplicate
+[X] SpellCheck
+[ ] Search across all notes
+[ ] Search in note
+[ ] Dynamically format hyperlinks
+[ ] Error handling and logging
+[ ] Print note
+[ ] Automatic notes backup at specified interval
+[ ] Automatic notes backup on startup if the version of the app is different since the last run
+[ ] Encrypt/decrypt notes with a password
+[ ] Export note to: RTF, DOCX, PDF and TXT
+[ ] Ability to resize image
+[ ] Attach categories to a note
+[ ] Attach color to a note
+
+Note Elements
+=============
+[ ] Todo
+[ ] Line
+[ ] Quote
+[ ] Code segment
+
+Settings
+========
+[ ] Note font size
+[ ] Note font style
+[ ] Note margin size
+[ ] Search result highlight color
+[ ] Auto save timer duration
+[ ] Notes location
+[ ] Show/Hide notes list scrollbar
+[ ] Show/Hide category counts in sidebar
+[ ] Maintain X notes backups + maintain X notes backups for version changes

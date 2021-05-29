@@ -37,6 +37,7 @@ Project updates:
   - Refactored the Note service
   - Implemented notes automatic save/load support
   - Demo/Guide notes will be auto-generated when you run the application for first time
+  - Added SpellCheck functionality
   
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>

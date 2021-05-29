@@ -38,7 +38,7 @@
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Bottom"
                  Text="{Binding CurrentNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 SpellCheck.IsEnabled="True"
+                 SpellCheck.IsEnabled="{Binding IsSpellCheckEnabled}"
                  ui:ScrollViewerHelper.AutoHideScrollBars="False"
                  ui:TextBoxHelper.IsDeleteButtonVisible="False"                 
                  ui:ControlHelper.PlaceholderText="Note Title"
@@ -59,7 +59,8 @@
                     BorderThickness="0"
                     VerticalScrollBarVisibility="Auto"
                     IsDocumentEnabled="True"
-                    AllowDrop="True"    
+                    AllowDrop="True"  
+                    SpellCheck.IsEnabled="{Binding IsSpellCheckEnabled}"
                     BoundFlowDocument="{Binding CurrentNote.Document, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsInactiveSelectionHighlightEnabled="True"
                     Style="{StaticResource DefaultRichTextBoxStyle}"                
@@ -91,6 +92,15 @@
                         </Style>
                     </ResourceDictionary>
                 </controls:NoteEditor.Resources>
+                <controls:NoteEditor.ContextMenu>
+                    <ui:TextContextMenu>
+                        <MenuItem Command="{Binding ToggleSpellCheckCommand}" Header="SpellCheck">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xF87B;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ui:TextContextMenu>
+                </controls:NoteEditor.ContextMenu>
             </controls:NoteEditor>
         </ui:ScrollViewerEx>
 
@@ -187,9 +197,9 @@
             <ui:AppBarSeparator Margin="-12,0,-9,0" />
 
             <!-- Note actions -->
-            <Button ToolTip="Set note color" Style="{DynamicResource ChromelessButton}" Visibility="Collapsed">
+            <!--<Button ToolTip="Set note color" Style="{DynamicResource ChromelessButton}"">
                 <ui:FontIcon Glyph="&#xE790;" />
-            </Button>
+            </Button>-->
             <Button ToolTip="{Binding CurrentNote.IsStarred, Converter={converters:BooleanToIconStateConverter TrueValue='Remove note from starred', FalseValue='Add note to starred'}}"
                     Style="{DynamicResource ChromelessButton}" Command="{Binding MarkNoteAsStarredCommand}">
                 <ui:FontIcon Glyph="{Binding CurrentNote.IsStarred, Converter={converters:BooleanToIconStateConverter
@@ -199,9 +209,9 @@
             <Button ToolTip="Duplicate note" Style="{DynamicResource ChromelessButton}" Command="{Binding DuplicateNoteCommand}">
                 <ui:FontIcon Glyph="&#xF413;" />
             </Button>
-            <Button ToolTip="Move note to..." Style="{DynamicResource ChromelessButton}" Visibility="Collapsed">
+            <!--<Button ToolTip="Move note to..." Style="{DynamicResource ChromelessButton}">
                 <ui:FontIcon Glyph="&#xE19C;" />
-            </Button>
+            </Button>-->
             <Button ToolTip="{Binding CurrentNote.IsArchived, Converter={converters:BooleanToIconStateConverter TrueValue='Remove note from archive', FalseValue='Add note to archive'}}"
                     Style="{DynamicResource ChromelessButton}" Command="{Binding MarkNoteAsArchivedCommand}">
                 <ui:PathIcon Data="{Binding CurrentNote.IsArchived, Converter={converters:BooleanToIconStateConverter

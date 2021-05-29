@@ -21,11 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 		Screenshot.png = Screenshot.png
+		Todo.txt = Todo.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly.Business", "Tefterly.Business\Tefterly.Business.csproj", "{B8B3693B-AEAF-483C-893B-F935F59F2B24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tefterly.Services", "Tefterly.Services\Tefterly.Services.csproj", "{4C8500E0-7AE6-4F4F-AFC8-BF9DEE78EF29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly.Services", "Tefterly.Services\Tefterly.Services.csproj", "{4C8500E0-7AE6-4F4F-AFC8-BF9DEE78EF29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

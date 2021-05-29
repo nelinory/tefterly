@@ -27,6 +27,13 @@ namespace Tefterly.Modules.Note.ViewModels
             set { SetProperty(ref _showNoteComponents, value); }
         }
 
+        private bool _isSpellCheckEnabled;
+        public bool IsSpellCheckEnabled
+        {
+            get { return _isSpellCheckEnabled; }
+            set { SetProperty(ref _isSpellCheckEnabled, value); }
+        }
+
         private readonly DispatcherTimer _autoSaveNoteTimer;
 
         // services
@@ -39,6 +46,7 @@ namespace Tefterly.Modules.Note.ViewModels
         public DelegateCommand MarkNoteAsArchivedCommand { get; set; }
         public DelegateCommand DeleteNoteCommand { get; set; }
         public DelegateCommand PermanentlyDeleteNoteCommand { get; set; }
+        public DelegateCommand ToggleSpellCheckCommand { get; set; }
 
         public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator)
         {
@@ -52,6 +60,7 @@ namespace Tefterly.Modules.Note.ViewModels
             MarkNoteAsArchivedCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Archived));
             DeleteNoteCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Deleted));
             PermanentlyDeleteNoteCommand = new DelegateCommand(() => ExecutePermanentlyDeleteNoteCommand());
+            ToggleSpellCheckCommand = new DelegateCommand(() => ExecuteToggleSpellCheckCommand());
 
             // autosave
             _autoSaveNoteTimer = new DispatcherTimer();
@@ -118,6 +127,15 @@ namespace Tefterly.Modules.Note.ViewModels
                 if (_noteService.DeleteNote(CurrentNote.Id) == true)
                     SendNoteChangedEvent();
             }
+        }
+
+        private void ExecuteToggleSpellCheckCommand()
+        {
+            if (CurrentNote == null)
+                return;
+
+            // enable/disable spellcheck
+            IsSpellCheckEnabled = (IsSpellCheckEnabled == false);
         }
 
         private void SendNoteChangedEvent()
