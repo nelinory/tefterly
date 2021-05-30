@@ -34,10 +34,11 @@ Project updates:
   - Implemented model change tracking base class
 - 05/29/2021
   - Settings service added
-  - Refactored the Note service
+  - Search service added
   - Implemented notes automatic save/load support
+  - Implemented search across all notes in a category
   - Demo/Guide notes will be auto-generated when you run the application for first time
-  - Added SpellCheck functionality
+  - Added SpellCheck support
   
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>

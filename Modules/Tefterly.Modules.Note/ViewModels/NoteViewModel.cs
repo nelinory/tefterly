@@ -148,7 +148,8 @@ namespace Tefterly.Modules.Note.ViewModels
             if (CurrentNote == null)
                 return;
 
-            _noteService.SaveNotes();
+            if (CurrentNote.IsChanged == true)
+                _noteService.SaveNotes();
         }
 
         private void OnModelChanged(object sender, EventArgs e)

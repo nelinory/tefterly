@@ -100,6 +100,8 @@ namespace Tefterly.Services
 
                 DeleteNoteXaml(targetNote);
 
+                SaveNoteCatalog();
+
                 success = true;
             }
 

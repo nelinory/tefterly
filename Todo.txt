@@ -4,7 +4,7 @@ Notes Features:
 [X] Rich text paragraph styles: Left/Right/Center/Justify align, Increase/Decrease indent and Bullet/Ordered list
 [X] Note operation: Starred/Unstarred, Delete/Restore/Permanently Delete, Archive/Restore and Duplicate
 [X] SpellCheck
-[ ] Search across all notes
+[X] Search across all notes
 [ ] Search in note
 [ ] Dynamically format hyperlinks
 [ ] Error handling and logging

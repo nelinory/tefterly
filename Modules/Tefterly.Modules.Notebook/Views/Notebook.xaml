@@ -34,8 +34,9 @@
         <Rectangle Fill="{DynamicResource NavigationViewExpandedPaneBackground}" IsHitTestVisible="False" Grid.Row="0" Grid.RowSpan="3"/>
 
         <TextBlock Text="tefterly"
-                       FontSize="19" FontWeight="DemiBold" FontStyle="Italic" VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Margin="0" Foreground="{DynamicResource SystemControlBackgroundChromeWhiteBrush}" Grid.Row="0" Grid.Column="1" ToolTip="{Binding Version}"/>
+                   FontSize="19" FontWeight="DemiBold" FontStyle="Italic" VerticalAlignment="Center" HorizontalAlignment="Center"
+                   Margin="0" Foreground="{DynamicResource SystemControlBackgroundChromeWhiteBrush}" Grid.Row="0" Grid.Column="1" ToolTip="{Binding Version}"
+                   WindowChrome.IsHitTestVisibleInChrome="True"/>
 
         <DockPanel Grid.Row="1">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top">

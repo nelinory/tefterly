@@ -55,42 +55,69 @@ namespace Tefterly.Modules.Notes.ViewModels
             set { SetProperty(ref _showAddNoteButton, value); }
         }
 
+        private string _searchTerm;
+        public string SearchTerm
+        {
+            get { return _searchTerm; }
+            set
+            {
+                SetProperty(ref _searchTerm, value);
+                _searchService.ExecuteSearch(SearchTerm);
+            }
+        }
+
         // services
         private readonly INoteService _noteService;
         private readonly IApplicationCommands _applicationCommands;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ISearchService _searchService;
 
         // commands
         public DelegateCommand AddNoteCommand { get; set; }
+        public DelegateCommand ClearSearchTermCommand { get; set; }
 
-        public NotesViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator)
+        public NotesViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator, ISearchService searchService)
         {
             // attach all required services
             _noteService = noteService;
             _eventAggregator = eventAggregator;
+            _searchService = searchService;
 
             // attach all commands
             AddNoteCommand = new DelegateCommand(() => ExecuteAddNoteCommand());
+            ClearSearchTermCommand = new DelegateCommand(() => ExecuteClearSearchTermCommand()); ;
 
             // attach all composite commands
             _applicationCommands = applicationCommands;
 
             // subscribe to important events
             _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { LoadNoteList(SelectedNotebookCategoryId); });
+
+            // event handlers
+            _searchService.Search += (sender, e) => LoadNoteList(SelectedNotebookCategoryId);
         }
 
         private void LoadNoteList(Guid notebookGategory)
         {
             List<Business.Models.Note> notes = new List<Business.Models.Note>(_noteService.GetNotes(notebookGategory).OrderByDescending(p => p.UpdatedDateTime));
 
-            if (notes.Count > 0)
+            // apply search filter
+            if (String.IsNullOrEmpty(_searchService.SearchText) == false && _searchService.SearchText.Length > 2)
+                notes = notes.AsParallel().Where(p => p.Title.IndexOf(_searchService.SearchText, StringComparison.InvariantCultureIgnoreCase) != -1
+                                                || p.Content.IndexOf(_searchService.SearchText, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
+
+            if (notes.Count > 0 && String.IsNullOrEmpty(_searchService.SearchText) == true)
                 SelectedNote = notes[0]; // select the first item
             else
                 SelectedNote = null; // no notes found in the selected category
 
             NoteList = new ObservableCollection<Business.Models.Note>(notes); // bind it to the live NoteList
             ShowNotesNotFoundPanel = (NoteList.Count == 0);
-            ShowAddNoteButton = (SelectedNotebookCategoryId == NotebookCategories.Default);
+
+            if (String.IsNullOrEmpty(_searchService.SearchText) == true)
+                ShowAddNoteButton = (SelectedNotebookCategoryId == NotebookCategories.Default);
+            else
+                ShowAddNoteButton = false;
         }
 
         private void ExecuteNavigation(Business.Models.Note selectedNote)
@@ -114,6 +141,11 @@ namespace Tefterly.Modules.Notes.ViewModels
 
             if (SelectedNotebookCategoryId != NotebookCategories.Default)
                 _eventAggregator.GetEvent<ResetNotebookCategoryEvent>().Publish(String.Empty);
+        }
+
+        private void ExecuteClearSearchTermCommand()
+        {
+            SearchTerm = String.Empty;
         }
 
         #region Navigation Logic

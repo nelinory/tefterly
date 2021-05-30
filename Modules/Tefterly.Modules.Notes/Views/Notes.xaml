@@ -63,9 +63,16 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="38"/>
             </Grid.ColumnDefinitions>
-            <ui:AutoSuggestBox Grid.Column="0" PlaceholderText="Search" QueryIcon="Find" Margin="7,2,1,0" />
+            <ui:AutoSuggestBox Grid.Column="0" PlaceholderText="Search" QueryIcon="Find" Margin="7,2,1,0"
+                               Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               WindowChrome.IsHitTestVisibleInChrome="True">
+                <ui:AutoSuggestBox.InputBindings>
+                    <KeyBinding Command="{Binding ClearSearchTermCommand}" Key="Esc" />
+                </ui:AutoSuggestBox.InputBindings>
+            </ui:AutoSuggestBox>
             <Button Grid.Column="1" Command="{Binding AddNoteCommand}"
-                    ToolTip="Add a note" Style="{DynamicResource ChromelessButton}" Margin="0,1,2,0">
+                    ToolTip="Add a note" Style="{DynamicResource ChromelessButton}" Margin="0,1,2,0"
+                    WindowChrome.IsHitTestVisibleInChrome="True">
                 <ui:FontIcon Glyph="&#xF164;" FontSize="24" />
             </Button>
         </Grid>
