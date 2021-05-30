@@ -2,7 +2,7 @@
 
 namespace Tefterly.Core.Events
 {
-    public class NoteChangedEvent : PubSubEvent<string>
+    public class ThemeChangedEvent : PubSubEvent<string>
     {
     }
 }

@@ -7,7 +7,8 @@ namespace Tefterly.Services
     public interface ISearchService
     {
         event SearchEventHandler Search;
-        string SearchText { get; set; }
+        string SearchTerm { get; set; }
         void ExecuteSearch(string searchText);
+        bool IsSearchInProgress();
     }
 }

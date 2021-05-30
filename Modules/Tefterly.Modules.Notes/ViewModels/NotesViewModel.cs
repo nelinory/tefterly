@@ -85,7 +85,7 @@ namespace Tefterly.Modules.Notes.ViewModels
 
             // attach all commands
             AddNoteCommand = new DelegateCommand(() => ExecuteAddNoteCommand());
-            ClearSearchTermCommand = new DelegateCommand(() => ExecuteClearSearchTermCommand()); ;
+            ClearSearchTermCommand = new DelegateCommand(() => { SearchTerm = String.Empty; });
 
             // attach all composite commands
             _applicationCommands = applicationCommands;
@@ -102,11 +102,11 @@ namespace Tefterly.Modules.Notes.ViewModels
             List<Business.Models.Note> notes = new List<Business.Models.Note>(_noteService.GetNotes(notebookGategory).OrderByDescending(p => p.UpdatedDateTime));
 
             // apply search filter
-            if (String.IsNullOrEmpty(_searchService.SearchText) == false && _searchService.SearchText.Length > 2)
-                notes = notes.AsParallel().Where(p => p.Title.IndexOf(_searchService.SearchText, StringComparison.InvariantCultureIgnoreCase) != -1
-                                                || p.Content.IndexOf(_searchService.SearchText, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
+            if (_searchService.IsSearchInProgress() == true)
+                notes = notes.AsParallel().Where(p => p.Title.IndexOf(_searchService.SearchTerm, StringComparison.InvariantCultureIgnoreCase) != -1
+                                                || p.Content.IndexOf(_searchService.SearchTerm, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
 
-            if (notes.Count > 0 && String.IsNullOrEmpty(_searchService.SearchText) == true)
+            if (notes.Count > 0)
                 SelectedNote = notes[0]; // select the first item
             else
                 SelectedNote = null; // no notes found in the selected category
@@ -114,7 +114,7 @@ namespace Tefterly.Modules.Notes.ViewModels
             NoteList = new ObservableCollection<Business.Models.Note>(notes); // bind it to the live NoteList
             ShowNotesNotFoundPanel = (NoteList.Count == 0);
 
-            if (String.IsNullOrEmpty(_searchService.SearchText) == true)
+            if (String.IsNullOrEmpty(_searchService.SearchTerm) == true)
                 ShowAddNoteButton = (SelectedNotebookCategoryId == NotebookCategories.Default);
             else
                 ShowAddNoteButton = false;
@@ -141,11 +141,6 @@ namespace Tefterly.Modules.Notes.ViewModels
 
             if (SelectedNotebookCategoryId != NotebookCategories.Default)
                 _eventAggregator.GetEvent<ResetNotebookCategoryEvent>().Publish(String.Empty);
-        }
-
-        private void ExecuteClearSearchTermCommand()
-        {
-            SearchTerm = String.Empty;
         }
 
         #region Navigation Logic

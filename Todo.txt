@@ -5,7 +5,7 @@ Notes Features:
 [X] Note operation: Starred/Unstarred, Delete/Restore/Permanently Delete, Archive/Restore and Duplicate
 [X] SpellCheck
 [X] Search across all notes
-[ ] Search in note
+[X] Search in note
 [ ] Dynamically format hyperlinks
 [ ] Error handling and logging
 [ ] Print note

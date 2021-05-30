@@ -8,7 +8,7 @@ namespace Tefterly.Services
         private DispatcherTimer _searchTimer = new DispatcherTimer();
 
         public event SearchEventHandler Search;
-        public string SearchText { get; set; }
+        public string SearchTerm { get; set; }
 
         public int Subscribers
         {
@@ -26,13 +26,20 @@ namespace Tefterly.Services
                 if (Search != null)
                     Search(this, null);
             };
+
+            SearchTerm = String.Empty;
         }
 
         public void ExecuteSearch(string searchText)
         {
-            SearchText = searchText;
+            SearchTerm = searchText;
 
             _searchTimer.Start();
+        }
+
+        public bool IsSearchInProgress()
+        {
+            return (String.IsNullOrEmpty(SearchTerm) == false && SearchTerm.Length > 2); // TODO: Read from settings
         }
     }
 }

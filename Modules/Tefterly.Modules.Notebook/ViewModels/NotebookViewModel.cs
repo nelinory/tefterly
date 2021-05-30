@@ -4,7 +4,6 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Tefterly.Business;
 using Tefterly.Core;
@@ -110,6 +109,8 @@ namespace Tefterly.Modules.Notebook.ViewModels
                 ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
             else
                 ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
+
+            _eventAggregator.GetEvent<ThemeChangedEvent>().Publish(String.Empty);
         }
     }
 }

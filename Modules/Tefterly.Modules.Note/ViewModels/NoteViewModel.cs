@@ -7,6 +7,7 @@ using System;
 using System.Windows.Threading;
 using Tefterly.Core;
 using Tefterly.Core.Events;
+using Tefterly.Core.Resources.Controls;
 using Tefterly.Services;
 
 namespace Tefterly.Modules.Note.ViewModels
@@ -34,11 +35,20 @@ namespace Tefterly.Modules.Note.ViewModels
             set { SetProperty(ref _isSpellCheckEnabled, value); }
         }
 
+        private string _noteNotFoundMessage;
+        public string NoteNotFoundMessage
+        {
+            get { return _noteNotFoundMessage; }
+            set { SetProperty(ref _noteNotFoundMessage, value); }
+        }
+
         private readonly DispatcherTimer _autoSaveNoteTimer;
+        private readonly DispatcherTimer _searchNoteResultsTimer;
 
         // services
         private readonly INoteService _noteService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ISearchService _searchService;
 
         // commands
         public DelegateCommand MarkNoteAsStarredCommand { get; set; }
@@ -48,11 +58,12 @@ namespace Tefterly.Modules.Note.ViewModels
         public DelegateCommand PermanentlyDeleteNoteCommand { get; set; }
         public DelegateCommand ToggleSpellCheckCommand { get; set; }
 
-        public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator)
+        public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator, ISearchService searchService)
         {
             // attach all required services
             _noteService = noteService;
             _eventAggregator = eventAggregator;
+            _searchService = searchService;
 
             // attach all commands
             MarkNoteAsStarredCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Starred));
@@ -62,11 +73,25 @@ namespace Tefterly.Modules.Note.ViewModels
             PermanentlyDeleteNoteCommand = new DelegateCommand(() => ExecutePermanentlyDeleteNoteCommand());
             ToggleSpellCheckCommand = new DelegateCommand(() => ExecuteToggleSpellCheckCommand());
 
+            // event handlers
+            _searchService.Search += (sender, e) => _searchNoteResultsTimer.Start();
+
+            // subscribe to important events
+            _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(x => { SearchNoteResultsHandler(null, null); });
+
             // autosave
             _autoSaveNoteTimer = new DispatcherTimer();
             _autoSaveNoteTimer.Interval = TimeSpan.FromSeconds(7); // TODO: Add to settings
             _autoSaveNoteTimer.Tick += AutoSaveNoteHandler;
             _autoSaveNoteTimer.Start();
+
+            // search note
+            _searchNoteResultsTimer = new DispatcherTimer();
+            _searchNoteResultsTimer.Interval = TimeSpan.FromMilliseconds(10);
+            _searchNoteResultsTimer.Tick += SearchNoteResultsHandler;
+            _searchNoteResultsTimer.Start();
+
+            IsSpellCheckEnabled = false; // TODO: Add to settings
         }
 
         private void LoadNote(Guid noteId)
@@ -76,10 +101,17 @@ namespace Tefterly.Modules.Note.ViewModels
             if (CurrentNote != null)
             {
                 CurrentNote.TrackChanges = true;
-                CurrentNote.ModelChanged += OnModelChanged;
+                CurrentNote.ModelChanged += (sender, e) => SendNoteChangedEvent();
             }
 
             ShowNoteComponents = (CurrentNote != null);
+            NoteNotFoundMessage = String.Empty;
+            if (_searchService.IsSearchInProgress() == false && CurrentNote == null)
+                NoteNotFoundMessage = "Please, select a category with notes or create a new note";
+
+            // if the search is still active and we are switching between search results then activate the search note timer
+            if (_searchService.IsSearchInProgress() == true)
+                _searchNoteResultsTimer.Start();
         }
 
         private void ExecuteChangeNotebookCategory(Guid notebookCategory)
@@ -152,9 +184,18 @@ namespace Tefterly.Modules.Note.ViewModels
                 _noteService.SaveNotes();
         }
 
-        private void OnModelChanged(object sender, EventArgs e)
+        private void SearchNoteResultsHandler(object sender, EventArgs e)
         {
-            SendNoteChangedEvent();
+            if (CurrentNote != null)
+            {
+                NoteEditor noteEditor = CurrentNote.Document.Parent as NoteEditor;
+
+                noteEditor.SearchTerm = String.Empty; // clear the property first so we can trigger DependencyPropertyChangedEvent on dependency property
+                if (_searchService.IsSearchInProgress() == true)
+                    noteEditor.SearchTerm = _searchService.SearchTerm;
+            }
+
+            _searchNoteResultsTimer.Stop(); // search complete
         }
 
         #region Navigation Logic

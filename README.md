@@ -39,6 +39,8 @@ Project updates:
   - Implemented search across all notes in a category
   - Demo/Guide notes will be auto-generated when you run the application for first time
   - Added SpellCheck support
+- 05/30/2021
+  - Implemented search in a note
   
 Screenshot:
 <img src="Screenshot.png" alt="Screenshot" width="900"/>
