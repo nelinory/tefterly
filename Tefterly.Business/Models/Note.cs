@@ -21,10 +21,11 @@ namespace Tefterly.Business.Models
             set { SetProperty(ref _title, value); }
         }
 
+        private string _content;
         [JsonIgnore]
         public string Content
         {
-            get { return Utilities.GetTextFromFlowDocument(Document); }
+            get { return _content; }
         }
 
         private FlowDocument _document;
@@ -35,6 +36,7 @@ namespace Tefterly.Business.Models
             set
             {
                 SetProperty(ref _document, value);
+                SetProperty(ref _content, Utilities.GetTextFromFlowDocument(value));
                 RaisePropertyChanged("Content");
             }
         }
