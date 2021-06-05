@@ -74,7 +74,7 @@ namespace Tefterly.Modules.Note.ViewModels
             ToggleSpellCheckCommand = new DelegateCommand(() => ExecuteToggleSpellCheckCommand());
 
             // event handlers
-            _searchService.Search += (sender, e) => _searchNoteResultsTimer.Start();
+            _searchService.Search += (sender, e) => _searchNoteResultsTimer.Start(); // search started
 
             // subscribe to important events
             _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(x => { SearchNoteResultsHandler(null, null); });
@@ -83,13 +83,11 @@ namespace Tefterly.Modules.Note.ViewModels
             _autoSaveNoteTimer = new DispatcherTimer();
             _autoSaveNoteTimer.Interval = TimeSpan.FromSeconds(7); // TODO: Add to settings
             _autoSaveNoteTimer.Tick += AutoSaveNoteHandler;
-            _autoSaveNoteTimer.Start();
 
             // search note
             _searchNoteResultsTimer = new DispatcherTimer();
-            _searchNoteResultsTimer.Interval = TimeSpan.FromMilliseconds(10);
+            _searchNoteResultsTimer.Interval = TimeSpan.FromMilliseconds(10); // TODO: Add to settings
             _searchNoteResultsTimer.Tick += SearchNoteResultsHandler;
-            _searchNoteResultsTimer.Start();
 
             IsSpellCheckEnabled = false; // TODO: Add to settings
         }
@@ -173,6 +171,9 @@ namespace Tefterly.Modules.Note.ViewModels
         private void SendNoteChangedEvent()
         {
             _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+
+            // note changed start autoSaveNoteTimer
+            _autoSaveNoteTimer.Start();
         }
 
         private void AutoSaveNoteHandler(object sender, EventArgs e)
@@ -181,7 +182,12 @@ namespace Tefterly.Modules.Note.ViewModels
                 return;
 
             if (CurrentNote.IsChanged == true)
+            {
                 _noteService.SaveNotes();
+
+                // note saved stop autoSaveNoteTimer
+                _autoSaveNoteTimer.Stop();
+            }
         }
 
         private void SearchNoteResultsHandler(object sender, EventArgs e)

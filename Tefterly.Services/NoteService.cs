@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -148,7 +149,7 @@ namespace Tefterly.Services
             }
             catch (Exception ex)
             {
-                // TODO: Logging
+                Log.Error("Error while saving notes: {EX}", ex);
             }
         }
 

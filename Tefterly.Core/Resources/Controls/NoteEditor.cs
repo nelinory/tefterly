@@ -73,7 +73,7 @@ namespace Tefterly.Core.Resources.Controls
                     if (backgroundProperty is SolidColorBrush && ((SolidColorBrush)backgroundProperty).Color.Equals(Colors.Yellow) == true)
                         Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent); // clear the highlight from the selection
                     else
-                        Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Yellow); // highlight the selection
+                        Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Yellow); // highlight the selection // TODO: Read from settings
                     break;
                 default:
                     throw new Exception(String.Format("Illegal NoteFontStyles enumeration value {0}", fontStyle));

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -26,7 +27,7 @@ namespace Tefterly.Core.Resources.Controls
                 // when application window is resizing these may not have values
                 if (leftSide.IsEmpty == true || rightSide.IsEmpty == true)
                     return;
-                
+
                 _searchHighlightRect.X = leftSide.X;
                 _searchHighlightRect.Width = rightSide.Right - leftSide.Left;
                 _searchHighlightRect.Height = rightSide.Bottom - leftSide.Top;
@@ -39,7 +40,7 @@ namespace Tefterly.Core.Resources.Controls
             }
             catch (Exception ex)
             {
-                // TODO: Logging
+                Log.Error("Error while highlighting search results: {EX}", ex);
             }
         }
     }

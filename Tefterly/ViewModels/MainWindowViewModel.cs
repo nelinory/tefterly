@@ -9,13 +9,6 @@ namespace Tefterly.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "Tefterly";
-        public string Title
-        {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
-        }
-
         // services
         private readonly IRegionManager _regionManager;
 
