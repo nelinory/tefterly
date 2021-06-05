@@ -27,11 +27,11 @@
                     <TextBlock Text="{Binding Title}" 
                                Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontWeight="SemiBold"
                                TextTrimming="CharacterEllipsis"/>
-                    <TextBlock Text="{Binding Content}" FontSize="13" Margin="0,3,0,0"
+                    <TextBlock Text="{Binding Content}" FontSize="12" 
                                Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" TextTrimming="WordEllipsis"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"
                                 HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2">
-                        <ui:FontIcon Glyph="&#xE735;" FontSize="13"
+                        <ui:FontIcon Glyph="&#xE735;" FontSize="12"
                                      Visibility="{Binding IsStarred, Converter={StaticResource BooleanToVisibilityConverter}}"
                                      IsHitTestVisible="False" Foreground="{DynamicResource SystemControlHighlightListAccentVeryHighBrush}"/>
                     </StackPanel>

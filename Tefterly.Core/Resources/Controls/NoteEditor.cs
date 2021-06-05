@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Tefterly.Core.Resources.Controls
 {
@@ -16,6 +19,12 @@ namespace Tefterly.Core.Resources.Controls
             // event handlers
             TextChanged += OnTextChanged;
             PreviewKeyDown += OnPreviewKeyDown;
+
+            // Credit: http://social.msdn.microsoft.com/Forums/vstudio/en-US/0d672c70-d49d-4ebf-871d-420cc164f7d8/c-wpf-richtextbox-remove-formatting-and-line-spaces
+            DataObject.AddPastingHandler(this, DataObjectPasting_EventHandler);
+
+            // add custom binding for Ctrl+Shift+V for rich format pasting
+            this.InputBindings.Add(new KeyBinding(ApplicationCommands.Paste, Key.V, ModifierKeys.Control | ModifierKeys.Shift));
 
             // search support
             _noteEditorSearchHighlightResults = new NoteEditorSearchHighlight(this);
@@ -263,7 +272,84 @@ namespace Tefterly.Core.Resources.Controls
                         ApplyFontStylesCommand(NoteFontStyles.Highlight);
                         e.Handled = true;
                         break;
+                    case Key.OemOpenBrackets: // Font downscale
+                    case Key.OemCloseBrackets: // Font upscale
+                        e.Handled = true;
+                        break;
                 }
+            }
+        }
+
+        protected void DataObjectPasting_EventHandler(object sender, DataObjectPastingEventArgs e)
+        {
+            bool richObjectPasteRequest = false;
+            if (Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+                richObjectPasteRequest = true;
+
+            // pasting image from clipboard
+            if (e.DataObject.GetDataPresent(DataFormats.Bitmap) == true)
+            {
+                DataObject dataObject = new DataObject();
+                dataObject.SetData(DataFormats.Bitmap, e.DataObject.GetData(DataFormats.Bitmap));
+                e.DataObject = dataObject;
+            }
+            // drag and drop image
+            else if (e.DataObject.GetDataPresent(DataFormats.Dib) == true)
+            {
+                BitmapImage bitmapImage = null;
+                string[] droppedFiles = (string[])e.DataObject.GetData(DataFormats.FileDrop);
+
+                if (droppedFiles != null && droppedFiles.Length > 0)
+                {
+                    foreach (string droppedFile in droppedFiles)
+                    {
+                        try
+                        {
+                            bitmapImage = new BitmapImage(new Uri(droppedFile));
+                            break; // just get the first image
+                        }
+                        catch (Exception)
+                        {
+                            // do nothing since dropped image cannot be loaded as bitmap
+                        }
+                    }
+                }
+
+                if (bitmapImage != null) // we got an image
+                {
+                    DataObject dataObject = new DataObject();
+                    dataObject.SetData(DataFormats.Bitmap, bitmapImage);
+                    e.DataObject = dataObject;
+                }
+            }
+            // remove formatting from the pasted text or use formatted pasted text as is
+            else if (e.DataObject.GetDataPresent(DataFormats.Text) == true)
+            {
+                if (e.SourceDataObject.GetDataPresent(DataFormats.Rtf, true) == false)
+                    return;
+
+                string rtfDocument = e.SourceDataObject.GetData(DataFormats.Rtf) as string;
+
+                FlowDocument document = new FlowDocument();
+                document.SetValue(FlowDocument.TextAlignmentProperty, TextAlignment.Right);
+
+                TextRange textRange = Utilities.FormatFlowDocument(document);
+
+                if (textRange.CanLoad(DataFormats.Rtf) && string.IsNullOrEmpty(rtfDocument) == false)
+                {
+                    using (MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(rtfDocument)))
+                    {
+                        textRange.Load(stream, DataFormats.Rtf);
+                    }
+                }
+
+                DataObject dataObject = new DataObject();
+                if (richObjectPasteRequest == true)
+                    dataObject.SetData(DataFormats.Rtf, rtfDocument);
+                else
+                    dataObject.SetData(DataFormats.Text, Utilities.RemoveBulletsFromText(textRange.Text));
+
+                e.DataObject = dataObject;
             }
         }
     }

@@ -174,6 +174,8 @@ namespace Tefterly.Services
                 foreach (Note note in _notes)
                 {
                     note.Document = LoadNoteXaml(note.Id);
+
+                    Utilities.FormatFlowDocument(note.Document);
                 }
             }
             else

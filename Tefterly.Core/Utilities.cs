@@ -36,10 +36,21 @@ namespace Tefterly.Core
         {
             string returnValue = String.Empty;
 
-            returnValue = inputText.Replace("•\t", String.Empty);
-            returnValue = returnValue.Replace("•", String.Empty);
+            returnValue = inputText.Replace("•\t", "- ");
+            //returnValue = returnValue.Replace("•", String.Empty);
 
             return returnValue;
+        }
+
+        public static TextRange FormatFlowDocument(FlowDocument document)
+        {
+            TextRange textRange = new TextRange(document.ContentStart, document.ContentEnd);
+
+            // TODO: Read this from settings
+            textRange.ApplyPropertyValue(TextElement.FontSizeProperty, (Double)14);
+            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, new System.Windows.Media.FontFamily("Segoe UI"));
+
+            return textRange;
         }
     }
 }
