@@ -7,7 +7,7 @@ Notes Features:
 [X] Search across all notes
 [X] Search in note
 [ ] Dynamically format hyperlinks
-[ ] Error handling and logging
+[X] Error handling and logging
 [ ] Print note
 [ ] Automatic notes backup at specified interval
 [ ] Automatic notes backup on startup if the version of the app is different since the last run
