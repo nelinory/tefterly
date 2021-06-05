@@ -1,7 +1,7 @@
 # tefterly
-![Github release](https://img.shields.io/github/release/nelinory/tefterly.svg?label=latest%20version&style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues/nelinory/tefterly.svg?style=flat-square)
 ![Github license](https://img.shields.io/github/license/nelinory/tefterly.svg?style=flat-square)
+
 An attempt to recreate Evernote notes management application while learning WPF/MVVM and Prism.
 
 ### References:
