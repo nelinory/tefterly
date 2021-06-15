@@ -6,32 +6,34 @@ Notes Features:
 [X] SpellCheck
 [X] Search across all notes
 [X] Search in note
-[ ] Dynamically format hyperlinks
+[X] Dynamically format hyperlinks
 [X] Error handling and logging
+[ ] Version settings
 [ ] Print note
 [ ] Automatic notes backup at specified interval
 [ ] Automatic notes backup on startup if the version of the app is different since the last run
-[ ] Encrypt/decrypt notes with a password
-[ ] Export note to: RTF, DOCX, PDF and TXT
 [ ] Ability to resize image
+[ ] Export note to: RTF, DOCX, PDF and TXT
 [ ] Attach categories to a note
 [ ] Attach color to a note
+[ ] Encrypt/decrypt notes with a password
 
-Note Elements
-=============
-[ ] Todo
-[ ] Line
-[ ] Quote
-[ ] Code segment
-
-Settings
-========
+Settings:
+=========
 [ ] Note font size
 [ ] Note font style
 [ ] Note margin size
 [ ] Search result highlight color
+[ ] Search results highlight timer
+[ ] Search term minimum length
 [ ] Auto save timer duration
 [ ] Notes location
 [ ] Show/Hide notes list scrollbar
-[ ] Show/Hide category counts in sidebar
 [ ] Maintain X notes backups + maintain X notes backups for version changes
+
+Future Roadmap - Note Elements:
+===============================
+[ ] Todo
+[ ] Line
+[ ] Quote
+[ ] Code segment

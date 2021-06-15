@@ -1,11 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Windows;
 using System.Windows.Documents;
 
 namespace Tefterly.Core
 {
     public static class Utilities
     {
+        public static IEnumerable<DependencyObject> GetVisuals(DependencyObject root)
+        {
+            foreach (DependencyObject child in LogicalTreeHelper.GetChildren(root).OfType<DependencyObject>())
+            {
+                yield return child;
+                foreach (DependencyObject descendants in GetVisuals(child))
+                    yield return descendants;
+            }
+        }
+
         public static FlowDocument GetFlowDocumentFromText(string text)
         {
             Paragraph paragraph = new Paragraph();
@@ -23,8 +36,8 @@ namespace Tefterly.Core
                 TextRange textRange = new TextRange(document.ContentStart, document.ContentEnd);
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    textRange.Save(memoryStream, System.Windows.DataFormats.Text);
-                    returnResult = RemoveBulletsFromText(textRange.Text);
+                    textRange.Save(memoryStream, DataFormats.Text);
+                    returnResult = ConvertBulletsInText(textRange.Text);
                 }
             }
 
@@ -32,12 +45,17 @@ namespace Tefterly.Core
         }
 
         // fix some bad looking bullet points in the plain text
+        public static string ConvertBulletsInText(string inputText)
+        {
+            return inputText.Replace("•\t", "  •  ");
+        }
+
         public static string RemoveBulletsFromText(string inputText)
         {
             string returnValue = String.Empty;
 
-            returnValue = inputText.Replace("•\t", "- ");
-            //returnValue = returnValue.Replace("•", String.Empty);
+            returnValue = inputText.Replace("•\t", String.Empty);
+            returnValue = returnValue.Replace("•", String.Empty);
 
             return returnValue;
         }

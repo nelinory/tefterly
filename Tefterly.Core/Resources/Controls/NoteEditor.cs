@@ -24,7 +24,7 @@ namespace Tefterly.Core.Resources.Controls
             DataObject.AddPastingHandler(this, DataObjectPasting_EventHandler);
 
             // add custom binding for Ctrl+Shift+V for rich format pasting
-            this.InputBindings.Add(new KeyBinding(ApplicationCommands.Paste, Key.V, ModifierKeys.Control | ModifierKeys.Shift));
+            InputBindings.Add(new KeyBinding(ApplicationCommands.Paste, Key.V, ModifierKeys.Control | ModifierKeys.Shift));
 
             // search support
             _noteEditorSearchHighlightResults = new NoteEditorSearchHighlight(this);
@@ -168,6 +168,8 @@ namespace Tefterly.Core.Resources.Controls
             {
                 Document = new FlowDocument();
             }
+
+            SubscribeToAllHyperlinks(Document);
         }
 
         #endregion
@@ -253,9 +255,7 @@ namespace Tefterly.Core.Resources.Controls
         {
             // Document.IsLoaded == true prevents the TextChange event of firing continuously while we load the flowDocument
             if (Document != null && Document.IsLoaded == true)
-            {
                 SetValue(BoundFlowDocumentProperty, Document);
-            }
         }
 
         protected void OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -278,6 +278,10 @@ namespace Tefterly.Core.Resources.Controls
                         break;
                 }
             }
+            else if (e.Key == Key.Space || e.Key == Key.Enter)
+                ApplyHyperlinkFormat();
+            else if (e.Key == Key.Back)
+                RemoveHyperlinkFormat();
         }
 
         protected void DataObjectPasting_EventHandler(object sender, DataObjectPastingEventArgs e)
@@ -347,7 +351,7 @@ namespace Tefterly.Core.Resources.Controls
                 if (richObjectPasteRequest == true)
                     dataObject.SetData(DataFormats.Rtf, rtfDocument);
                 else
-                    dataObject.SetData(DataFormats.Text, Utilities.RemoveBulletsFromText(textRange.Text));
+                    dataObject.SetData(DataFormats.Text, Utilities.ConvertBulletsInText(textRange.Text));
 
                 e.DataObject = dataObject;
             }

@@ -54,7 +54,7 @@
         <controls:NoteEditor
                     Grid.Row="1"
                     Margin="10,0,0,0"
-                    Padding="5,0,10,3"                 
+                    Padding="5,0,20,3"                 
                     AcceptsTab="True"
                     BorderThickness="0"
                     VerticalScrollBarVisibility="Auto"
@@ -63,7 +63,7 @@
                     SpellCheck.IsEnabled="{Binding IsSpellCheckEnabled}"
                     BoundFlowDocument="{Binding CurrentNote.Document, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsInactiveSelectionHighlightEnabled="True"
-                    Style="{StaticResource DefaultRichTextBoxStyle}"                
+                    Style="{StaticResource DefaultRichTextBoxStyle}"
                     ui:ControlHelper.PlaceholderText="Note Text"
                     Visibility="{Binding ShowNoteComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
             <controls:NoteEditor.Resources>
