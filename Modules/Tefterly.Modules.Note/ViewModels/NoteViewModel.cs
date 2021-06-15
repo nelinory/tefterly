@@ -99,7 +99,7 @@ namespace Tefterly.Modules.Note.ViewModels
             if (CurrentNote != null)
             {
                 CurrentNote.TrackChanges = true;
-                CurrentNote.ModelChanged += (sender, e) => SendNoteChangedEvent();
+                CurrentNote.ModelChanged += (sender, e) => NoteHasChanged();
             }
 
             ShowNoteComponents = (CurrentNote != null);
@@ -122,7 +122,7 @@ namespace Tefterly.Modules.Note.ViewModels
             else
                 CurrentNote.NotebookCategory = notebookCategory;
 
-            SendNoteChangedEvent();
+            NoteHasChanged();
         }
 
         private void ExecuteDuplicateNoteCommand()
@@ -131,7 +131,7 @@ namespace Tefterly.Modules.Note.ViewModels
                 return;
 
             if (_noteService.DuplicateNote(CurrentNote.Id) == true)
-                SendNoteChangedEvent();
+                NoteHasChanged();
         }
 
         private async void ExecutePermanentlyDeleteNoteCommand()
@@ -155,7 +155,7 @@ namespace Tefterly.Modules.Note.ViewModels
             if (result == ContentDialogResult.Primary)
             {
                 if (_noteService.DeleteNote(CurrentNote.Id) == true)
-                    SendNoteChangedEvent();
+                    NoteHasChanged();
             }
         }
 
@@ -168,10 +168,8 @@ namespace Tefterly.Modules.Note.ViewModels
             IsSpellCheckEnabled = (IsSpellCheckEnabled == false);
         }
 
-        private void SendNoteChangedEvent()
+        private void NoteHasChanged()
         {
-            _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
-
             // note changed start autoSaveNoteTimer
             _autoSaveNoteTimer.Start();
         }
@@ -185,8 +183,12 @@ namespace Tefterly.Modules.Note.ViewModels
             {
                 _noteService.SaveNotes();
 
+                System.Diagnostics.Debug.WriteLine($"{DateTime.Now} - Note saved");
+
                 // note saved stop autoSaveNoteTimer
                 _autoSaveNoteTimer.Stop();
+
+                _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
             }
         }
 
