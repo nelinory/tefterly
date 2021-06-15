@@ -169,6 +169,12 @@ namespace Tefterly.Core.Resources.Controls
                 Document = new FlowDocument();
             }
 
+            // scrollviewer appears to remember scroll position between different notes
+            // this is a hack to reset the scrollviewer to top every time we load switch between notes
+            ScrollViewer parent = this.Parent as ScrollViewer;
+            if (parent != null)
+                parent.ScrollToTop();
+
             SubscribeToAllHyperlinks(Document);
         }
 

@@ -51,13 +51,12 @@
         </TextBox>
 
         <!-- Main note richtextbox -->
-        <controls:NoteEditor
-                    Grid.Row="1"
+        <ui:ScrollViewerEx HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <controls:NoteEditor
                     Margin="10,0,0,0"
                     Padding="5,0,20,3"                 
                     AcceptsTab="True"
                     BorderThickness="0"
-                    VerticalScrollBarVisibility="Auto"
                     IsDocumentEnabled="True"
                     AllowDrop="True"  
                     SpellCheck.IsEnabled="{Binding IsSpellCheckEnabled}"
@@ -66,42 +65,43 @@
                     Style="{StaticResource DefaultRichTextBoxStyle}"
                     ui:ControlHelper.PlaceholderText="Note Text"
                     Visibility="{Binding ShowNoteComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <controls:NoteEditor.Resources>
-                <ResourceDictionary>
-                    <!-- Override the border style for the richtextbox -->
-                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
-                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                <controls:NoteEditor.Resources>
+                    <ResourceDictionary>
+                        <!-- Override the border style for the richtextbox -->
+                        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
 
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="3" />
-                    </Style>
-                    <Style TargetType="{x:Type Table}">
-                        <Setter Property="Margin" Value="3"/>
-                    </Style>
-                    <Style TargetType="{x:Type List}">
-                        <Setter Property="Margin" Value="3"/>
-                        <Style.Resources>
-                            <Style TargetType="{x:Type ListItem}">
-                                <Style.Resources>
-                                    <Style TargetType="{x:Type Paragraph}">
-                                        <Setter Property="Margin" Value="3"/>
-                                    </Style>
-                                </Style.Resources>
-                            </Style>
-                        </Style.Resources>
-                    </Style>
-                </ResourceDictionary>
-            </controls:NoteEditor.Resources>
-            <controls:NoteEditor.ContextMenu>
-                <ui:TextContextMenu>
-                    <MenuItem Command="{Binding ToggleSpellCheckCommand}" Header="SpellCheck">
-                        <MenuItem.Icon>
-                            <ui:FontIcon Glyph="&#xF87B;" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ui:TextContextMenu>
-            </controls:NoteEditor.ContextMenu>
-        </controls:NoteEditor>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="3" />
+                        </Style>
+                        <Style TargetType="{x:Type Table}">
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+                        <Style TargetType="{x:Type List}">
+                            <Setter Property="Margin" Value="3"/>
+                            <Style.Resources>
+                                <Style TargetType="{x:Type ListItem}">
+                                    <Style.Resources>
+                                        <Style TargetType="{x:Type Paragraph}">
+                                            <Setter Property="Margin" Value="3"/>
+                                        </Style>
+                                    </Style.Resources>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </ResourceDictionary>
+                </controls:NoteEditor.Resources>
+                <controls:NoteEditor.ContextMenu>
+                    <ui:TextContextMenu>
+                        <MenuItem Command="{Binding ToggleSpellCheckCommand}" Header="SpellCheck">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xF87B;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ui:TextContextMenu>
+                </controls:NoteEditor.ContextMenu>
+            </controls:NoteEditor>
+        </ui:ScrollViewerEx>
 
         <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Spacing="5" Margin="0,0,15,0"
                              Visibility="{Binding ShowNoteComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
