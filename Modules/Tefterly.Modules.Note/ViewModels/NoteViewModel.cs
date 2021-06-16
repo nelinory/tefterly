@@ -99,7 +99,7 @@ namespace Tefterly.Modules.Note.ViewModels
             if (CurrentNote != null)
             {
                 CurrentNote.TrackChanges = true;
-                CurrentNote.ModelChanged += (sender, e) => NoteHasChanged();
+                CurrentNote.ModelChanged += (sender, e) => _autoSaveNoteTimer.Start();
             }
 
             ShowNoteComponents = (CurrentNote != null);
@@ -170,6 +170,8 @@ namespace Tefterly.Modules.Note.ViewModels
 
         private void NoteHasChanged()
         {
+            _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+
             // note changed start autoSaveNoteTimer
             _autoSaveNoteTimer.Start();
         }
@@ -183,12 +185,8 @@ namespace Tefterly.Modules.Note.ViewModels
             {
                 _noteService.SaveNotes();
 
-                System.Diagnostics.Debug.WriteLine($"{DateTime.Now} - Note saved");
-
                 // note saved stop autoSaveNoteTimer
                 _autoSaveNoteTimer.Stop();
-
-                _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
             }
         }
 

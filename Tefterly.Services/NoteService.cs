@@ -140,6 +140,8 @@ namespace Tefterly.Services
                     {
                         SaveNoteXaml(note);
 
+                        System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - [Action] '{note.Title}' saved");
+
                         changesSaved = true;
                     }
                 }
