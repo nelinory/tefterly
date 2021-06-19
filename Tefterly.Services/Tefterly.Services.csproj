@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tefterly.Business\Tefterly.Business.csproj" />
+    <ProjectReference Include="..\Tefterly.Core\Tefterly.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
 
-namespace Tefterly.Business.Models
+namespace Tefterly.Core.Models
 {
     public class Notebook: BindableBase
     {

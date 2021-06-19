@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using System.Windows.Documents;
 
-namespace Tefterly.Business
+namespace Tefterly.Core.Models
 {
     public class ModelChangeTrackingBase : BindableBase, IRevertibleChangeTracking
     {

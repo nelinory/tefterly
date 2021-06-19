@@ -1,4 +1,4 @@
-﻿using Tefterly.Business.Models;
+﻿using Tefterly.Core.Models;
 
 namespace Tefterly.Services
 {

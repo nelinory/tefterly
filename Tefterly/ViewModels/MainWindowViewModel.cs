@@ -3,9 +3,9 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
-using Tefterly.Business;
 using Tefterly.Core.Commands;
 using Tefterly.Core.Events;
+using Tefterly.Core.Navigation;
 
 namespace Tefterly.ViewModels
 {

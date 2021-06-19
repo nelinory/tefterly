@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 using System.Windows.Documents;
-using Tefterly.Core;
 
-namespace Tefterly.Business.Models
+namespace Tefterly.Core.Models
 {
     public class Note : ModelChangeTrackingBase
     {

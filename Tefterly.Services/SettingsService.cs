@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
-using Tefterly.Business.Models;
+using Tefterly.Core.Models;
 
 namespace Tefterly.Services
 {
@@ -43,6 +43,11 @@ namespace Tefterly.Services
                 {
                     Settings = JsonSerializer.DeserializeAsync<Settings>(fs).Result;
                 }
+            }
+
+            if (Settings.CurrentVersion != Settings.LatestVersion)
+            {
+                // TODO: Add actions when settings version changes
             }
         }
 

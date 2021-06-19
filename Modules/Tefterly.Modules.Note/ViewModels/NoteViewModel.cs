@@ -14,8 +14,8 @@ namespace Tefterly.Modules.Note.ViewModels
 {
     public class NoteViewModel : BindableBase, INavigationAware
     {
-        private Business.Models.Note _currentNote;
-        public Business.Models.Note CurrentNote
+        private Core.Models.Note _currentNote;
+        public Core.Models.Note CurrentNote
         {
             get { return _currentNote; }
             set { SetProperty(ref _currentNote, value); }
@@ -49,6 +49,7 @@ namespace Tefterly.Modules.Note.ViewModels
         private readonly INoteService _noteService;
         private readonly IEventAggregator _eventAggregator;
         private readonly ISearchService _searchService;
+        private readonly ISettingsService _settingsService;
 
         // commands
         public DelegateCommand MarkNoteAsStarredCommand { get; set; }
@@ -58,12 +59,13 @@ namespace Tefterly.Modules.Note.ViewModels
         public DelegateCommand PermanentlyDeleteNoteCommand { get; set; }
         public DelegateCommand ToggleSpellCheckCommand { get; set; }
 
-        public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator, ISearchService searchService)
+        public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator, ISearchService searchService, ISettingsService settingsService)
         {
             // attach all required services
             _noteService = noteService;
             _eventAggregator = eventAggregator;
             _searchService = searchService;
+            _settingsService = settingsService;
 
             // attach all commands
             MarkNoteAsStarredCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Starred));
@@ -81,15 +83,15 @@ namespace Tefterly.Modules.Note.ViewModels
 
             // autosave
             _autoSaveNoteTimer = new DispatcherTimer();
-            _autoSaveNoteTimer.Interval = TimeSpan.FromSeconds(7); // TODO: Add to settings
+            _autoSaveNoteTimer.Interval = TimeSpan.FromSeconds(7); // TODO: Read from settings
             _autoSaveNoteTimer.Tick += AutoSaveNoteHandler;
 
             // search note
             _searchNoteResultsTimer = new DispatcherTimer();
-            _searchNoteResultsTimer.Interval = TimeSpan.FromMilliseconds(10); // TODO: Add to settings
+            _searchNoteResultsTimer.Interval = TimeSpan.FromMilliseconds(_settingsService.Settings.Search.ResultsRefreshTimerIntervalMs);
             _searchNoteResultsTimer.Tick += SearchNoteResultsHandler;
 
-            IsSpellCheckEnabled = false; // TODO: Add to settings
+            IsSpellCheckEnabled = false; // TODO: Read from settings
         }
 
         private void LoadNote(Guid noteId)

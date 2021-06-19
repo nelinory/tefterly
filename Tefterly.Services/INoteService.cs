@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Tefterly.Business.Models;
+using Tefterly.Core.Models;
 
 namespace Tefterly.Services
 {

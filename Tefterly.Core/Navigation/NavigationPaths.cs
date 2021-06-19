@@ -1,4 +1,4 @@
-﻿namespace Tefterly.Core
+﻿namespace Tefterly.Core.Navigation
 {
     public static class NavigationPaths
     {

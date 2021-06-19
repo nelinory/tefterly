@@ -7,6 +7,9 @@ namespace Tefterly.Services
     {
         private DispatcherTimer _searchTimer = new DispatcherTimer();
 
+        // services
+        private readonly ISettingsService _settingsService;
+
         public event SearchEventHandler Search;
         public string SearchTerm { get; set; }
 
@@ -15,8 +18,10 @@ namespace Tefterly.Services
             get { return Search == null ? 0 : Search.GetInvocationList().Length; }
         }
 
-        public SearchService()
+        public SearchService(ISettingsService settingsService)
         {
+            _settingsService = settingsService;
+
             _searchTimer = new DispatcherTimer();
             _searchTimer.Interval = TimeSpan.FromMilliseconds(300);
             _searchTimer.Tick += (sender, e) =>
@@ -39,7 +44,7 @@ namespace Tefterly.Services
 
         public bool IsSearchInProgress()
         {
-            return (String.IsNullOrEmpty(SearchTerm) == false && SearchTerm.Length > 2); // TODO: Read from settings
+            return (String.IsNullOrEmpty(SearchTerm) == false && SearchTerm.Length > _settingsService.Settings.Search.TermMinimumLength);
         }
     }
 }

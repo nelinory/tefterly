@@ -64,9 +64,8 @@ namespace Tefterly.Core
         {
             TextRange textRange = new TextRange(document.ContentStart, document.ContentEnd);
 
-            // TODO: Read this from settings
-            textRange.ApplyPropertyValue(TextElement.FontSizeProperty, (Double)14);
-            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, new System.Windows.Media.FontFamily("Segoe UI"));
+            textRange.ApplyPropertyValue(TextElement.FontSizeProperty, (Double)14); // TODO: Read from settings
+            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, new System.Windows.Media.FontFamily("Segoe UI")); // TODO: Read from settings
 
             return textRange;
         }

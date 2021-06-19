@@ -9,7 +9,6 @@
     <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Tefterly.Business\Tefterly.Business.csproj" />
     <ProjectReference Include="..\..\Tefterly.Core\Tefterly.Core.csproj" />
     <ProjectReference Include="..\..\Tefterly.Services\Tefterly.Services.csproj" />
   </ItemGroup>

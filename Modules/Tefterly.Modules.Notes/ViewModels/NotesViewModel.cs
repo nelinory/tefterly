@@ -6,25 +6,25 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Tefterly.Business;
 using Tefterly.Core;
 using Tefterly.Core.Commands;
 using Tefterly.Core.Events;
+using Tefterly.Core.Navigation;
 using Tefterly.Services;
 
 namespace Tefterly.Modules.Notes.ViewModels
 {
     public class NotesViewModel : BindableBase, INavigationAware
     {
-        private ObservableCollection<Business.Models.Note> _noteList;
-        public ObservableCollection<Business.Models.Note> NoteList
+        private ObservableCollection<Core.Models.Note> _noteList;
+        public ObservableCollection<Core.Models.Note> NoteList
         {
             get { return _noteList; }
             set { SetProperty(ref _noteList, value); }
         }
 
-        private Business.Models.Note _selectedNote;
-        public Business.Models.Note SelectedNote
+        private Core.Models.Note _selectedNote;
+        public Core.Models.Note SelectedNote
         {
             get { return _selectedNote; }
             set
@@ -99,7 +99,7 @@ namespace Tefterly.Modules.Notes.ViewModels
 
         private void LoadNoteList(Guid notebookGategory)
         {
-            List<Business.Models.Note> notes = new List<Business.Models.Note>(_noteService.GetNotes(notebookGategory).OrderByDescending(p => p.UpdatedDateTime));
+            List<Core.Models.Note> notes = new List<Core.Models.Note>(_noteService.GetNotes(notebookGategory).OrderByDescending(p => p.UpdatedDateTime));
 
             // apply search filter
             if (_searchService.IsSearchInProgress() == true)
@@ -111,7 +111,7 @@ namespace Tefterly.Modules.Notes.ViewModels
             else
                 SelectedNote = null; // no notes found in the selected category
 
-            NoteList = new ObservableCollection<Business.Models.Note>(notes); // bind it to the live NoteList
+            NoteList = new ObservableCollection<Core.Models.Note>(notes); // bind it to the live NoteList
             ShowNotesNotFoundPanel = (NoteList.Count == 0);
 
             if (String.IsNullOrEmpty(_searchService.SearchTerm) == true)
@@ -120,7 +120,7 @@ namespace Tefterly.Modules.Notes.ViewModels
                 ShowAddNoteButton = false;
         }
 
-        private void ExecuteNavigation(Business.Models.Note selectedNote)
+        private void ExecuteNavigation(Core.Models.Note selectedNote)
         {
             Guid id = (selectedNote == null) ? Guid.Empty : selectedNote.Id;
 

@@ -5,25 +5,25 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
-using Tefterly.Business;
 using Tefterly.Core;
 using Tefterly.Core.Commands;
 using Tefterly.Core.Events;
+using Tefterly.Core.Navigation;
 using Tefterly.Services;
 
 namespace Tefterly.Modules.Notebook.ViewModels
 {
     public class NotebookViewModel : BindableBase
     {
-        private ObservableCollection<Business.Models.Notebook> _notebookList;
-        public ObservableCollection<Business.Models.Notebook> NotebookList
+        private ObservableCollection<Core.Models.Notebook> _notebookList;
+        public ObservableCollection<Core.Models.Notebook> NotebookList
         {
             get { return _notebookList; }
             set { SetProperty(ref _notebookList, value); }
         }
 
-        private Business.Models.Notebook _selectedNotebook;
-        public Business.Models.Notebook SelectedNotebook
+        private Core.Models.Notebook _selectedNotebook;
+        public Core.Models.Notebook SelectedNotebook
         {
             get { return _selectedNotebook; }
             set
@@ -71,7 +71,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
 
         private void LoadNotebookList()
         {
-            NotebookList = new ObservableCollection<Business.Models.Notebook>(_noteService.GetAllNotebookCategories());
+            NotebookList = new ObservableCollection<Core.Models.Notebook>(_noteService.GetAllNotebookCategories());
 
             if (NotebookList.Count > 0)
                 SelectedNotebook = NotebookList[0]; // select the first item
@@ -83,13 +83,13 @@ namespace Tefterly.Modules.Notebook.ViewModels
 
         private void RefreshCategoryCounts()
         {
-            foreach (Business.Models.Notebook notebook in NotebookList)
+            foreach (Core.Models.Notebook notebook in NotebookList)
             {
                 notebook.TotalItems = _noteService.GetCategoryCount(notebook.Id);
             }
         }
 
-        private void ExecuteNavigation(Business.Models.Notebook selectedNotebook)
+        private void ExecuteNavigation(Core.Models.Notebook selectedNotebook)
         {
             Guid id = (selectedNotebook == null) ? Guid.Empty : selectedNotebook.Id;
 

@@ -24,8 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Todo.txt = Todo.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly.Business", "Tefterly.Business\Tefterly.Business.csproj", "{B8B3693B-AEAF-483C-893B-F935F59F2B24}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tefterly.Services", "Tefterly.Services\Tefterly.Services.csproj", "{4C8500E0-7AE6-4F4F-AFC8-BF9DEE78EF29}"
 EndProject
 Global
@@ -54,10 +52,6 @@ Global
 		{3746CC8B-A086-4C4F-999E-C2AE5251D2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3746CC8B-A086-4C4F-999E-C2AE5251D2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3746CC8B-A086-4C4F-999E-C2AE5251D2E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8B3693B-AEAF-483C-893B-F935F59F2B24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8B3693B-AEAF-483C-893B-F935F59F2B24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8B3693B-AEAF-483C-893B-F935F59F2B24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8B3693B-AEAF-483C-893B-F935F59F2B24}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C8500E0-7AE6-4F4F-AFC8-BF9DEE78EF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C8500E0-7AE6-4F4F-AFC8-BF9DEE78EF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C8500E0-7AE6-4F4F-AFC8-BF9DEE78EF29}.Release|Any CPU.ActiveCfg = Release|Any CPU

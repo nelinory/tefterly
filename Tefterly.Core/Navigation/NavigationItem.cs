@@ -1,6 +1,6 @@
 ﻿using Prism.Regions;
 
-namespace Tefterly.Business
+namespace Tefterly.Core.Navigation
 {
     public class NavigationItem : INavigationItem
     {

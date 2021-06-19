@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Windows.Documents;
-using Tefterly.Business.Models;
 using Tefterly.Core;
+using Tefterly.Core.Models;
 
 namespace Tefterly.Services
 {
