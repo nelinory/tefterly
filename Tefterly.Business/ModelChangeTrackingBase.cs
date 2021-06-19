@@ -3,7 +3,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
@@ -13,7 +12,7 @@ namespace Tefterly.Business
 {
     public class ModelChangeTrackingBase : BindableBase, IRevertibleChangeTracking
     {
-        private static readonly IEnumerable<string> _propertiesToIgnore = new List<string> { "IsChanged" };
+        private static readonly IList<string> _propertiesToIgnore = new List<string> { "IsChanged" };
 
         [JsonIgnore]
         public ConcurrentDictionary<string, object> Changes { get; private set; }
