@@ -33,8 +33,8 @@ namespace Tefterly.Core.Resources.Controls
                 _searchHighlightRect.Height = rightSide.Bottom - leftSide.Top;
                 _searchHighlightRect.Y = rightSide.Y;
 
-                drawingContext.PushOpacity(0.5); // TODO: Read from settings
-                drawingContext.DrawRectangle(new SolidColorBrush(Colors.Orange), null, _searchHighlightRect); // TODO: Read from settings
+                drawingContext.PushOpacity(SettingsManager.Instance.Settings.Search.ResultsHighlightColorOpacity);
+                drawingContext.DrawRectangle(Utilities.GetColorBrushFromString(SettingsManager.Instance.Settings.Search.ResultsHighlightColor), null, _searchHighlightRect);
                 drawingContext.Pop();
             }
             catch (Exception ex)

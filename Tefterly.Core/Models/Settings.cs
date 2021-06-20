@@ -7,11 +7,12 @@ namespace Tefterly.Core.Models
     {
         public int LatestVersion { get { return 1; } }
 
-        public int CurrentVersion { get; set; }
+        public int CurrentVersion { get; set; } = 1;
         public string NotesLocation { get; set; }
         public string NotesFileLocation { get; set; }
 
         public Search Search { get; set; }
+        public Notes Notes { get; set; }
 
         public Settings()
         {
@@ -21,20 +22,26 @@ namespace Tefterly.Core.Models
             NotesLocation = Path.Combine(Environment.CurrentDirectory, "Notes");
             NotesFileLocation = Path.Combine(NotesLocation, "Tefterly.notes");
 
-            // search
-            Search = new Search
-            {
-                ResultsHighlightColor = "#FF0173C7",
-                ResultsRefreshTimerIntervalMs = 10,
-                TermMinimumLength = 2
-            };
+            // sections
+            Search = new Search();
+            Notes = new Notes();
         }
     }
 
     public class Search
     {
-        public string ResultsHighlightColor { get; set; }
-        public int ResultsRefreshTimerIntervalMs { get; set; }
-        public int TermMinimumLength { get; set; }
+        public string ResultsHighlightColor { get; set; } = "#FFFFA500";
+        public double ResultsHighlightColorOpacity { get; set; } = 0.5;
+        public int ResultsRefreshTimerIntervalMs { get; set; } = 10;
+        public int TermMinimumLength { get; set; } = 2;
+    }
+
+    public class Notes
+    {
+        public double FontSize { get; set; } = 14;
+        public string FontFamily { get; set; } = "Segoe UI";
+        public int AutoSaveTimerIntervalSeconds { get; set; } = 7;
+        public bool IsSpellCheckEnabled { get; set; } = false;
+        public string HyperlinkForegroundColor { get; set; } = "#FF0173C7";
     }
 }

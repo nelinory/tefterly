@@ -1,62 +1,34 @@
-﻿using System;
-using System.IO;
-using System.Text.Json;
+﻿using Tefterly.Core;
 using Tefterly.Core.Models;
 
 namespace Tefterly.Services
 {
     public class SettingsService : ISettingsService
     {
-        private JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
+        private readonly SettingsManager _settingsManager;
 
         public SettingsService()
         {
-            Load();
-        }
+            _settingsManager = SettingsManager.Instance;
 
-        public string SettingsFileLocation
-        {
-            get { return Path.Combine(Environment.CurrentDirectory, "Tefterly.config"); }
+            Settings = _settingsManager.Settings;
         }
 
         public Settings Settings { get; private set; }
 
         public void Get<T>(string settingName, ref T value)
         {
-            // TODO: Is it needed
-            value = (T)Settings.GetType().GetProperty(settingName).GetValue(Settings, null);
+            _settingsManager.Get<T>(settingName, ref value);
         }
 
         public void Set<T>(string settingName, T value)
         {
-            // TODO: Is it needed
-            Settings.GetType().GetProperty(settingName).SetValue(Settings, value);
-        }
-
-        public void Load()
-        {
-            Settings = new Settings();
-
-            if (File.Exists(SettingsFileLocation) == true)
-            {
-                using (FileStream fs = File.OpenRead(SettingsFileLocation))
-                {
-                    Settings = JsonSerializer.DeserializeAsync<Settings>(fs).Result;
-                }
-            }
-
-            if (Settings.CurrentVersion != Settings.LatestVersion)
-            {
-                // TODO: Add actions when settings version changes
-            }
+            _settingsManager.Set<T>(settingName, value);
         }
 
         public void Save()
         {
-            using (FileStream fs = File.Create(SettingsFileLocation))
-            {
-                JsonSerializer.SerializeAsync(fs, Settings, _jsonSerializerOptions);
-            }
+            _settingsManager.Save();
         }
     }
 }

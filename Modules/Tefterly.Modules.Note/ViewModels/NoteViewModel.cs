@@ -83,7 +83,7 @@ namespace Tefterly.Modules.Note.ViewModels
 
             // autosave
             _autoSaveNoteTimer = new DispatcherTimer();
-            _autoSaveNoteTimer.Interval = TimeSpan.FromSeconds(7); // TODO: Read from settings
+            _autoSaveNoteTimer.Interval = TimeSpan.FromSeconds(_settingsService.Settings.Notes.AutoSaveTimerIntervalSeconds);
             _autoSaveNoteTimer.Tick += AutoSaveNoteHandler;
 
             // search note
@@ -91,7 +91,7 @@ namespace Tefterly.Modules.Note.ViewModels
             _searchNoteResultsTimer.Interval = TimeSpan.FromMilliseconds(_settingsService.Settings.Search.ResultsRefreshTimerIntervalMs);
             _searchNoteResultsTimer.Tick += SearchNoteResultsHandler;
 
-            IsSpellCheckEnabled = false; // TODO: Read from settings
+            IsSpellCheckEnabled = _settingsService.Settings.Notes.IsSpellCheckEnabled;
         }
 
         private void LoadNote(Guid noteId)
@@ -168,6 +168,7 @@ namespace Tefterly.Modules.Note.ViewModels
 
             // enable/disable spellcheck
             IsSpellCheckEnabled = (IsSpellCheckEnabled == false);
+            _settingsService.Settings.Notes.IsSpellCheckEnabled = IsSpellCheckEnabled;
         }
 
         private void NoteHasChanged()

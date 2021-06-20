@@ -18,15 +18,6 @@ Notes Features:
 
 Settings:
 =========
-[ ] Note font size
-[ ] Note font style
-[ ] Note margin size
-[ ] Search result highlight color
-[ ] Search results highlight timer
-[ ] Search term minimum length
-[ ] Auto save timer duration
-[ ] Notes location
-[ ] Show/Hide notes list scrollbar
 [ ] Maintain X notes backups + maintain X notes backups for version changes
 
 Future Roadmap - Note Elements:

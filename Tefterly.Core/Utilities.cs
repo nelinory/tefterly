@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Tefterly.Core
 {
@@ -64,10 +65,15 @@ namespace Tefterly.Core
         {
             TextRange textRange = new TextRange(document.ContentStart, document.ContentEnd);
 
-            textRange.ApplyPropertyValue(TextElement.FontSizeProperty, (Double)14); // TODO: Read from settings
-            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, new System.Windows.Media.FontFamily("Segoe UI")); // TODO: Read from settings
+            textRange.ApplyPropertyValue(TextElement.FontSizeProperty, SettingsManager.Instance.Settings.Notes.FontSize);
+            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, new FontFamily(SettingsManager.Instance.Settings.Notes.FontFamily));
 
             return textRange;
+        }
+
+        public static SolidColorBrush GetColorBrushFromString(string colorCode)
+        {
+            return new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorCode));
         }
     }
 }

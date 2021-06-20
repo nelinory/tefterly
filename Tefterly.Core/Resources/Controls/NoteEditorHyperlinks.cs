@@ -36,7 +36,7 @@ namespace Tefterly.Core.Resources.Controls
                         {
                             IsEnabled = true,
                             NavigateUri = new Uri(word),
-                            Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString("#FF0173C7") } // TODO: Read from settings
+                            Foreground = Utilities.GetColorBrushFromString(SettingsManager.Instance.Settings.Notes.HyperlinkForegroundColor)
                         };
 
                         hyperlink.RequestNavigate += OnRequestNavigate;
