@@ -75,5 +75,12 @@ namespace Tefterly.Core
         {
             return new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorCode));
         }
+
+        public static void EnsureTargetFolderExists(string fileName)
+        {
+            string folderName = Path.GetDirectoryName(fileName);
+            if (Directory.Exists(folderName) == false)
+                Directory.CreateDirectory(folderName);
+        }
     }
 }

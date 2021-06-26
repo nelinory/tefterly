@@ -6,13 +6,15 @@ namespace Tefterly.Core.Models
     public class Settings
     {
         public int LatestVersion { get { return 1; } }
-
         public int CurrentVersion { get; set; } = 1;
+
         public string NotesLocation { get; set; }
+        public string BackupLocation { get; set; }
         public string NotesFileLocation { get; set; }
 
         public Search Search { get; set; }
         public Notes Notes { get; set; }
+        public Backup Backup { get; set; }
 
         public Settings()
         {
@@ -20,11 +22,13 @@ namespace Tefterly.Core.Models
 
             // default values
             NotesLocation = Path.Combine(Environment.CurrentDirectory, "Notes");
+            BackupLocation = Path.Combine(Environment.CurrentDirectory, "Backup");
             NotesFileLocation = Path.Combine(NotesLocation, "Tefterly.notes");
 
             // sections
             Search = new Search();
             Notes = new Notes();
+            Backup = new Backup();
         }
     }
 
@@ -43,5 +47,13 @@ namespace Tefterly.Core.Models
         public int AutoSaveTimerIntervalSeconds { get; set; } = 7;
         public bool IsSpellCheckEnabled { get; set; } = false;
         public string HyperlinkForegroundColor { get; set; } = "#FF0173C7";
+    }
+
+    public class Backup
+    {
+        public bool IsEnabled { get; set; } = true;
+        public int TimerIntervalMinutes { get; set; } = 30;
+        public int MaxRegularBackups { get; set; } = 20;
+        public int MaxVersionChangeBackups { get; set; } = 7;
     }
 }

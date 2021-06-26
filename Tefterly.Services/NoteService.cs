@@ -14,6 +14,7 @@ namespace Tefterly.Services
     {
         private static IList<Notebook> _notebooks = new List<Notebook>();
         private static IList<Note> _notes = new List<Note>();
+       
         private static JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
 
         // services
@@ -248,7 +249,7 @@ namespace Tefterly.Services
 
         private void SaveNoteXaml(Note note)
         {
-            EnsureTargetFolderExists(_settingsService.Settings.NotesFileLocation);
+            Utilities.EnsureTargetFolderExists(_settingsService.Settings.NotesFileLocation);
 
             string noteFileName = GetNoteFileName(note.Id, _settingsService.Settings.NotesLocation);
             TextRange textRange = new TextRange(note.Document.ContentStart, note.Document.ContentEnd);
@@ -280,7 +281,7 @@ namespace Tefterly.Services
             return document;
         }
 
-        public void DeleteNoteXaml(Note note)
+        private void DeleteNoteXaml(Note note)
         {
             string noteFileName = GetNoteFileName(note.Id, _settingsService.Settings.NotesLocation);
 
@@ -290,18 +291,11 @@ namespace Tefterly.Services
 
         private void SaveNoteCatalog()
         {
-            EnsureTargetFolderExists(_settingsService.Settings.NotesFileLocation);
+            Utilities.EnsureTargetFolderExists(_settingsService.Settings.NotesFileLocation);
 
             string jsonNotes = JsonSerializer.Serialize(_notes, _jsonSerializerOptions);
 
             File.WriteAllText(_settingsService.Settings.NotesFileLocation, jsonNotes);
-        }
-
-        private void EnsureTargetFolderExists(string fileName)
-        {
-            string folderName = Path.GetDirectoryName(fileName);
-            if (Directory.Exists(folderName) == false)
-                Directory.CreateDirectory(folderName);
         }
 
         private string GetNoteFileName(Guid noteId, string filePath)

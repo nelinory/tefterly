@@ -8,7 +8,7 @@ namespace Tefterly.Core
     public sealed class SettingsManager
     {
         private static readonly Lazy<SettingsManager> _intance = new Lazy<SettingsManager>(() => new SettingsManager());
-        
+
         private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true, IgnoreNullValues = true };
         private static readonly string _settingsFileLocation = Path.Combine(Environment.CurrentDirectory, "Tefterly.config");
 
@@ -19,7 +19,7 @@ namespace Tefterly.Core
         private SettingsManager()
         {
             Settings = new Settings();
-            
+
             if (File.Exists(_settingsFileLocation) == true)
             {
                 using (FileStream fs = File.OpenRead(_settingsFileLocation))
@@ -30,7 +30,14 @@ namespace Tefterly.Core
 
             if (Settings.CurrentVersion != Settings.LatestVersion)
             {
-                // TODO: Add actions when settings version changes
+                // always backup on version change
+                BackupManager.VersionChangeBackup(Settings.BackupLocation, Settings.NotesLocation, Settings.CurrentVersion, Settings.LatestVersion, Settings.Backup.MaxVersionChangeBackups);
+
+                // settings migration started
+
+                // settings migration completed
+                Settings.CurrentVersion = Settings.LatestVersion;
+                Save();
             }
         }
 

@@ -44,6 +44,7 @@ namespace Tefterly.Modules.Note.ViewModels
 
         private readonly DispatcherTimer _autoSaveNoteTimer;
         private readonly DispatcherTimer _searchNoteResultsTimer;
+        private readonly DispatcherTimer _notesBackupTimer;
 
         // services
         private readonly INoteService _noteService;
@@ -90,6 +91,13 @@ namespace Tefterly.Modules.Note.ViewModels
             _searchNoteResultsTimer = new DispatcherTimer();
             _searchNoteResultsTimer.Interval = TimeSpan.FromMilliseconds(_settingsService.Settings.Search.ResultsRefreshTimerIntervalMs);
             _searchNoteResultsTimer.Tick += SearchNoteResultsHandler;
+
+            // notes backup
+            _notesBackupTimer = new DispatcherTimer();
+            _notesBackupTimer.Interval = TimeSpan.FromMinutes(_settingsService.Settings.Backup.TimerIntervalMinutes);
+            _notesBackupTimer.Tick += NotesBackupHandler;
+            if (_settingsService.Settings.Backup.IsEnabled == true)
+                _notesBackupTimer.Start();
 
             IsSpellCheckEnabled = _settingsService.Settings.Notes.IsSpellCheckEnabled;
         }
@@ -205,6 +213,13 @@ namespace Tefterly.Modules.Note.ViewModels
             }
 
             _searchNoteResultsTimer.Stop(); // search complete
+        }
+
+        private void NotesBackupHandler(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - [Action] Regular notes backup initiated");
+
+            BackupManager.RegularBackup(_settingsService.Settings.BackupLocation, _settingsService.Settings.NotesLocation, _settingsService.Settings.Backup.MaxRegularBackups);
         }
 
         #region Navigation Logic

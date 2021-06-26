@@ -8,17 +8,13 @@ Notes Features:
 [X] Search in note
 [X] Dynamically format hyperlinks
 [X] Error handling and logging
-[ ] Automatic notes backup at specified interval
-[ ] Automatic notes backup on startup if the version of the app is different since the last run
+[X] Automatic notes backup at specified interval
+[X] Automatic notes backup on startup if the version of the app settings is different since the last run
 [ ] Print note
 [ ] Attach categories to a note
 [ ] Ability to resize image
 [ ] Export note to: RTF, DOCX, PDF and TXT
 [ ] Encrypt/decrypt notes with a password
-
-Settings:
-=========
-[ ] Maintain X notes backups + maintain X notes backups for version changes
 
 Future Roadmap - Note Elements:
 ===============================
