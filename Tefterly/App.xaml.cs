@@ -34,14 +34,9 @@ namespace Tefterly
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            // configure logging
-            Log.Logger = new LoggerConfiguration()
-               .WriteTo.File(Path.Combine(_logsPath, "Tefterly-.log"),
-                                restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
-                                outputTemplate: "{Timestamp:MM/dd/yyyy HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
-                                rollingInterval: RollingInterval.Day,
-                                retainedFileCountLimit: 7)
-               .CreateLogger();
+            ForceSingleInstance();
+
+            ConfigureLogging();
 
             SetupUnhandledExceptionHandling();
 
@@ -51,31 +46,6 @@ namespace Tefterly
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
-        }
-
-        protected override void InitializeShell(Window shell)
-        {
-            if (_appMutex.WaitOne(TimeSpan.Zero, true) == true)
-            {
-                _appMutex.ReleaseMutex();
-
-                // show splash window
-                //Window splashWin = new Splash();
-                //splashWin.Show();
-            }
-            else
-            {
-                Process[] processes = Process.GetProcessesByName(Assembly.GetEntryAssembly().GetName().Name);
-                {
-                    if (processes.Length > 0)
-                    {
-                        ShowWindow(processes[0].MainWindowHandle, SW_RESTORE_WINDOW);
-                        SetForegroundWindow(processes[0].MainWindowHandle);
-                    }
-                }
-
-                Application.Current.Shutdown();
-            }
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -103,6 +73,45 @@ namespace Tefterly
             Log.CloseAndFlush();
 
             base.OnExit(e);
+        }
+
+        #region Private methods
+
+        private void ForceSingleInstance()
+        {
+            if (_appMutex.WaitOne(TimeSpan.Zero, true) == true)
+            {
+                _appMutex.ReleaseMutex();
+
+                // show splash window
+                SplashScreen splash = new SplashScreen("Spash.png");
+                splash.Show(true, true);
+            }
+            else
+            {
+                Process[] processes = Process.GetProcessesByName(Assembly.GetEntryAssembly().GetName().Name);
+                {
+                    if (processes.Length > 0)
+                    {
+                        ShowWindow(processes[0].MainWindowHandle, SW_RESTORE_WINDOW);
+                        SetForegroundWindow(processes[0].MainWindowHandle);
+                    }
+                }
+
+                Application.Current.Shutdown();
+            }
+        }
+
+        private void ConfigureLogging()
+        {
+            // configure logging
+            Log.Logger = new LoggerConfiguration()
+               .WriteTo.File(Path.Combine(_logsPath, "Tefterly-.log"),
+                                restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+                                outputTemplate: "{Timestamp:MM/dd/yyyy HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+                                rollingInterval: RollingInterval.Day,
+                                retainedFileCountLimit: 7)
+               .CreateLogger();
         }
 
         private void SetupUnhandledExceptionHandling()
@@ -149,5 +158,7 @@ namespace Tefterly
 
             Application.Current.Shutdown();
         }
+
+        #endregion
     }
 }

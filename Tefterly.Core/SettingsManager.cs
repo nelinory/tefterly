@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.IO;
 using System.Text.Json;
 using Tefterly.Core.Models;
@@ -22,9 +23,16 @@ namespace Tefterly.Core
 
             if (File.Exists(_settingsFileLocation) == true)
             {
-                using (FileStream fs = File.OpenRead(_settingsFileLocation))
+                try
                 {
-                    Settings = JsonSerializer.DeserializeAsync<Settings>(fs).Result;
+                    using (FileStream fs = File.OpenRead(_settingsFileLocation))
+                    {
+                        Settings = JsonSerializer.DeserializeAsync<Settings>(fs).Result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Error while loading settings: {EX}", ex);
                 }
             }
 
