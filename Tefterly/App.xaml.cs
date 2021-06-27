@@ -30,20 +30,20 @@ namespace Tefterly
 
         private const int SW_RESTORE_WINDOW = 9;
         private static readonly Mutex _appMutex = new Mutex(true, "5DC91344-9EA8-4E15-9396-ED4CCBA8B152");
+        private static readonly string _logsPath = Path.Combine(Environment.CurrentDirectory, "Logs");
 
         protected override void OnStartup(StartupEventArgs e)
         {
             // configure logging
             Log.Logger = new LoggerConfiguration()
-               .WriteTo.File(Path.Combine(Environment.CurrentDirectory, "Logs\\Tefterly-.log"),
+               .WriteTo.File(Path.Combine(_logsPath, "Tefterly-.log"),
                                 restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
                                 outputTemplate: "{Timestamp:MM/dd/yyyy HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
                                 rollingInterval: RollingInterval.Day,
                                 retainedFileCountLimit: 7)
                .CreateLogger();
 
-            // handler for Dispatcher unhandled exceptions
-            DispatcherUnhandledException += App_DispatcherUnhandledException;
+            SetupUnhandledExceptionHandling();
 
             base.OnStartup(e);
         }
@@ -59,12 +59,6 @@ namespace Tefterly
             {
                 _appMutex.ReleaseMutex();
 
-                // handler for unhandled exceptions
-                AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs e)
-                {
-                    LogFatalAndExit(e.ExceptionObject as Exception);
-                };
-
                 // show splash window
                 //Window splashWin = new Splash();
                 //splashWin.Show();
@@ -79,6 +73,7 @@ namespace Tefterly
                         SetForegroundWindow(processes[0].MainWindowHandle);
                     }
                 }
+
                 Application.Current.Shutdown();
             }
         }
@@ -110,25 +105,47 @@ namespace Tefterly
             base.OnExit(e);
         }
 
-        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private void SetupUnhandledExceptionHandling()
         {
-            // prevent default unhandled exception processing
-            e.Handled = true;
+            // handler for all exceptions from all threads
+            AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs e)
+            {
+                LogFatalAndExit(e.ExceptionObject as Exception);
+            };
 
-            LogFatalAndExit(e.Exception);
+            // handler for all exceptions from a single dispatcher thread
+            Application.Current.DispatcherUnhandledException += delegate (object sender, DispatcherUnhandledExceptionEventArgs e)
+            {
+                // If we are debugging, let Visual Studio handle the exception and take us to the code that threw it
+                if (Debugger.IsAttached == false)
+                {
+                    e.Handled = true;
+                    LogFatalAndExit(e.Exception);
+                }
+            };
         }
 
         private void LogFatalAndExit(Exception ex)
         {
             Log.Error("Fatal application exception: {EX}", ex);
 
-            // save settings before exiting
-            SettingsService settingsService = Container.Resolve<SettingsService>();
-            settingsService.Save();
+            string errorMessage = $"A fatal application error occurred.\n\nPlease, check error logs at:\n{_logsPath} for more details.\n\nApplication will close now.";
+            MessageBox.Show(errorMessage, "Tefterly - Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
-            // save notes before exiting
-            NoteService noteService = Container.Resolve<NoteService>();
-            noteService.SaveNotes();
+            try
+            {
+                // save settings before exiting
+                SettingsService settingsService = Container.Resolve<SettingsService>();
+                settingsService.Save();
+
+                // save notes before exiting
+                NoteService noteService = Container.Resolve<NoteService>();
+                noteService.SaveNotes();
+            }
+            catch (Exception)
+            {
+                // ignore we are exiting anyway
+            }
 
             Application.Current.Shutdown();
         }
