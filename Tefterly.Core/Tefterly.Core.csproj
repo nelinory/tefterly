@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
+    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
     <PackageReference Include="Serilog" Version="2.10.0" />
   </ItemGroup>
 

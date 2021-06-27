@@ -6,7 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ModernWpfUI" Version="0.9.4" />
-    <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tefterly.Core\Tefterly.Core.csproj" />
