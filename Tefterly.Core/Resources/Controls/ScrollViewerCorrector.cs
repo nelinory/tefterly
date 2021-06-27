@@ -35,7 +35,7 @@ namespace Tefterly.Core.Resources.Controls
                 viewer.PreviewMouseWheel -= HandlePreviewMouseWheel;
         }
 
-        private static List<MouseWheelEventArgs> _reentrantList = new List<MouseWheelEventArgs>();
+        private static readonly List<MouseWheelEventArgs> _reentrantList = new List<MouseWheelEventArgs>();
 
         private static void HandlePreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {

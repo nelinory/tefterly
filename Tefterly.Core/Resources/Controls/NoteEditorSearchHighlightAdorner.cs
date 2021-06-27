@@ -8,7 +8,7 @@ namespace Tefterly.Core.Resources.Controls
 {
     public class NoteEditorSearchHighlightAdorner : Adorner
     {
-        private TextRange _textRange;
+        private readonly TextRange _textRange;
         private Rect _searchHighlightRect;
 
         public NoteEditorSearchHighlightAdorner(NoteEditor noteEditor, TextRange textRange) : base(noteEditor)

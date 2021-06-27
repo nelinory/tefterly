@@ -15,7 +15,7 @@ namespace Tefterly.Services
         private static IList<Notebook> _notebooks = new List<Notebook>();
         private static IList<Note> _notes = new List<Note>();
        
-        private static JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
 
         // services
         private readonly ISettingsService _settingsService;

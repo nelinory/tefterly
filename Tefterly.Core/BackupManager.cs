@@ -7,8 +7,8 @@ namespace Tefterly.Core
 {
     public static class BackupManager
     {
-        private static string _regularBackup = "Backup_r";
-        private static string _versionChangeBackup = "Backup_vc";
+        private static readonly string _regularBackup = "Backup_r";
+        private static readonly string _versionChangeBackup = "Backup_vc";
 
         public static void RegularBackup(string backupLocation, string notesLocation, int maxBackupsToKeep)
         {

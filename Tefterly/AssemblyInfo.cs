@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("tefterly")]
+[assembly: AssemblyTitle("Tefterly")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("tefterly")]
+[assembly: AssemblyProduct("Tefterly")]
 [assembly: AssemblyCopyright("Copyright © nelinory 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -11,8 +11,8 @@ namespace Tefterly.Views
     public partial class MainWindow : Window
     {
         // services
-        private INoteService _noteService;
-        private ISettingsService _settingsService;
+        private readonly INoteService _noteService;
+        private readonly ISettingsService _settingsService;
 
         public MainWindow(INoteService noteService, ISettingsService settingsService)
         {

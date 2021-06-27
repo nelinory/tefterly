@@ -204,7 +204,7 @@ namespace Tefterly.Core.Resources.Controls
         #endregion
 
         private MethodInfo _searchMethodAPI;
-        private NoteEditorSearchHighlight _noteEditorSearchHighlightResults;
+        private readonly NoteEditorSearchHighlight _noteEditorSearchHighlightResults;
 
         public void Search(string searchTerm)
         {

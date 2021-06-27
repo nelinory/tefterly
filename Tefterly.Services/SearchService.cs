@@ -5,7 +5,7 @@ namespace Tefterly.Services
 {
     public class SearchService : ISearchService
     {
-        private DispatcherTimer _searchTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _searchTimer = new DispatcherTimer();
 
         // services
         private readonly ISettingsService _settingsService;
@@ -20,6 +20,7 @@ namespace Tefterly.Services
 
         public SearchService(ISettingsService settingsService)
         {
+            // attach all required services
             _settingsService = settingsService;
 
             _searchTimer = new DispatcherTimer();
