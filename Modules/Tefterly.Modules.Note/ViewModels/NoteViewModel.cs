@@ -59,6 +59,7 @@ namespace Tefterly.Modules.Note.ViewModels
         public DelegateCommand DeleteNoteCommand { get; set; }
         public DelegateCommand PermanentlyDeleteNoteCommand { get; set; }
         public DelegateCommand ToggleSpellCheckCommand { get; set; }
+        public DelegateCommand PrintNoteCommand { get; set; }
 
         public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator, ISearchService searchService, ISettingsService settingsService)
         {
@@ -75,6 +76,7 @@ namespace Tefterly.Modules.Note.ViewModels
             DeleteNoteCommand = new DelegateCommand(() => ExecuteChangeNotebookCategory(NotebookCategories.Deleted));
             PermanentlyDeleteNoteCommand = new DelegateCommand(() => ExecutePermanentlyDeleteNoteCommand());
             ToggleSpellCheckCommand = new DelegateCommand(() => ExecuteToggleSpellCheckCommand());
+            PrintNoteCommand = new DelegateCommand(() => ExecutePrintNoteCommand());
 
             // event handlers
             _searchService.Search += (sender, e) => _searchNoteResultsTimer.Start(); // search started
@@ -177,6 +179,14 @@ namespace Tefterly.Modules.Note.ViewModels
             // enable/disable spellcheck
             IsSpellCheckEnabled = (IsSpellCheckEnabled == false);
             _settingsService.Settings.Notes.IsSpellCheckEnabled = IsSpellCheckEnabled;
+        }
+
+        private void ExecutePrintNoteCommand()
+        {
+            if (CurrentNote == null)
+                return;
+
+            PrintManager.PrintNote(CurrentNote.Title, CurrentNote.Document);
         }
 
         private void NoteHasChanged()

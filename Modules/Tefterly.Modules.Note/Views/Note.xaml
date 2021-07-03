@@ -93,7 +93,7 @@
                 </controls:NoteEditor.Resources>
                 <controls:NoteEditor.ContextMenu>
                     <ui:TextContextMenu>
-                        <MenuItem Command="{Binding ToggleSpellCheckCommand}" Header="SpellCheck">
+                        <MenuItem Command="{Binding ToggleSpellCheckCommand}" Header="Toggle spell check">
                             <MenuItem.Icon>
                                 <ui:FontIcon Glyph="&#xF87B;" />
                             </MenuItem.Icon>
@@ -217,7 +217,10 @@
                     TrueValue='M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 18V15H8L12 11 16 15H13.5V18',
                     FalseValue='M20 21H4V10H5.25V19.75H18.75V10H20V21M3 3H21V9H3V3M4.25 4.25V7.75H19.75V4.25M10.5 11V14H8L12 18 16 14H13.5V11'}}" />
             </Button>
-
+            <Button ToolTip="Print note" Style="{DynamicResource ChromelessButton}" Command="{Binding PrintNoteCommand}">
+                <ui:FontIcon Glyph="&#xE749;" />
+            </Button>
+            
             <ui:AppBarSeparator Margin="-12,0,-9,0" />
 
             <Button ToolTip="{Binding CurrentNote.IsDeleted, Converter={converters:BooleanToIconStateConverter TrueValue='Restore note', FalseValue='Delete note'}}"

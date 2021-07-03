@@ -141,6 +141,9 @@ namespace Tefterly.Modules.Notes.ViewModels
 
             if (SelectedNotebookCategoryId != NotebookCategories.Default)
                 _eventAggregator.GetEvent<ResetNotebookCategoryEvent>().Publish(String.Empty);
+
+            // save newly created note
+            _noteService.SaveNotes();
         }
 
         #region Navigation Logic

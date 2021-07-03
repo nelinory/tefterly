@@ -2,15 +2,15 @@ Notes Features:
 ===============
 [X] Rich text font styles: Bold/Italic/Underline/Strikethrough and Highlight
 [X] Rich text paragraph styles: Left/Right/Center/Justify align, Increase/Decrease indent and Bullet/Ordered list
-[X] Note operation: Starred/Unstarred, Delete/Restore/Permanently Delete, Archive/Restore and Duplicate
+[X] Note operation: Starred/Unstarred, Delete/Restore/Permanently Delete, Archive/Restore, Duplicate and Print
 [X] SpellCheck
 [X] Search across all notes
 [X] Search in note
-[X] Dynamically format hyperlinks
+[X] Dynamically formatted hyperlinks
 [X] Error handling and logging
 [X] Automatic notes backup at specified interval
 [X] Automatic notes backup on startup if the version of the app settings is different since the last run
-[ ] Print note
+[ ] Dark/Light theme support
 [ ] Attach categories to a note
 [ ] Ability to resize image
 [ ] Export note to: RTF, HTML, PDF and TXT
@@ -26,3 +26,4 @@ Future Roadmap - Note Elements:
 Settings
 =======
 [ ] Remember theme selection
+[ ] Remember selected category
