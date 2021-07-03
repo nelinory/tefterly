@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Tefterly.Core.Resources.Controls
@@ -26,7 +23,7 @@ namespace Tefterly.Core.Resources.Controls
             // add custom binding for Ctrl+Shift+V for rich format pasting
             InputBindings.Add(new KeyBinding(ApplicationCommands.Paste, Key.V, ModifierKeys.Control | ModifierKeys.Shift));
 
-            // search support
+            // search results highlight support
             _noteEditorSearchHighlightResults = new NoteEditorSearchHighlight(this);
 
             // register global commands
@@ -35,111 +32,6 @@ namespace Tefterly.Core.Resources.Controls
         }
 
         public NoteEditor(FlowDocument document) : base(document) { }
-
-        #region Font Style Command
-
-        public static readonly ICommand FontStylesCommand = new RoutedUICommand("FontStylesCommand", "FontStylesCommand", typeof(NoteEditor));
-
-        private void CanExecuteFontStylesCommand(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
-
-        private void OnFontStylesCommand(object sender, ExecutedRoutedEventArgs e)
-        {
-            Enum.TryParse(e.Parameter.ToString(), out NoteFontStyles fontStyle);
-            ApplyFontStylesCommand(fontStyle);
-        }
-
-        private void ApplyFontStylesCommand(NoteFontStyles fontStyle)
-        {
-            switch (fontStyle)
-            {
-                case NoteFontStyles.Bold:
-                    EditingCommands.ToggleBold.Execute(null, this);
-                    break;
-                case NoteFontStyles.Italic:
-                    EditingCommands.ToggleItalic.Execute(null, this);
-                    break;
-                case NoteFontStyles.Underline:
-                    EditingCommands.ToggleUnderline.Execute(null, this);
-                    break;
-                case NoteFontStyles.Strikethrough:
-                    TextDecorationCollection textDecorationCollection = Selection.GetPropertyValue(Inline.TextDecorationsProperty) as TextDecorationCollection;
-                    if (textDecorationCollection != null && textDecorationCollection.Count == 0)
-                        Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Strikethrough); // set the formatting
-                    else
-                        Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null); // clear the formatting
-                    break;
-                case NoteFontStyles.Highlight:
-                    object backgroundProperty = Selection.GetPropertyValue(TextElement.BackgroundProperty);
-                    if (backgroundProperty is SolidColorBrush && ((SolidColorBrush)backgroundProperty).Color.Equals(Colors.Yellow) == true)
-                        Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent); // clear the highlight from the selection
-                    else
-                        Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Yellow); // highlight the selection // TODO: Read from settings
-                    break;
-                default:
-                    throw new Exception(String.Format("Illegal NoteFontStyles enumeration value {0}", fontStyle));
-            }
-        }
-
-        #endregion
-
-        #region Paragraph Style Command
-
-        public static readonly ICommand ParagraphStylesCommand = new RoutedUICommand("ParagraphStylesCommand", "ParagraphStylesCommand", typeof(NoteEditor));
-
-        private void CanExecuteParagraphStylesCommand(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
-
-        private void OnParagraphStylesCommand(object sender, ExecutedRoutedEventArgs e)
-        {
-            Enum.TryParse(e.Parameter.ToString(), out NoteParagraphStyles paragraphStyle);
-            ApplyParagraphStylesCommand(paragraphStyle);
-        }
-
-        private void ApplyParagraphStylesCommand(NoteParagraphStyles paragraphStyle)
-        {
-            switch (paragraphStyle)
-            {
-                case NoteParagraphStyles.Left:
-                    EditingCommands.AlignLeft.Execute(null, this);
-                    break;
-                case NoteParagraphStyles.Center:
-                    EditingCommands.AlignCenter.Execute(null, this);
-                    break;
-                case NoteParagraphStyles.Right:
-                    EditingCommands.AlignRight.Execute(null, this);
-                    break;
-                case NoteParagraphStyles.Justify:
-                    EditingCommands.AlignJustify.Execute(null, this);
-                    break;
-                case NoteParagraphStyles.IncreaseIndent:
-                    EditingCommands.IncreaseIndentation.Execute(null, this);
-                    break;
-                case NoteParagraphStyles.DecreaseIndent:
-                    EditingCommands.DecreaseIndentation.Execute(null, this);
-                    break;
-                case NoteParagraphStyles.List:
-                    EditingCommands.ToggleBullets.Execute(null, this);
-                    MoveCursorToNextContentPosition();
-                    break;
-                case NoteParagraphStyles.OrderedList:
-                    EditingCommands.ToggleNumbering.Execute(null, this);
-                    MoveCursorToNextContentPosition();
-                    break;
-                default:
-                    throw new Exception(String.Format("Illegal NoteParagraphStyles enumeration value {0}", paragraphStyle));
-            }
-        }
-
-        private void MoveCursorToNextContentPosition()
-        {
-            TextPointer movePosition = CaretPosition.GetNextContextPosition(LogicalDirection.Forward);
-
-            if (movePosition != null)
-                CaretPosition = movePosition;
-
-            Focus();
-        }
-
-        #endregion
 
         #region BoundFlowDocument Property
 
@@ -176,83 +68,6 @@ namespace Tefterly.Core.Resources.Controls
                 parent.ScrollToTop();
 
             SubscribeToAllHyperlinks(Document);
-        }
-
-        #endregion
-
-        #region Note Search Support
-
-        #region SearchText Property
-
-        public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(
-            nameof(SearchTerm),
-            typeof(string),
-            typeof(NoteEditor),
-            new PropertyMetadata((sender, args) => ((NoteEditor)sender).OnSearchTextChanged(args)));
-
-        public string SearchTerm
-        {
-            get { return (string)GetValue(SearchTextProperty); }
-            set { SetValue(SearchTextProperty, value); }
-        }
-
-        private void OnSearchTextChanged(DependencyPropertyChangedEventArgs e)
-        {
-            Search(e.NewValue.ToString());
-        }
-
-        #endregion
-
-        private MethodInfo _searchMethodAPI;
-        private readonly NoteEditorSearchHighlight _noteEditorSearchHighlightResults;
-
-        public void Search(string searchTerm)
-        {
-            _noteEditorSearchHighlightResults.Clear();
-
-            if (String.IsNullOrEmpty(searchTerm) == true)
-                return;
-
-            TextRange textRange = FindText(Document.ContentStart, Document.ContentEnd, searchTerm);
-            if (textRange == null)
-                return;
-
-            // bring the first search result in the view
-            FrameworkContentElement fce = textRange.Start.Paragraph as FrameworkContentElement;
-            if (fce != null)
-                fce.BringIntoView();
-
-            // search for the next matches until end of document
-            while (textRange != null)
-            {
-                _noteEditorSearchHighlightResults.Add(textRange, false); // do not update adorner layout while adding search results
-                textRange = FindText(textRange.End, Document.ContentEnd, searchTerm);
-            }
-
-            _noteEditorSearchHighlightResults.Update();
-        }
-
-        private TextRange FindText(TextPointer startPosition, TextPointer endPosition, string searchText)
-        {
-            // Credit: https://shevaspace.blogspot.com/2007/11/how-to-search-text-in-wpf-flowdocument.html
-            TextRange textRange = null;
-            if (startPosition.CompareTo(endPosition) < 0)
-            {
-                try
-                {
-                    if (_searchMethodAPI == null)
-                        _searchMethodAPI = typeof(FrameworkElement).Assembly.GetType("System.Windows.Documents.TextFindEngine").GetMethod("Find", BindingFlags.Static | BindingFlags.Public);
-
-                    object result = _searchMethodAPI.Invoke(null, new object[] { startPosition, endPosition, searchText, 0, CultureInfo.CurrentCulture });
-                    textRange = result as TextRange;
-                }
-                catch (ApplicationException)
-                {
-                    textRange = null;
-                }
-            }
-
-            return textRange;
         }
 
         #endregion

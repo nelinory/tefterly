@@ -79,7 +79,7 @@ namespace Tefterly.Core
 
         private static string GetFormattedDateTime()
         {
-            return String.Format("{0:yyyyMMddHmmss}", DateTime.Now);
+            return String.Format("{0:yyyyMMddHHmmss}", DateTime.Now);
         }
     }
 }

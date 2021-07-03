@@ -13,7 +13,7 @@ Notes Features:
 [ ] Print note
 [ ] Attach categories to a note
 [ ] Ability to resize image
-[ ] Export note to: RTF, DOCX, PDF and TXT
+[ ] Export note to: RTF, HTML, PDF and TXT
 [ ] Encrypt/decrypt notes with a password
 
 Future Roadmap - Note Elements:
@@ -22,3 +22,7 @@ Future Roadmap - Note Elements:
 [ ] Line
 [ ] Quote
 [ ] Code segment
+
+Settings
+=======
+[ ] Remember theme selection
