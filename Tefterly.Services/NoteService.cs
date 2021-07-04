@@ -118,7 +118,7 @@ namespace Tefterly.Services
             if (newNote != null)
             {
                 newNote.Title = String.Format("New Note - {0:F}", DateTime.Now);
-                newNote.Document = Utilities.GetFlowDocumentFromText("Please, type your note content here...");
+                newNote.Document = new FlowDocument();
                 newNote.NotebookCategory = NotebookCategories.Default;
 
                 _notes.Add(newNote);
@@ -258,7 +258,7 @@ namespace Tefterly.Services
             {
                 textRange.Save(fileStream, System.Windows.DataFormats.XamlPackage);
             }
-
+        
             note.AcceptChanges(); // marked as saved
         }
 

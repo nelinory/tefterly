@@ -30,8 +30,8 @@
         <TextBox
                  Grid.Row="0"
                  FontSize="20"
-                 Margin="12,0,12,0"
-                 Padding="5,0,5,0"
+                 Margin="10,0,12,0"
+                 Padding="4,0,5,0"
                  TextWrapping="NoWrap"
                  ToolTip="Click here to change the title"
                  Foreground="{DynamicResource SystemControlHighlightListAccentVeryHighBrush}"
@@ -56,39 +56,19 @@
                     Margin="10,0,0,0"
                     Padding="5,0,20,3"                 
                     AcceptsTab="True"
-                    BorderThickness="0"
                     IsDocumentEnabled="True"
                     AllowDrop="True"  
                     SpellCheck.IsEnabled="{Binding IsSpellCheckEnabled}"
                     BoundFlowDocument="{Binding CurrentNote.Document, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsInactiveSelectionHighlightEnabled="True"
-                    Style="{StaticResource DefaultRichTextBoxStyle}"
-                    ui:ControlHelper.PlaceholderText="Note Text"
+                    Style="{DynamicResource DefaultRichTextBoxStyle}"
+                    ui:ControlHelper.PlaceholderText="Please, type your note here..."
                     Visibility="{Binding ShowNoteComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <controls:NoteEditor.Resources>
                     <ResourceDictionary>
                         <!-- Override the border style for the richtextbox -->
                         <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                         <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
-
-                        <Style TargetType="{x:Type Paragraph}">
-                            <Setter Property="Margin" Value="3" />
-                        </Style>
-                        <Style TargetType="{x:Type Table}">
-                            <Setter Property="Margin" Value="3"/>
-                        </Style>
-                        <Style TargetType="{x:Type List}">
-                            <Setter Property="Margin" Value="3"/>
-                            <Style.Resources>
-                                <Style TargetType="{x:Type ListItem}">
-                                    <Style.Resources>
-                                        <Style TargetType="{x:Type Paragraph}">
-                                            <Setter Property="Margin" Value="3"/>
-                                        </Style>
-                                    </Style.Resources>
-                                </Style>
-                            </Style.Resources>
-                        </Style>
                     </ResourceDictionary>
                 </controls:NoteEditor.Resources>
                 <controls:NoteEditor.ContextMenu>
@@ -220,7 +200,7 @@
             <Button ToolTip="Print note" Style="{DynamicResource ChromelessButton}" Command="{Binding PrintNoteCommand}">
                 <ui:FontIcon Glyph="&#xE749;" />
             </Button>
-            
+
             <ui:AppBarSeparator Margin="-12,0,-9,0" />
 
             <Button ToolTip="{Binding CurrentNote.IsDeleted, Converter={converters:BooleanToIconStateConverter TrueValue='Restore note', FalseValue='Delete note'}}"

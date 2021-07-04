@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModernWpf;
+using System;
 using System.Windows;
 using System.Windows.Interop;
 using Tefterly.Services;
@@ -24,6 +25,9 @@ namespace Tefterly.Views
             // attach all required services
             _noteService = noteService;
             _settingsService = settingsService;
+
+            // TODO: Read the app theme from settings
+            ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
         }
 
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
