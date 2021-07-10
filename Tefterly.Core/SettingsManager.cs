@@ -21,20 +21,7 @@ namespace Tefterly.Core
         {
             Settings = new Settings();
 
-            if (File.Exists(_settingsFileLocation) == true)
-            {
-                try
-                {
-                    using (FileStream fs = File.OpenRead(_settingsFileLocation))
-                    {
-                        Settings = JsonSerializer.DeserializeAsync<Settings>(fs).Result;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Error while loading settings: {EX}", ex);
-                }
-            }
+            Load();
 
             if (Settings.CurrentVersion != Settings.LatestVersion)
             {
@@ -61,12 +48,26 @@ namespace Tefterly.Core
             Settings.GetType().GetProperty(settingName).SetValue(Settings, value);
         }
 
+        public void Load()
+        {
+            if (File.Exists(_settingsFileLocation) == true)
+            {
+                try
+                {
+                    Settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(_settingsFileLocation));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Error while loading settings: {EX}", ex);
+                }
+            }
+        }
+
         public void Save()
         {
-            using (FileStream fs = File.Create(_settingsFileLocation))
-            {
-                JsonSerializer.SerializeAsync(fs, Settings, _jsonSerializerOptions);
-            }
+            string jsonSettings = JsonSerializer.Serialize(Settings, _jsonSerializerOptions);
+
+            File.WriteAllText(_settingsFileLocation, jsonSettings);
         }
     }
 }

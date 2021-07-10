@@ -26,6 +26,11 @@ namespace Tefterly.Services
             _settingsManager.Set<T>(settingName, value);
         }
 
+        public void Load()
+        {
+            _settingsManager.Load();
+        }
+
         public void Save()
         {
             _settingsManager.Save();

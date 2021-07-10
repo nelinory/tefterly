@@ -39,17 +39,17 @@ namespace Tefterly.Core.Resources.Controls
 
         private static void HandlePreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            var scrollControl = sender as ScrollViewer;
+            ScrollViewer scrollControl = sender as ScrollViewer;
 
             if (e.Handled == false && sender != null && _reentrantList.Contains(e) == false)
             {
-                var previewEventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+                MouseWheelEventArgs previewEventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
                 {
                     RoutedEvent = UIElement.PreviewMouseWheelEvent,
                     Source = sender
                 };
 
-                var originalSource = e.OriginalSource as UIElement;
+                UIElement originalSource = e.OriginalSource as UIElement;
                 _reentrantList.Add(previewEventArg);
                 originalSource.RaiseEvent(previewEventArg);
                 _reentrantList.Remove(previewEventArg);
@@ -59,10 +59,12 @@ namespace Tefterly.Core.Resources.Controls
                     || (e.Delta <= 0 && scrollControl.VerticalOffset >= scrollControl.ExtentHeight - scrollControl.ViewportHeight)))
                 {
                     e.Handled = true;
-                    var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
-                    eventArg.RoutedEvent = UIElement.MouseWheelEvent;
-                    eventArg.Source = sender;
-                    var parent = (UIElement)((FrameworkElement)sender).Parent;
+                    MouseWheelEventArgs eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+                    {
+                        RoutedEvent = UIElement.MouseWheelEvent,
+                        Source = sender
+                    };
+                    UIElement parent = (UIElement)((FrameworkElement)sender).Parent;
                     parent.RaiseEvent(eventArg);
                 }
             }

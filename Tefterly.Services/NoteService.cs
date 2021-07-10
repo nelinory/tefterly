@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -14,7 +15,7 @@ namespace Tefterly.Services
     {
         private static IList<Notebook> _notebooks = new List<Notebook>();
         private static IList<Note> _notes = new List<Note>();
-       
+
         private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
 
         // services
@@ -175,11 +176,14 @@ namespace Tefterly.Services
             {
                 _notes = JsonSerializer.Deserialize<IList<Note>>(File.ReadAllText(_settingsService.Settings.NotesFileLocation));
 
-                foreach (Note note in _notes)
+                using (new DisposableStopwatch(sw => Debug.WriteLine("LoadNotes -> {0}ms elapsed", sw.TotalMilliseconds)))
                 {
-                    note.Document = LoadNoteXaml(note.Id);
+                    foreach (Note note in _notes)
+                    {
+                        note.Document = LoadNoteXaml(note.Id);
 
-                    Utilities.FormatFlowDocument(note.Document);
+                        Utilities.FormatFlowDocument(note.Document);
+                    }
                 }
             }
             else
@@ -258,7 +262,7 @@ namespace Tefterly.Services
             {
                 textRange.Save(fileStream, System.Windows.DataFormats.XamlPackage);
             }
-        
+
             note.AcceptChanges(); // marked as saved
         }
 
