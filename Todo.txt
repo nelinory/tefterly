@@ -13,7 +13,7 @@ Notes Features:
 [ ] Dark/Light theme support
 [ ] Attach categories to a note
 [ ] Ability to resize image
-[ ] Export note to: RTF, HTML, PDF and TXT
+[ ] Export note to: RTF, HTML and TXT
 [ ] Encrypt/decrypt notes with a password
 
 Future Roadmap - Note Elements:

@@ -12,13 +12,21 @@
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" IsInverted="False" />
             <converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
 
+            <MenuItem x:Key="SpellcheckMenuItem" x:Shared="false"
+                      Command="{Binding ToggleSpellCheckCommand}" Header="Toggle spell check"
+                      Visibility="{Binding CurrentNote.IsArchived, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
+                <MenuItem.Icon>
+                    <ui:FontIcon Glyph="&#xF87B;" />
+                </MenuItem.Icon>
+            </MenuItem>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/Scrollbar.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -39,6 +47,7 @@
                  VerticalAlignment="Bottom"
                  Text="{Binding CurrentNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  SpellCheck.IsEnabled="{Binding IsSpellCheckEnabled}"
+                 IsReadOnly="{Binding CurrentNote.IsArchived}"            
                  ui:ScrollViewerHelper.AutoHideScrollBars="False"
                  ui:TextBoxHelper.IsDeleteButtonVisible="False"                 
                  ui:ControlHelper.PlaceholderText="Note Title"
@@ -48,6 +57,11 @@
                 <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                 <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
             </TextBox.Resources>
+            <TextBox.ContextMenu>
+                <ui:TextContextMenu>
+                    <StaticResource ResourceKey="SpellcheckMenuItem"/>
+                </ui:TextContextMenu>
+            </TextBox.ContextMenu>
         </TextBox>
 
         <!-- Main note richtextbox -->
@@ -62,6 +76,7 @@
                     BoundFlowDocument="{Binding CurrentNote.Document, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsInactiveSelectionHighlightEnabled="True"
                     Style="{DynamicResource DefaultRichTextBoxStyle}"
+                    IsReadOnly="{Binding CurrentNote.IsArchived}"
                     ui:ControlHelper.PlaceholderText="Please, type your note here..."
                     Visibility="{Binding ShowNoteComponents, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <controls:NoteEditor.Resources>
@@ -73,11 +88,7 @@
                 </controls:NoteEditor.Resources>
                 <controls:NoteEditor.ContextMenu>
                     <ui:TextContextMenu>
-                        <MenuItem Command="{Binding ToggleSpellCheckCommand}" Header="Toggle spell check">
-                            <MenuItem.Icon>
-                                <ui:FontIcon Glyph="&#xF87B;" />
-                            </MenuItem.Icon>
-                        </MenuItem>
+                        <StaticResource ResourceKey="SpellcheckMenuItem"/>
                     </ui:TextContextMenu>
                 </controls:NoteEditor.ContextMenu>
             </controls:NoteEditor>

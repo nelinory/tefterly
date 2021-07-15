@@ -101,7 +101,7 @@ namespace Tefterly.Modules.Note.ViewModels
             if (_settingsService.Settings.Backup.IsEnabled == true)
                 _notesBackupTimer.Start();
 
-            IsSpellCheckEnabled = _settingsService.Settings.Notes.IsSpellCheckEnabled;
+            IsSpellCheckEnabled = false; // default
         }
 
         private void LoadNote(Guid noteId)
@@ -112,6 +112,10 @@ namespace Tefterly.Modules.Note.ViewModels
             {
                 CurrentNote.TrackChanges = true;
                 CurrentNote.ModelChanged += (sender, e) => _autoSaveNoteTimer.Start();
+
+                // Obey spellcheck settings only if the current note is not archived
+                if (CurrentNote.NotebookCategory != NotebookCategories.Archived)
+                    IsSpellCheckEnabled = _settingsService.Settings.Notes.IsSpellCheckEnabled;
             }
 
             ShowNoteComponents = (CurrentNote != null);
