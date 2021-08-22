@@ -33,7 +33,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
             }
         }
 
-        public string Version
+        public static string Version
         {
             get
             {

@@ -77,7 +77,7 @@ namespace Tefterly
 
         #region Private methods
 
-        private void ForceSingleInstance()
+        private static void ForceSingleInstance()
         {
             if (_appMutex.WaitOne(TimeSpan.Zero, true) == true)
             {
@@ -102,7 +102,7 @@ namespace Tefterly
             }
         }
 
-        private void ConfigureLogging()
+        private static void ConfigureLogging()
         {
             // configure logging
             Log.Logger = new LoggerConfiguration()

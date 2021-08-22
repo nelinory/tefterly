@@ -16,8 +16,8 @@ namespace Tefterly.Core.Resources.Controls
 
         private void OnFontStylesCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            Enum.TryParse(e.Parameter.ToString(), out NoteFontStyles fontStyle);
-            ApplyFontStylesCommand(fontStyle);
+            if (Enum.TryParse(e.Parameter.ToString(), out NoteFontStyles fontStyle) == true)
+                ApplyFontStylesCommand(fontStyle);
         }
 
         private void ApplyFontStylesCommand(NoteFontStyles fontStyle)
@@ -34,15 +34,13 @@ namespace Tefterly.Core.Resources.Controls
                     EditingCommands.ToggleUnderline.Execute(null, this);
                     break;
                 case NoteFontStyles.Strikethrough:
-                    TextDecorationCollection textDecorationCollection = Selection.GetPropertyValue(Inline.TextDecorationsProperty) as TextDecorationCollection;
-                    if (textDecorationCollection != null && textDecorationCollection.Count == 0)
+                    if (Selection.GetPropertyValue(Inline.TextDecorationsProperty) is TextDecorationCollection textDecorationCollection && textDecorationCollection.Count == 0)
                         Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Strikethrough); // set the formatting
                     else
                         Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null); // clear the formatting
                     break;
                 case NoteFontStyles.Highlight:
-                    object backgroundProperty = Selection.GetPropertyValue(TextElement.BackgroundProperty);
-                    if (backgroundProperty is SolidColorBrush && ((SolidColorBrush)backgroundProperty).Color.Equals(Colors.Yellow) == true)
+                    if (Selection.GetPropertyValue(TextElement.BackgroundProperty) is SolidColorBrush brush && brush.Color.Equals(Colors.Yellow) == true)
                         Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent); // clear the highlight from the selection
                     else
                         Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Yellow); // highlight the selection // TODO: Read from settings
@@ -62,8 +60,8 @@ namespace Tefterly.Core.Resources.Controls
 
         private void OnParagraphStylesCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            Enum.TryParse(e.Parameter.ToString(), out NoteParagraphStyles paragraphStyle);
-            ApplyParagraphStylesCommand(paragraphStyle);
+            if (Enum.TryParse(e.Parameter.ToString(), out NoteParagraphStyles paragraphStyle) == true)
+                ApplyParagraphStylesCommand(paragraphStyle);
         }
 
         private void ApplyParagraphStylesCommand(NoteParagraphStyles paragraphStyle)

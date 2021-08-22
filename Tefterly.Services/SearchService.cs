@@ -29,8 +29,7 @@ namespace Tefterly.Services
             {
                 _searchTimer.Stop();
 
-                if (Search != null)
-                    Search(this, null);
+                Search?.Invoke(this, null);
             };
 
             SearchTerm = String.Empty;

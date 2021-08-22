@@ -159,7 +159,7 @@ namespace Tefterly.Services
 
         #region Private Methods
 
-        private void LoadNotebooks()
+        private static void LoadNotebooks()
         {
             _notebooks = new List<Notebook>
             {
@@ -302,12 +302,12 @@ namespace Tefterly.Services
             File.WriteAllText(_settingsService.Settings.NotesFileLocation, jsonNotes);
         }
 
-        private string GetNoteFileName(Guid noteId, string filePath)
+        private static string GetNoteFileName(Guid noteId, string filePath)
         {
             return Path.Combine(filePath, noteId + ".xaml");
         }
 
-        private Note CreateNewNote()
+        private static Note CreateNewNote()
         {
             Note note = new Note
             {

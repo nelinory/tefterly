@@ -9,14 +9,14 @@ namespace Tefterly.Core.Resources.Controls
         private static AdornerLayer _noteEditorAdornerLayer;
         private static List<NoteEditorSearchHighlightAdorner> _noteEditorSearchHighlightAdorners;
 
-        public NoteEditorSearchHighlight(NoteEditor noteEditor)
+        public static void Init(NoteEditor noteEditor)
         {
             _noteEditor = noteEditor;
             _noteEditorAdornerLayer = AdornerLayer.GetAdornerLayer(_noteEditor);
             _noteEditorSearchHighlightAdorners = new List<NoteEditorSearchHighlightAdorner>();
         }
 
-        public void Add(TextRange textRange, bool forceAdornerLayerUpdate = true)
+        public static void Add(TextRange textRange, bool forceAdornerLayerUpdate = true)
         {
             NoteEditorSearchHighlightAdorner noteEditorSearchHighlightAdorner = new NoteEditorSearchHighlightAdorner(_noteEditor, textRange);
             _noteEditorSearchHighlightAdorners.Add(noteEditorSearchHighlightAdorner);
@@ -26,7 +26,7 @@ namespace Tefterly.Core.Resources.Controls
                 _noteEditorAdornerLayer.Update();
         }
 
-        public void Update()
+        public static void Update()
         {
             if (_noteEditorAdornerLayer == null)
                 _noteEditorAdornerLayer = AdornerLayer.GetAdornerLayer(_noteEditor);
@@ -35,7 +35,7 @@ namespace Tefterly.Core.Resources.Controls
             _noteEditorAdornerLayer.Update();
         }
 
-        public void Clear()
+        public static void Clear()
         {
             if (_noteEditorAdornerLayer == null)
                 _noteEditorAdornerLayer = AdornerLayer.GetAdornerLayer(_noteEditor);

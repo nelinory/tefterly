@@ -130,7 +130,7 @@ namespace Tefterly.Modules.Note.ViewModels
 
         private void ExecuteChangeNotebookCategory(Guid notebookCategory)
         {
-            if (CurrentNote == null || notebookCategory == null)
+            if (CurrentNote == null)
                 return;
 
             if (CurrentNote.NotebookCategory == notebookCategory)

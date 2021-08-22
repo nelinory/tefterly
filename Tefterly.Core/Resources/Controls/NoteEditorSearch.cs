@@ -30,11 +30,10 @@ namespace Tefterly.Core.Resources.Controls
         #endregion
 
         private MethodInfo _searchMethodAPI;
-        private readonly NoteEditorSearchHighlight _noteEditorSearchHighlightResults;
 
         public void Search(string searchTerm)
         {
-            _noteEditorSearchHighlightResults.Clear();
+            NoteEditorSearchHighlight.Clear();
 
             if (String.IsNullOrEmpty(searchTerm) == true)
                 return;
@@ -44,18 +43,17 @@ namespace Tefterly.Core.Resources.Controls
                 return;
 
             // bring the first search result in the view
-            FrameworkContentElement fce = textRange.Start.Paragraph as FrameworkContentElement;
-            if (fce != null)
+            if (textRange.Start.Paragraph is FrameworkContentElement fce)
                 fce.BringIntoView();
 
             // search for the next matches until end of document
             while (textRange != null)
             {
-                _noteEditorSearchHighlightResults.Add(textRange, false); // do not update adorner layout while adding search results
+                NoteEditorSearchHighlight.Add(textRange, false); // do not update adorner layout while adding search results
                 textRange = FindText(textRange.End, Document.ContentEnd, searchTerm);
             }
 
-            _noteEditorSearchHighlightResults.Update();
+            NoteEditorSearchHighlight.Update();
         }
 
         private TextRange FindText(TextPointer startPosition, TextPointer endPosition, string searchText)

@@ -24,7 +24,7 @@ namespace Tefterly.Core.Resources.Controls
             InputBindings.Add(new KeyBinding(ApplicationCommands.Paste, Key.V, ModifierKeys.Control | ModifierKeys.Shift));
 
             // search results highlight support
-            _noteEditorSearchHighlightResults = new NoteEditorSearchHighlight(this);
+            NoteEditorSearchHighlight.Init(this);
 
             // register global commands
             CommandManager.RegisterClassCommandBinding(typeof(Window), new CommandBinding(FontStylesCommand, OnFontStylesCommand, CanExecuteFontStylesCommand));
@@ -51,7 +51,7 @@ namespace Tefterly.Core.Resources.Controls
         {
             try
             {
-                if (e == null || e.NewValue == null)
+                if (e.NewValue == null)
                     Document = new FlowDocument();
                 else
                     Document = e.NewValue as FlowDocument;
@@ -63,8 +63,7 @@ namespace Tefterly.Core.Resources.Controls
 
             // scrollviewer appears to remember scroll position between different notes
             // this is a hack to reset the scrollviewer to top every time we load switch between notes
-            ScrollViewer parent = this.Parent as ScrollViewer;
-            if (parent != null)
+            if (this.Parent is ScrollViewer parent)
                 parent.ScrollToTop();
 
             SubscribeToAllHyperlinks(Document);

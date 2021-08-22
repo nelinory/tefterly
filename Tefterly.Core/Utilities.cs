@@ -53,9 +53,7 @@ namespace Tefterly.Core
 
         public static string RemoveBulletsFromText(string inputText)
         {
-            string returnValue = String.Empty;
-
-            returnValue = inputText.Replace("•\t", String.Empty);
+            string returnValue = inputText.Replace("•\t", String.Empty);
             returnValue = returnValue.Replace("•", String.Empty);
 
             return returnValue;

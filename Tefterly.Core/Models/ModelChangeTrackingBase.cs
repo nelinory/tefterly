@@ -67,10 +67,7 @@ namespace Tefterly.Core.Models
 
         protected virtual void OnModelChanged(EventArgs e)
         {
-            EventHandler eventHandler = ModelChanged;
-
-            if (eventHandler != null)
-                eventHandler(this, e);
+            ModelChanged?.Invoke(this, e);
         }
 
         #region BindableBase Implementation
