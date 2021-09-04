@@ -5,11 +5,11 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using Tefterly.Core.Commands;
+using Tefterly.Core.Win32Api;
 using Tefterly.Modules.Note;
 using Tefterly.Modules.Notebook;
 using Tefterly.Modules.Notes;
@@ -23,12 +23,6 @@ namespace Tefterly
     /// </summary>
     public partial class App
     {
-        [DllImport("user32.dll")]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
-        [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        private const int SW_RESTORE_WINDOW = 9;
         private static readonly Mutex _appMutex = new Mutex(true, "5DC91344-9EA8-4E15-9396-ED4CCBA8B152");
         private static readonly string _logsPath = Path.Combine(Environment.CurrentDirectory, "Logs");
 
@@ -93,8 +87,8 @@ namespace Tefterly
                 {
                     if (processes.Length > 0)
                     {
-                        ShowWindow(processes[0].MainWindowHandle, SW_RESTORE_WINDOW);
-                        SetForegroundWindow(processes[0].MainWindowHandle);
+                        NativeMethods.ShowWindowEx(processes[0].MainWindowHandle, NativeMethods.SW_RESTORE_WINDOW);
+                        NativeMethods.SetForegroundWindowEx(processes[0].MainWindowHandle);
                     }
                 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Tefterly.Core.Win32Api;
 
 namespace Tefterly.Core.Models
 {
@@ -63,5 +64,7 @@ namespace Tefterly.Core.Models
     {
         public bool RememberLastUsedCategory { get; set; } = true;
         public Guid LastUsedCategory { get; set; } = NotebookCategories.Default;
+        public bool RememberAppWindowPlacement { get; set; } = true;
+        public WindowPlacement AppWindowPlacement { get; set; }
     }
 }

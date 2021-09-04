@@ -26,4 +26,3 @@ Future Roadmap - Note Elements:
 Settings
 =======
 [ ] Remember theme selection
-[ ] Remember application screen position
