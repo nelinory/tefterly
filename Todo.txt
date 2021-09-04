@@ -27,3 +27,4 @@ Settings
 =======
 [ ] Remember theme selection
 [ ] Remember selected category
+[ ] Remember application screen position
