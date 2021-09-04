@@ -5,6 +5,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Tefterly.Core;
 using Tefterly.Core.Commands;
 using Tefterly.Core.Events;
@@ -46,15 +47,17 @@ namespace Tefterly.Modules.Notebook.ViewModels
         private readonly INoteService _noteService;
         private readonly IApplicationCommands _applicationCommands;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ISettingsService _settingsService;
 
         // commands
         public DelegateCommand ChangeThemeCommand { get; set; }
 
-        public NotebookViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator)
+        public NotebookViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator, ISettingsService settingsService)
         {
             // attach all required services
             _noteService = noteService;
             _eventAggregator = eventAggregator;
+            _settingsService = settingsService;
 
             // attach all composite commands
             _applicationCommands = applicationCommands;
@@ -74,10 +77,14 @@ namespace Tefterly.Modules.Notebook.ViewModels
             NotebookList = new ObservableCollection<Core.Models.Notebook>(_noteService.GetAllNotebookCategories());
 
             if (NotebookList.Count > 0)
-                SelectedNotebook = NotebookList[0]; // select the first item
-            else
-                SelectedNotebook = null; // no notebooks found
+            {
+                if (_settingsService.Settings.General.RememberLastUsedCategory == true)
+                    SelectedNotebook = NotebookList.Where(m => m.Id == _settingsService.Settings.General.LastUsedCategory).FirstOrDefault();
 
+                if (SelectedNotebook == null)
+                    SelectedNotebook = NotebookList[0]; // select the first available category
+            }
+            
             RefreshCategoryCounts();
         }
 
@@ -99,6 +106,11 @@ namespace Tefterly.Modules.Notebook.ViewModels
                 NavigationRegion = RegionNames.NotesRegion,
                 NavigationParameters = new NavigationParameters { { "id", id } }
             };
+
+            if (id != Guid.Empty
+                && _settingsService.Settings.General.RememberLastUsedCategory == true
+                && _settingsService.Settings.General.LastUsedCategory != id)
+                _settingsService.Settings.General.LastUsedCategory = id;
 
             _applicationCommands.NavigateCommand.Execute(navigationItem);
         }

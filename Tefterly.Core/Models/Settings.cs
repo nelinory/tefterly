@@ -15,6 +15,7 @@ namespace Tefterly.Core.Models
         public Search Search { get; set; }
         public Notes Notes { get; set; }
         public Backup Backup { get; set; }
+        public General General { get; set; }
 
         public Settings()
         {
@@ -29,6 +30,7 @@ namespace Tefterly.Core.Models
             Search = new Search();
             Notes = new Notes();
             Backup = new Backup();
+            General = new General();
         }
     }
 
@@ -55,5 +57,11 @@ namespace Tefterly.Core.Models
         public int TimerIntervalMinutes { get; set; } = 30;
         public int MaxRegularBackups { get; set; } = 20;
         public int MaxVersionChangeBackups { get; set; } = 7;
+    }
+
+    public class General
+    {
+        public bool RememberLastUsedCategory { get; set; } = true;
+        public Guid LastUsedCategory { get; set; } = NotebookCategories.Default;
     }
 }
