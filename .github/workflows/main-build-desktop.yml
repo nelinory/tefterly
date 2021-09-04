@@ -1,4 +1,4 @@
-name: tefterly .NET Core
+name: tefterly CI
 
 on:
   push:
