@@ -42,5 +42,5 @@ jobs:
       run: msbuild ${{env.SOLUTION_NAME}} /t:Restore /p:Configuration=${{env.BUILD_TYPE}} /p:RuntimeIdentifier=${{env.RUNTIME}}
 
     # Execute all unit tests in the solution
-#    - name: Execute unit tests
-#      run: dotnet test
+    - name: Execute unit tests
+      run: dotnet test
