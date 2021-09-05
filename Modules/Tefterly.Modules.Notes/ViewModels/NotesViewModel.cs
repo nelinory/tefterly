@@ -71,17 +71,19 @@ namespace Tefterly.Modules.Notes.ViewModels
         private readonly IApplicationCommands _applicationCommands;
         private readonly IEventAggregator _eventAggregator;
         private readonly ISearchService _searchService;
+        private readonly ISettingsService _settingsService;
 
         // commands
         public DelegateCommand AddNoteCommand { get; set; }
         public DelegateCommand ClearSearchTermCommand { get; set; }
 
-        public NotesViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator, ISearchService searchService)
+        public NotesViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator, ISearchService searchService, ISettingsService settingsService)
         {
             // attach all required services
             _noteService = noteService;
             _eventAggregator = eventAggregator;
             _searchService = searchService;
+            _settingsService = settingsService;
 
             // attach all commands
             AddNoteCommand = new DelegateCommand(() => ExecuteAddNoteCommand());
@@ -107,9 +109,13 @@ namespace Tefterly.Modules.Notes.ViewModels
                                                 || p.Content.IndexOf(_searchService.SearchTerm, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
 
             if (notes.Count > 0)
-                SelectedNote = notes[0]; // select the first item
-            else
-                SelectedNote = null; // no notes found in the selected category
+            {
+                if (_settingsService.Settings.General.RememberLastUsedNote == true)
+                    SelectedNote = notes.Where(m => m.Id == _settingsService.Settings.General.LastUsedNote).FirstOrDefault();
+
+                if (SelectedNote == null)
+                    SelectedNote = notes[0]; // select the first available note
+            }
 
             NoteList = new ObservableCollection<Core.Models.Note>(notes); // bind it to the live NoteList
             ShowNotesNotFoundPanel = (NoteList.Count == 0);
@@ -130,6 +136,11 @@ namespace Tefterly.Modules.Notes.ViewModels
                 NavigationRegion = RegionNames.NoteRegion,
                 NavigationParameters = new NavigationParameters { { "id", id } }
             };
+
+            if (id != Guid.Empty
+                && _settingsService.Settings.General.RememberLastUsedNote == true
+                && _settingsService.Settings.General.LastUsedNote != id)
+                _settingsService.Settings.General.LastUsedNote = id;
 
             _applicationCommands.NavigateCommand.Execute(navigationItem);
         }

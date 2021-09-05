@@ -64,6 +64,8 @@ namespace Tefterly.Core.Models
     {
         public bool RememberLastUsedCategory { get; set; } = true;
         public Guid LastUsedCategory { get; set; } = NotebookCategories.Default;
+        public bool RememberLastUsedNote { get; set; } = true;
+        public Guid LastUsedNote { get; set; } = Guid.Empty;
         public bool RememberAppWindowPlacement { get; set; } = true;
         public WindowPlacement AppWindowPlacement { get; set; }
     }
