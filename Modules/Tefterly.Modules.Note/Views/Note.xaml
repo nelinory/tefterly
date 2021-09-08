@@ -84,6 +84,26 @@
                         <!-- Override the border style for the richtextbox -->
                         <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                         <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+
+                        <!-- Define more visually appealing margins -->
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="3" />
+                        </Style>
+                        <Style TargetType="{x:Type Table}">
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+                        <Style TargetType="{x:Type List}">
+                            <Setter Property="Margin" Value="3"/>
+                            <Style.Resources>
+                                <Style TargetType="{x:Type ListItem}">
+                                    <Style.Resources>
+                                        <Style TargetType="{x:Type Paragraph}">
+                                            <Setter Property="Margin" Value="3"/>
+                                        </Style>
+                                    </Style.Resources>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
                     </ResourceDictionary>
                 </controls:NoteEditor.Resources>
                 <controls:NoteEditor.ContextMenu>
