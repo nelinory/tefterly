@@ -195,6 +195,7 @@ namespace Tefterly.Modules.Note.ViewModels
 
         private void NoteHasChanged()
         {
+            // a note have changed state, i.e. category change, deleted, added, etc.
             _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
 
             // note changed start autoSaveNoteTimer
@@ -212,6 +213,9 @@ namespace Tefterly.Modules.Note.ViewModels
 
                 // note saved stop autoSaveNoteTimer
                 _autoSaveNoteTimer.Stop();
+
+                // note have change content
+                _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
             }
         }
 
