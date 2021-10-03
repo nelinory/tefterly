@@ -161,9 +161,17 @@ namespace Tefterly.Core.Resources.Controls
 
                 if (textRange.CanLoad(DataFormats.Rtf) && string.IsNullOrEmpty(rtfDocument) == false)
                 {
-                    using (MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(rtfDocument)))
+                    try
                     {
-                        textRange.Load(stream, DataFormats.Rtf);
+                        using (MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(rtfDocument)))
+                        {
+                            textRange.Load(stream, DataFormats.Rtf);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // something happen while loading the rtf object, most likely incompatible format
+                        return;
                     }
                 }
 
