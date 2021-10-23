@@ -16,15 +16,19 @@ namespace Tefterly.Core.Resources.Controls
             // event handlers
             TextChanged += OnTextChanged;
             PreviewKeyDown += OnPreviewKeyDown;
+            PreviewMouseDown += OnPreviewMouseDown; // PreviewMouseDown for image resize adorner
 
             // Credit: http://social.msdn.microsoft.com/Forums/vstudio/en-US/0d672c70-d49d-4ebf-871d-420cc164f7d8/c-wpf-richtextbox-remove-formatting-and-line-spaces
-            DataObject.AddPastingHandler(this, DataObjectPasting_EventHandler);
+            DataObject.AddPastingHandler(this, DataObjectPastingEventHandler);
 
             // add custom binding for Ctrl+Shift+V for rich format pasting
             InputBindings.Add(new KeyBinding(ApplicationCommands.Paste, Key.V, ModifierKeys.Control | ModifierKeys.Shift));
 
             // search results highlight support
             NoteEditorSearchHighlight.Init(this);
+
+            // image resize support
+            ImageResizeHelper.Init(this);
 
             // register global commands
             CommandManager.RegisterClassCommandBinding(typeof(Window), new CommandBinding(FontStylesCommand, OnFontStylesCommand, CanExecuteFontStylesCommand));
@@ -63,7 +67,7 @@ namespace Tefterly.Core.Resources.Controls
 
             // scrollviewer appears to remember scroll position between different notes
             // this is a hack to reset the scrollviewer to top every time we load switch between notes
-            if (this.Parent is ScrollViewer parent)
+            if (Parent is ScrollViewer parent)
                 parent.ScrollToTop();
 
             SubscribeToAllHyperlinks(Document);
@@ -96,6 +100,8 @@ namespace Tefterly.Core.Resources.Controls
                     case Key.OemCloseBrackets: // Font upscale
                         e.Handled = true;
                         break;
+                    default:
+                        break;
                 }
             }
             else if (e.Key == Key.Space || e.Key == Key.Enter)
@@ -104,7 +110,32 @@ namespace Tefterly.Core.Resources.Controls
                 RemoveHyperlinkFormat();
         }
 
-        protected void DataObjectPasting_EventHandler(object sender, DataObjectPastingEventArgs e)
+        private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextPointer textPointer = GetPositionFromPoint(e.GetPosition(this), false);
+
+            // image BlockUIContainer
+            if (textPointer != null && textPointer.Parent is BlockUIContainer)
+            {
+                UIElement uiElement = (textPointer.Parent as BlockUIContainer).Child;
+                if (uiElement == null)
+                    return;
+
+                if (uiElement is Image)
+                {
+                    ImageResizeHelper.UpdateImageResizers(uiElement as Image);
+
+                    // update the flowdocument when the image is resized
+                    ImageResizeHelper.ImageResized += () => SetValue(BoundFlowDocumentProperty, Document);
+                    //e.Handled = true;
+                    return;
+                }
+            }
+
+            ImageResizeHelper.ClearImageResizers();
+        }
+
+        protected void DataObjectPastingEventHandler(object sender, DataObjectPastingEventArgs e)
         {
             bool richObjectPasteRequest = false;
             if (Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))

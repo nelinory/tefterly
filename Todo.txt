@@ -10,9 +10,9 @@ Notes Features:
 [X] Error handling and logging
 [X] Automatic notes backup at specified interval
 [X] Automatic notes backup on startup if the version of the app settings is different since the last run
-[ ] Dark/Light theme support
+[X] Ability to resize image
 [ ] Attach categories to a note
-[ ] Ability to resize image
+[ ] Dark/Light theme support
 [ ] Export note to: RTF, HTML and TXT
 [ ] Encrypt/decrypt notes with a password
 
