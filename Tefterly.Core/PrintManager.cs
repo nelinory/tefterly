@@ -2,24 +2,23 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Markup;
-using System.Xml;
 
 namespace Tefterly.Core
 {
     public static class PrintManager
     {
-        public static void PrintNote(string documentTitle, FlowDocument flowDocument)
+        public static void PrintNote(string documentTitle, FlowDocument sourceDocument)
         {
-            FlowDocument printDocument;
+            FlowDocument printDocument = new FlowDocument();
 
             // clone original document, which prevents changes to the note window due to settings printing preferences
-            using (StringReader stringReader = new StringReader(XamlWriter.Save(flowDocument)))
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (XmlReader xmlReader = XmlReader.Create(stringReader))
-                {
-                    printDocument = XamlReader.Load(xmlReader) as FlowDocument;
-                }
+                TextRange sourceTextRange = new TextRange(sourceDocument.ContentStart, sourceDocument.ContentEnd);
+                sourceTextRange.Save(memoryStream, DataFormats.Xaml);
+
+                TextRange printTextRange = new TextRange(printDocument.ContentStart, printDocument.ContentEnd);
+                printTextRange.Load(memoryStream, DataFormats.Xaml);
             }
 
             PrintDialog printDialog = new PrintDialog();
