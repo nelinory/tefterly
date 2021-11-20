@@ -66,6 +66,8 @@ namespace Tefterly.Modules.Notes.ViewModels
             }
         }
 
+        private static Guid _selectedNoteFromSearch = Guid.Empty;
+
         // services
         private readonly INoteService _noteService;
         private readonly IApplicationCommands _applicationCommands;
@@ -107,7 +109,14 @@ namespace Tefterly.Modules.Notes.ViewModels
                                                 || p.Content.IndexOf(_searchService.SearchTerm, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
 
             if (notes.Count > 0)
-                SelectedNote = notes[0]; // select the first available note
+            {
+                if (_selectedNoteFromSearch != Guid.Empty)
+                    RestoreSelectedNoteOnSearch(notes);
+                else
+                    SelectedNote = notes[0]; // select the first available note
+
+                StoreSelectedNoteOnSearch(SelectedNote.Id);
+            }
             else
                 SelectedNote = null; // no notes found in the selected category
 
@@ -131,6 +140,8 @@ namespace Tefterly.Modules.Notes.ViewModels
                 NavigationParameters = new NavigationParameters { { "id", id } }
             };
 
+            StoreSelectedNoteOnSearch(id);
+
             _applicationCommands.NavigateCommand.Execute(navigationItem);
         }
 
@@ -144,6 +155,24 @@ namespace Tefterly.Modules.Notes.ViewModels
 
             // save newly created note
             _noteService.SaveNotes();
+        }
+
+        private void StoreSelectedNoteOnSearch(Guid id)
+        {
+            // store the last selected note from the search results
+            if (_searchService.IsSearchInProgress() == true)
+                _selectedNoteFromSearch = id;
+            else
+                _selectedNoteFromSearch = Guid.Empty;
+        }
+
+        private void RestoreSelectedNoteOnSearch(List<Core.Models.Note> notes)
+        {
+            // restore the last selected note from the search results
+            SelectedNote = notes.Where(m => m.Id == _selectedNoteFromSearch).FirstOrDefault();
+
+            if (SelectedNote == null)
+                SelectedNote = notes[0];
         }
 
         #region Navigation Logic
