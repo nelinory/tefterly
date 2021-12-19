@@ -14,11 +14,13 @@ namespace Tefterly.Core
             // clone original document, which prevents changes to the note window due to settings printing preferences
             using (MemoryStream memoryStream = new MemoryStream())
             {
+                // Xaml format - no support for images
+                // XamlPackage format - have issues with custom colors for hyperlinks
                 TextRange sourceTextRange = new TextRange(sourceDocument.ContentStart, sourceDocument.ContentEnd);
-                sourceTextRange.Save(memoryStream, DataFormats.Xaml);
+                sourceTextRange.Save(memoryStream, DataFormats.Rtf);
 
                 TextRange printTextRange = new TextRange(printDocument.ContentStart, printDocument.ContentEnd);
-                printTextRange.Load(memoryStream, DataFormats.Xaml);
+                printTextRange.Load(memoryStream, DataFormats.Rtf);
             }
 
             PrintDialog printDialog = new PrintDialog();
