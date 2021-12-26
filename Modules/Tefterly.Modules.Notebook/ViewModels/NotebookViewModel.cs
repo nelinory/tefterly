@@ -1,4 +1,5 @@
 ﻿using ModernWpf;
+using ModernWpf.Controls;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -51,6 +52,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
 
         // commands
         public DelegateCommand ChangeThemeCommand { get; set; }
+        public DelegateCommand ShowSettingsDialogCommand { get; set; }
 
         public NotebookViewModel(INoteService noteService, IApplicationCommands applicationCommands, IEventAggregator eventAggregator, ISettingsService settingsService)
         {
@@ -64,6 +66,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
 
             // attach all commands
             ChangeThemeCommand = new DelegateCommand(() => ExecuteChangeThemeCommand());
+            ShowSettingsDialogCommand = new DelegateCommand(() => ExecuteShowSettingsDialogCommand());
 
             // subscribe to important events
             _eventAggregator.GetEvent<NoteChangedEvent>().Subscribe(x => { RefreshCategoryCounts(); });
@@ -84,7 +87,7 @@ namespace Tefterly.Modules.Notebook.ViewModels
                 if (SelectedNotebook == null)
                     SelectedNotebook = NotebookList[0]; // select the first available category
             }
-            
+
             RefreshCategoryCounts();
         }
 
@@ -123,6 +126,27 @@ namespace Tefterly.Modules.Notebook.ViewModels
                 ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
 
             _eventAggregator.GetEvent<ThemeChangedEvent>().Publish(String.Empty);
+        }
+
+        private async void ExecuteShowSettingsDialogCommand()
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Settings",
+                PrimaryButtonText = "Save",
+                SecondaryButtonText = "Save & Restart",
+                CloseButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary,
+                Content = new Tefterly.Core.Resources.Controls.Views.SettingsDialog()
+            };
+
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+                System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - Save");
+            else if (result == ContentDialogResult.Secondary)
+                System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - Save & Restart");
+            else
+                System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - Escape");
         }
     }
 }
