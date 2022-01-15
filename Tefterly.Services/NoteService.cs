@@ -81,7 +81,7 @@ namespace Tefterly.Services
                 Note newNote = CreateNewNote();
 
                 newNote.Title = "Duplicate - " + targetNote.Title;
-                newNote.Document = targetNote.Document;
+                newNote.Document = Utilities.CloneFlowDocument(targetNote.Document);
                 newNote.NotebookCategory = targetNote.NotebookCategory;
 
                 _notes.Add(newNote);
