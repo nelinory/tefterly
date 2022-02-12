@@ -1,6 +1,8 @@
 ﻿using ModernWpf;
 using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Interop;
 using Tefterly.Core.Win32Api;
 using Tefterly.Services;
@@ -46,6 +48,11 @@ namespace Tefterly.Views
             }
         }
 
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new TurnOffAutomationPeer(this);
+        }
+
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // remember the window position
@@ -79,5 +86,12 @@ namespace Tefterly.Views
 
             return IntPtr.Zero;
         }
+    }
+
+    // Disable AutomationPeer to avoid memory leaks from WPF components
+    public class TurnOffAutomationPeer : WindowAutomationPeer
+    {
+        public TurnOffAutomationPeer(Window window) : base(window) { }
+        protected override List<AutomationPeer> GetChildrenCore() { return null; }
     }
 }
