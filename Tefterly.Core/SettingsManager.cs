@@ -8,11 +8,11 @@ namespace Tefterly.Core
 {
     public sealed class SettingsManager
     {
-        private static readonly Lazy<SettingsManager> _intance = new Lazy<SettingsManager>(() => new SettingsManager());
+        private static readonly Lazy<SettingsManager> _instance = new Lazy<SettingsManager>(() => new SettingsManager());
         private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true, IgnoreNullValues = true };
         private static readonly string _settingsFileLocation = Path.Combine(Environment.CurrentDirectory, "Tefterly.config");
 
-        public static SettingsManager Instance { get { return _intance.Value; } }
+        public static SettingsManager Instance { get { return _instance.Value; } }
 
         public Settings Settings { get; private set; }
 

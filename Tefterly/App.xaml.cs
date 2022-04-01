@@ -13,6 +13,7 @@ using Tefterly.Core.Win32Api;
 using Tefterly.Modules.Note;
 using Tefterly.Modules.Notebook;
 using Tefterly.Modules.Notes;
+using Tefterly.Modules.Settings;
 using Tefterly.Services;
 using Tefterly.Views;
 
@@ -59,6 +60,7 @@ namespace Tefterly
             moduleCatalog.AddModule<NoteModule>();
             moduleCatalog.AddModule<NotesModule>();
             moduleCatalog.AddModule<NotebookModule>();
+            moduleCatalog.AddModule<SettingsModule>();
         }
 
         protected override void OnExit(ExitEventArgs e)

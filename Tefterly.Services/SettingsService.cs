@@ -10,11 +10,12 @@ namespace Tefterly.Services
         public SettingsService()
         {
             _settingsManager = SettingsManager.Instance;
-
-            Settings = _settingsManager.Settings;
         }
 
-        public Settings Settings { get; private set; }
+        public Settings Settings
+        {
+            get { return _settingsManager.Settings; }
+        }
 
         public void Get<T>(string settingName, ref T value)
         {

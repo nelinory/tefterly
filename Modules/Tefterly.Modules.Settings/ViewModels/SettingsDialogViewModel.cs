@@ -1,13 +1,15 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows.Media;
+using Tefterly.Services;
 
-namespace Tefterly.Core.Resources.Controls.ViewModels
+namespace Tefterly.Modules.Settings.ViewModels
 {
     public class SettingsDialogViewModel : BindableBase
     {
+        #region Drop-downs Data
+
         public List<Tuple<string, FontFamily>> FontFamily { get; } = new List<Tuple<string, FontFamily>>()
         {
             new Tuple<string, FontFamily>("Agency FB", new FontFamily("Agency FB")),
@@ -60,32 +62,55 @@ namespace Tefterly.Core.Resources.Controls.ViewModels
             new Tuple<string, Brush>("Camouflage", (SolidColorBrush) new BrushConverter().ConvertFromString("#847545"))
         };
 
-        private string _notesLocation;
+        #endregion
+
+        #region Main Settings
+
         public string NotesLocation
         {
-            get { return _notesLocation; }
-            set { SetProperty(ref _notesLocation, value); }
+            get { return _settingsService.Settings.NotesLocation; }
+            set { _settingsService.Settings.NotesLocation = value; }
         }
 
-        private string _backupLocation;
         public string BackupLocation
         {
-            get { return _backupLocation; }
-            set { SetProperty(ref _backupLocation, value); }
+            get { return _settingsService.Settings.BackupLocation; }
+            set { _settingsService.Settings.BackupLocation = value; }
         }
 
-        private string _notesFileLocation;
         public string NotesFileLocation
         {
-            get { return _notesFileLocation; }
-            set { SetProperty(ref _notesFileLocation, value); }
+            get { return _settingsService.Settings.NotesFileLocation; }
+            set { _settingsService.Settings.NotesFileLocation = value; }
         }
 
-        public SettingsDialogViewModel()
+        #endregion
+
+        #region General Settings
+
+        public bool RememberLastUsedCategory
         {
-            NotesLocation = Path.Combine(Environment.CurrentDirectory, "Notes");
-            BackupLocation = Path.Combine(Environment.CurrentDirectory, "Backup");
-            NotesFileLocation = Path.Combine(NotesLocation, "Tefterly.notes");
+            get { return _settingsService.Settings.General.RememberLastUsedCategory; }
+            set { _settingsService.Settings.General.RememberLastUsedCategory = value; }
+        }
+
+        public bool RememberAppWindowPlacement
+        {
+            get { return _settingsService.Settings.General.RememberAppWindowPlacement; }
+            set { _settingsService.Settings.General.RememberAppWindowPlacement = value; }
+        }
+
+        #endregion
+
+        // services
+        private readonly ISettingsService _settingsService;
+
+        public SettingsDialogViewModel(ISettingsService settingsService)
+        {
+            // attach all required services
+            _settingsService = settingsService;
+
+            RememberLastUsedCategory = _settingsService.Settings.General.RememberLastUsedCategory;
         }
     }
 }

@@ -28,6 +28,7 @@
     <ProjectReference Include="..\Modules\Tefterly.Modules.Notebook\Tefterly.Modules.Notebook.csproj" />
     <ProjectReference Include="..\Modules\Tefterly.Modules.Notes\Tefterly.Modules.Notes.csproj" />
     <ProjectReference Include="..\Modules\Tefterly.Modules.Note\Tefterly.Modules.Note.csproj" />
+    <ProjectReference Include="..\Modules\Tefterly.Modules.Settings\Tefterly.Modules.Settings.csproj" />
     <ProjectReference Include="..\Tefterly.Core\Tefterly.Core.csproj" />
     <ProjectReference Include="..\Tefterly.Services\Tefterly.Services.csproj" />
   </ItemGroup>

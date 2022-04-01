@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Tefterly.Core.Resources.Controls.Views
+namespace Tefterly.Modules.Settings.Views
 {
     /// <summary>
     /// Interaction logic for SettingsDialog
