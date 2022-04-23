@@ -46,7 +46,7 @@ namespace Tefterly.Modules.Settings.ViewModels
             else
             {
                 System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - Escape");
-                //_settingsService.Load();
+                _settingsService.Load();
             }
         }
     }
