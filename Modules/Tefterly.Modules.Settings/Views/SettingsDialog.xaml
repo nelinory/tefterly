@@ -229,7 +229,7 @@
                             Text="Notes location"
                             Style="{StaticResource ComboBoxHeaderStyle}" />
                         <TextBox
-                            Text="{Binding NotesLocation}"
+                            Text="{Binding NotesLocation, Mode=OneWay}"
                             IsReadOnly="True"
                             Foreground="Gray"/>
                     </StackPanel>
@@ -238,7 +238,7 @@
                             Text="Notes backup location"
                             Style="{StaticResource ComboBoxHeaderStyle}" />
                         <TextBox
-                            Text="{Binding BackupLocation}"
+                            Text="{Binding BackupLocation, Mode=OneWay}"
                             IsReadOnly="True"
                             Foreground="Gray"/>
                     </StackPanel>
@@ -247,7 +247,7 @@
                             Text="Notes catalog file location"
                             Style="{StaticResource ComboBoxHeaderStyle}" />
                         <TextBox
-                            Text="{Binding NotesFileLocation}"
+                            Text="{Binding NotesFileLocation, Mode=OneWay}"
                             IsReadOnly="True"
                             Foreground="Gray"/>
                     </StackPanel>
