@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.Json.Serialization;
 using Tefterly.Core.Win32Api;
 
 namespace Tefterly.Core.Models
@@ -9,9 +10,12 @@ namespace Tefterly.Core.Models
         public int LatestVersion { get { return 1; } }
         public int CurrentVersion { get; set; } = 1;
 
-        public string NotesLocation { get; set; }
-        public string BackupLocation { get; set; }
-        public string NotesFileLocation { get; set; }
+        [JsonIgnore]
+        public string NotesLocation { get { return Path.Combine(Environment.CurrentDirectory, "Notes"); } }
+        [JsonIgnore]
+        public string BackupLocation { get { return Path.Combine(Environment.CurrentDirectory, "Backup"); } }
+        [JsonIgnore]
+        public string NotesFileLocation { get { return Path.Combine(NotesLocation, "Tefterly.notes"); } }
 
         public Search Search { get; set; }
         public Notes Notes { get; set; }
@@ -21,11 +25,6 @@ namespace Tefterly.Core.Models
         public Settings()
         {
             CurrentVersion = LatestVersion;
-
-            // default values
-            NotesLocation = Path.Combine(Environment.CurrentDirectory, "Notes");
-            BackupLocation = Path.Combine(Environment.CurrentDirectory, "Backup");
-            NotesFileLocation = Path.Combine(NotesLocation, "Tefterly.notes");
 
             // sections
             Search = new Search();

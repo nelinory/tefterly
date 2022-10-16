@@ -74,19 +74,16 @@ namespace Tefterly.Modules.Settings.ViewModels
         public string NotesLocation
         {
             get { return _settingsService.Settings.NotesLocation; }
-            set { _settingsService.Settings.NotesLocation = value; }
         }
 
         public string BackupLocation
         {
             get { return _settingsService.Settings.BackupLocation; }
-            set { _settingsService.Settings.BackupLocation = value; }
         }
 
         public string NotesFileLocation
         {
             get { return _settingsService.Settings.NotesFileLocation; }
-            set { _settingsService.Settings.NotesFileLocation = value; }
         }
 
         #endregion
