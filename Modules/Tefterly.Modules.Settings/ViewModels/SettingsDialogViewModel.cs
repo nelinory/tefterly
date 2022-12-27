@@ -26,7 +26,19 @@ namespace Tefterly.Modules.Settings.ViewModels
 
         public List<double> SearchResultsHighlightColorOpacityItemSource { get; } = new List<double>() { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 };
 
-        public List<Tuple<string, FontFamily>> FontFamily { get; } = new List<Tuple<string, FontFamily>>()
+        public List<Tuple<string, int>> AutomaticSaveIntervalItemSource { get; } = new List<Tuple<string, int>>()
+        {
+            new Tuple<string, int>("5 seconds", 5),
+            new Tuple<string, int>("7 seconds", 7),
+            new Tuple<string, int>("10 seconds", 10),
+            new Tuple<string, int>("20 seconds", 20),
+            new Tuple<string, int>("30 seconds", 30),
+            new Tuple<string, int>("40 seconds", 40),
+            new Tuple<string, int>("50 seconds", 50),
+            new Tuple<string, int>("60 seconds", 60)
+        };
+
+        public List<Tuple<string, FontFamily>> FontFamilyItemSource { get; } = new List<Tuple<string, FontFamily>>()
         {
             new Tuple<string, FontFamily>("Agency FB", new FontFamily("Agency FB")),
             new Tuple<string, FontFamily>("Arial", new FontFamily("Arial")),
@@ -38,7 +50,7 @@ namespace Tefterly.Modules.Settings.ViewModels
             new Tuple<string, FontFamily>("Tahoma", new FontFamily("Tahoma"))
         };
 
-        public List<double> FontSizes { get; } = new List<double>()
+        public List<double> FontSizeItemSource { get; } = new List<double>()
         {
             8,
             9,
@@ -56,7 +68,7 @@ namespace Tefterly.Modules.Settings.ViewModels
             72
         };
 
-        public List<Tuple<string, Brush>> HyperlinkColors { get; } = new List<Tuple<string, Brush>>()
+        public List<Tuple<string, Brush>> HyperlinkColorsItemSource { get; } = new List<Tuple<string, Brush>>()
         {
             new Tuple<string, Brush>("Default Blue", (SolidColorBrush) new BrushConverter().ConvertFromString("#0173C7")),
             new Tuple<string, Brush>("Green", (SolidColorBrush) new BrushConverter().ConvertFromString("#10893E")),
@@ -66,25 +78,6 @@ namespace Tefterly.Modules.Settings.ViewModels
             new Tuple<string, Brush>("Plum", (SolidColorBrush) new BrushConverter().ConvertFromString("#BF0077")),
             new Tuple<string, Brush>("Camouflage", (SolidColorBrush) new BrushConverter().ConvertFromString("#847545"))
         };
-
-        #endregion
-
-        #region Main Settings
-
-        public string NotesLocation
-        {
-            get { return _settingsService.Settings.NotesLocation; }
-        }
-
-        public string BackupLocation
-        {
-            get { return _settingsService.Settings.BackupLocation; }
-        }
-
-        public string NotesFileLocation
-        {
-            get { return _settingsService.Settings.NotesFileLocation; }
-        }
 
         #endregion
 
@@ -122,6 +115,71 @@ namespace Tefterly.Modules.Settings.ViewModels
         {
             get { return _settingsService.Settings.Search.ResultsHighlightColorOpacity; }
             set { _settingsService.Settings.Search.ResultsHighlightColorOpacity = value; }
+        }
+
+        #endregion
+
+        #region Notes Settings
+
+        public bool IsSpellCheckEnabled
+        {
+            get { return _settingsService.Settings.Notes.IsSpellCheckEnabled; }
+            set { _settingsService.Settings.Notes.IsSpellCheckEnabled = value; }
+        }
+
+        public Tuple<string, int> AutomaticSaveIntervalSelectedItem
+        {
+            get
+            {
+                Tuple<string, int> interval = AutomaticSaveIntervalItemSource.Where(m => m.Item2 == _settingsService.Settings.Notes.AutoSaveTimerIntervalSeconds).FirstOrDefault();
+                return interval ?? AutomaticSaveIntervalItemSource[0];
+            }
+            set { _settingsService.Settings.Notes.AutoSaveTimerIntervalSeconds = value.Item2; }
+        }
+
+        public Tuple<string, FontFamily> FontFamilySelectedItem
+        {
+            get
+            {
+                Tuple<string, FontFamily> fontFamily = FontFamilyItemSource.Where(m => m.Item2.ToString() == _settingsService.Settings.Notes.FontFamily).FirstOrDefault();
+                return fontFamily ?? FontFamilyItemSource[0];
+            }
+            set { _settingsService.Settings.Notes.FontFamily = value.Item2.ToString(); }
+        }
+
+        public double FontSizeSelectedItem
+        {
+            get { return _settingsService.Settings.Notes.FontSize; }
+            set { _settingsService.Settings.Notes.FontSize = value; }
+        }
+
+        public Tuple<string, Brush> HyperlinkColorsSelectedItem
+        {
+            get
+            {
+                Tuple<string, Brush> hyperlinkColor = HyperlinkColorsItemSource.Where(m => m.Item2.ToString() == _settingsService.Settings.Notes.HyperlinkForegroundColor).FirstOrDefault();
+                return hyperlinkColor ?? HyperlinkColorsItemSource[0];
+            }
+            set { _settingsService.Settings.Notes.HyperlinkForegroundColor = value.Item2.ToString(); }
+        }
+
+        #endregion
+
+        #region Storage Settings
+
+        public string NotesLocation
+        {
+            get { return _settingsService.Settings.NotesLocation; }
+        }
+
+        public string BackupLocation
+        {
+            get { return _settingsService.Settings.BackupLocation; }
+        }
+
+        public string NotesFileLocation
+        {
+            get { return _settingsService.Settings.NotesFileLocation; }
         }
 
         #endregion
