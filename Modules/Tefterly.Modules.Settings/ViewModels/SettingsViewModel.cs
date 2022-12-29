@@ -2,6 +2,7 @@
 using Prism.Events;
 using Prism.Mvvm;
 using System;
+using System.Windows;
 using Tefterly.Core.Events;
 using Tefterly.Services;
 
@@ -11,7 +12,7 @@ namespace Tefterly.Modules.Settings.ViewModels
     {
         // services
         private readonly IEventAggregator _eventAggregator;
-        private  ISettingsService _settingsService;
+        private ISettingsService _settingsService;
 
         public SettingsViewModel(IEventAggregator eventAggregator, ISettingsService settingsService)
         {
@@ -28,8 +29,7 @@ namespace Tefterly.Modules.Settings.ViewModels
             ContentDialog dialog = new ContentDialog
             {
                 Title = "Settings",
-                PrimaryButtonText = "Save",
-                SecondaryButtonText = "Save & Restart",
+                PrimaryButtonText = "Save & Restart",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Primary,
                 Content = new Views.SettingsDialog()
@@ -38,14 +38,18 @@ namespace Tefterly.Modules.Settings.ViewModels
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - Save");
-                //_settingsService.Save();
-            }
-            else if (result == ContentDialogResult.Secondary)
                 System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - Save & Restart");
+
+                // OnClosing event of the main window will save settings on exit
+                Application.Current.Exit += delegate (object sender, ExitEventArgs e)
+                {
+                    System.Diagnostics.Process.Start(Environment.ProcessPath);
+                };
+                Application.Current.Shutdown();
+            }
             else
             {
-                System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - Escape");
+                System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - Cancel");
                 _settingsService.Load();
             }
         }
