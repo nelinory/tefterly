@@ -79,6 +79,21 @@ namespace Tefterly.Modules.Settings.ViewModels
             new Tuple<string, Brush>("Camouflage", (SolidColorBrush) new BrushConverter().ConvertFromString("#847545"))
         };
 
+        public List<Tuple<string, int>> BackupIntervalItemSource { get; } = new List<Tuple<string, int>>()
+        {
+            new Tuple<string, int>("5 minutes", 5),
+            new Tuple<string, int>("10 minutes", 10),
+            new Tuple<string, int>("20 minutes", 20),
+            new Tuple<string, int>("30 minutes", 30),
+            new Tuple<string, int>("40 minutes", 40),
+            new Tuple<string, int>("50 minutes", 50),
+            new Tuple<string, int>("60 minutes", 60)
+        };
+
+        public List<int> MaximumRegularBackupsItemSource { get; } = new List<int>() { 5, 10, 15, 20, 25, 30 };
+
+        public List<int> MaximumVersionChangeBackupsItemSource { get; } = new List<int>() { 5, 7, 10, 15, 20 };
+
         #endregion
 
         #region General Settings
@@ -161,6 +176,38 @@ namespace Tefterly.Modules.Settings.ViewModels
                 return hyperlinkColor ?? HyperlinkColorsItemSource[0];
             }
             set { _settingsService.Settings.Notes.HyperlinkForegroundColor = value.Item2.ToString(); }
+        }
+
+        #endregion
+
+        #region Backup Settings
+
+        public bool IsBackupEnabled
+        {
+            get { return _settingsService.Settings.Backup.IsEnabled; }
+            set { _settingsService.Settings.Backup.IsEnabled = value; }
+        }
+
+        public Tuple<string, int> BackupIntervalSelectedItem
+        {
+            get
+            {
+                Tuple<string, int> interval = BackupIntervalItemSource.Where(m => m.Item2 == _settingsService.Settings.Backup.TimerIntervalMinutes).FirstOrDefault();
+                return interval ?? BackupIntervalItemSource[0];
+            }
+            set { _settingsService.Settings.Backup.TimerIntervalMinutes = value.Item2; }
+        }
+
+        public int MaximumRegularBackupsSelectedItem
+        {
+            get { return _settingsService.Settings.Backup.MaxRegularBackups; }
+            set { _settingsService.Settings.Backup.MaxRegularBackups = value; }
+        }
+
+        public int MaximumVersionChangeBackupsSelectedItem
+        {
+            get { return _settingsService.Settings.Backup.MaxVersionChangeBackups; }
+            set { _settingsService.Settings.Backup.MaxVersionChangeBackups = value; }
         }
 
         #endregion
