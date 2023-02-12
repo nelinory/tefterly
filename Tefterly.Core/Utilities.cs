@@ -83,21 +83,20 @@ namespace Tefterly.Core
 
         public static FlowDocument CloneFlowDocument(FlowDocument sourceDocument)
         {
-            FlowDocument printDocument = new FlowDocument();
+            FlowDocument cloneDocument = new FlowDocument();
 
             // clone original document
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 // Xaml format - no support for images
-                // XamlPackage format - have issues with custom colors for hyperlinks
                 TextRange sourceTextRange = new TextRange(sourceDocument.ContentStart, sourceDocument.ContentEnd);
-                sourceTextRange.Save(memoryStream, DataFormats.Rtf);
+                sourceTextRange.Save(memoryStream, DataFormats.XamlPackage, true);
 
-                TextRange printTextRange = new TextRange(printDocument.ContentStart, printDocument.ContentEnd);
-                printTextRange.Load(memoryStream, DataFormats.Rtf);
+                TextRange cloneTextRange = new TextRange(cloneDocument.ContentStart, cloneDocument.ContentEnd);
+                cloneTextRange.Load(memoryStream, DataFormats.XamlPackage);
             }
 
-            return printDocument;
+            return cloneDocument;
         }
     }
 }
