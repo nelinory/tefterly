@@ -126,7 +126,12 @@ namespace Tefterly.Core.Resources.Controls
         {
             var hyperlinks = Utilities.GetVisuals(flowDocument).OfType<Hyperlink>();
             foreach (var link in hyperlinks)
+            {
                 link.RequestNavigate += OnRequestNavigate;
+                
+                // set to the hyperlink color based on the settings
+                link.Foreground = Utilities.GetColorBrushFromString(SettingsManager.Instance.Settings.Notes.HyperlinkForegroundColor);
+            }
         }
 
         private void OnRequestNavigate(object sender, RequestNavigateEventArgs e)
