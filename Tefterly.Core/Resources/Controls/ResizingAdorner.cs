@@ -25,7 +25,7 @@ namespace Tefterly.Core.Resources.Controls
         private readonly double _parentWidth;
         private readonly double _parentHeight;
 
-        private static readonly double THUMB_SIZE = 12;
+        private static readonly double THUMB_SIZE = 11;
         private static readonly double ADORNER_MIN_SIZE = 70;
 
         // To store and manage the adorner's visual children 
@@ -59,7 +59,7 @@ namespace Tefterly.Core.Resources.Controls
         {
             adornerBorder = new Rectangle();
             adornerBorder.StrokeDashArray.Add(7);
-            adornerBorder.Stroke = Brushes.Blue;
+            adornerBorder.Stroke = Utilities.GetColorBrushFromString(SettingsManager.Instance.Settings.Notes.HyperlinkForegroundColor);
             adornerBorder.StrokeThickness = 1;
 
             _adornerVisualChildren.Add(adornerBorder);
@@ -189,8 +189,8 @@ namespace Tefterly.Core.Resources.Controls
         {
             FrameworkElementFactory frameworkElement = new FrameworkElementFactory(typeof(Ellipse));
             frameworkElement.SetValue(Shape.FillProperty, adornerBrush);
-            frameworkElement.SetValue(Shape.StrokeProperty, Brushes.Blue);
-            frameworkElement.SetValue(Shape.StrokeThicknessProperty, (double)1);
+            frameworkElement.SetValue(Shape.StrokeProperty, Utilities.GetColorBrushFromString(SettingsManager.Instance.Settings.Notes.HyperlinkForegroundColor));
+            frameworkElement.SetValue(Shape.StrokeThicknessProperty, (double)2);
 
             return frameworkElement;
         }

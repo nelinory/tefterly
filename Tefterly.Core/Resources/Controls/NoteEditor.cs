@@ -127,7 +127,7 @@ namespace Tefterly.Core.Resources.Controls
 
                     // update the flowdocument when the image is resized
                     ImageResizeHelper.ImageResized += () => SetValue(BoundFlowDocumentProperty, Document);
-                    //e.Handled = true;
+                    e.Handled = true;
                     return;
                 }
             }

@@ -150,7 +150,7 @@
                                 SelectedItem="{Binding HyperlinkColorsSelectedItem}"
                                 DisplayMemberPath="Item1"                        
                                 SelectedValuePath="Item2"                                
-                                ui:ControlHelper.Header="Hyperlink color"/>
+                                ui:ControlHelper.Header="Hyperlink/Adorner color"/>
                         </StackPanel>
                         <StackPanel Grid.Row="1">
                             <TextBlock>
