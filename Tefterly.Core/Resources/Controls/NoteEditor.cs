@@ -137,16 +137,10 @@ namespace Tefterly.Core.Resources.Controls
 
         protected void DataObjectPastingEventHandler(object sender, DataObjectPastingEventArgs e)
         {
-            bool richObjectPasteRequest = false;
-            if (Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
-                richObjectPasteRequest = true;
-
             // pasting image from clipboard
             if (e.DataObject.GetDataPresent(DataFormats.Bitmap) == true)
             {
-                DataObject dataObject = new DataObject();
-                dataObject.SetData(DataFormats.Bitmap, e.DataObject.GetData(DataFormats.Bitmap));
-                e.DataObject = dataObject;
+                e.DataObject = new DataObject(DataFormats.Bitmap, e.DataObject.GetData(DataFormats.Bitmap));
             }
             // drag and drop image
             else if (e.DataObject.GetDataPresent(DataFormats.Dib) == true)
@@ -171,48 +165,12 @@ namespace Tefterly.Core.Resources.Controls
                 }
 
                 if (bitmapImage != null) // we got an image
-                {
-                    DataObject dataObject = new DataObject();
-                    dataObject.SetData(DataFormats.Bitmap, bitmapImage);
-                    e.DataObject = dataObject;
-                }
+                    e.DataObject = new DataObject(DataFormats.Bitmap, bitmapImage);
             }
-            // remove formatting from the pasted text or use formatted pasted text as is
+            // remove formatting from the pasted text
             else if (e.DataObject.GetDataPresent(DataFormats.Text) == true)
             {
-                if (e.SourceDataObject.GetDataPresent(DataFormats.Rtf, true) == false)
-                    return;
-
-                string rtfDocument = e.SourceDataObject.GetData(DataFormats.Rtf) as string;
-
-                FlowDocument document = new FlowDocument();
-                document.SetValue(FlowDocument.TextAlignmentProperty, TextAlignment.Right);
-
-                TextRange textRange = Utilities.FormatFlowDocument(document);
-
-                if (textRange.CanLoad(DataFormats.Rtf) && string.IsNullOrEmpty(rtfDocument) == false)
-                {
-                    try
-                    {
-                        using (MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(rtfDocument)))
-                        {
-                            textRange.Load(stream, DataFormats.Rtf);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        // something happen while loading the rtf object, most likely incompatible format
-                        return;
-                    }
-                }
-
-                DataObject dataObject = new DataObject();
-                if (richObjectPasteRequest == true)
-                    dataObject.SetData(DataFormats.Rtf, rtfDocument);
-                else
-                    dataObject.SetData(DataFormats.Text, Utilities.ConvertBulletsInText(textRange.Text));
-
-                e.DataObject = dataObject;
+                e.DataObject = new DataObject(DataFormats.Text, Utilities.ConvertBulletsInText(e.DataObject.GetData(DataFormats.UnicodeText) as string));
             }
         }
     }
