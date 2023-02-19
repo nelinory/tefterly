@@ -77,11 +77,18 @@ namespace Tefterly.Views
 
         private IntPtr WndProc(IntPtr handle, int message, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
+            // http://pinvoke.net/default.aspx/Constants/WM.html
+
+            // Alt+Space key
             uint WM_SYSCOMMAND = 0x112;
             uint SC_KEYMENU = 0xf100;
 
+            // Right mouse button up
+            uint WM_NCRBUTTONUP = 0xa5;
+            uint HT_CAPTION = 0x02;
+
             // do not allow the system menu to show up
-            if ((message == WM_SYSCOMMAND) && (wParam.ToInt32() == SC_KEYMENU))
+            if ((message == WM_SYSCOMMAND && wParam.ToInt32() == SC_KEYMENU) || (message == WM_NCRBUTTONUP && wParam.ToInt32() == HT_CAPTION))
                 handled = true;
 
             return IntPtr.Zero;

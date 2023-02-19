@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -20,9 +18,6 @@ namespace Tefterly.Core.Resources.Controls
 
             // Credit: http://social.msdn.microsoft.com/Forums/vstudio/en-US/0d672c70-d49d-4ebf-871d-420cc164f7d8/c-wpf-richtextbox-remove-formatting-and-line-spaces
             DataObject.AddPastingHandler(this, DataObjectPastingEventHandler);
-
-            // add custom binding for Ctrl+Shift+V for rich format pasting
-            InputBindings.Add(new KeyBinding(ApplicationCommands.Paste, Key.V, ModifierKeys.Control | ModifierKeys.Shift));
 
             // search results highlight support
             NoteEditorSearchHighlight.Init(this);
