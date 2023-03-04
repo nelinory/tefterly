@@ -39,6 +39,14 @@ namespace Tefterly.Core.Resources.Controls
 
             _adornerVisualChildren = new VisualCollection(this);
 
+            // stretch the image into the selected area
+            Image adornedImage = (adornedElement as Image);
+            if (adornedImage == null)
+                return;
+
+            adornedImage.StretchDirection = StretchDirection.Both;
+            adornedImage.Stretch = Stretch.Fill;
+
             // Build adorner border
             BuildAdornerBorder(ref _adornerBorder);
 
@@ -173,16 +181,10 @@ namespace Tefterly.Core.Resources.Controls
             AdornerResized?.Invoke();
 
             if (adornedElement.Width < ADORNER_MIN_SIZE)
-            {
                 adornedElement.Width = ADORNER_MIN_SIZE;
-                return;
-            }
 
             if (adornedElement.Height < ADORNER_MIN_SIZE)
-            {
                 adornedElement.Height = ADORNER_MIN_SIZE;
-                return;
-            }
         }
 
         private static FrameworkElementFactory GetThumbTemplate(Brush adornerBrush)
