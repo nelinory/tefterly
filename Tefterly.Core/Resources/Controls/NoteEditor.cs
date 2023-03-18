@@ -164,7 +164,18 @@ namespace Tefterly.Core.Resources.Controls
             // remove formatting from the pasted text
             else if (e.DataObject.GetDataPresent(DataFormats.Text) == true)
             {
-                e.DataObject = new DataObject(DataFormats.Text, Utilities.ConvertBulletsInText(e.DataObject.GetData(DataFormats.UnicodeText) as string));
+                string clipboardText = e.DataObject.GetData(DataFormats.UnicodeText) as string;
+
+                if (IsValidUrl(clipboardText) == true)
+                {
+                    CaretPosition.InsertTextInRun(clipboardText);
+                    ApplyHyperlinkFormat();
+
+                    e.CancelCommand();
+                    e.Handled = true;
+                }
+                else
+                    e.DataObject = new DataObject(DataFormats.Text, Utilities.ConvertBulletsInText(clipboardText));
             }
         }
     }
