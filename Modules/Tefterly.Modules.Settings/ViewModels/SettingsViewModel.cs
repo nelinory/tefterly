@@ -12,7 +12,7 @@ namespace Tefterly.Modules.Settings.ViewModels
     {
         // services
         private readonly IEventAggregator _eventAggregator;
-        private ISettingsService _settingsService;
+        private readonly ISettingsService _settingsService;
 
         public SettingsViewModel(IEventAggregator eventAggregator, ISettingsService settingsService)
         {

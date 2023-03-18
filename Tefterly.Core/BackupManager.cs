@@ -15,6 +15,8 @@ namespace Tefterly.Core
             string currentDateTime = GetFormattedDateTime();
             string backupFileName = $"{_regularBackup}_{currentDateTime}.zip";
 
+            System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - [Action] Regular notes backup initiated");
+
             if (ExecuteBackup(notesLocation, Path.Combine(backupLocation, backupFileName)) == true)
                 PurgeOldBackups(backupLocation, _regularBackup, maxBackupsToKeep);
         }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Interop;
+using Tefterly.Core;
 using Tefterly.Core.Win32Api;
 using Tefterly.Services;
 
@@ -64,6 +65,10 @@ namespace Tefterly.Views
 
             // save settings before exiting
             _settingsService.Save();
+
+            // backup all notes if backup is enabled
+            if (_settingsService.Settings.Backup.IsEnabled == true)
+                BackupManager.RegularBackup(_settingsService.Settings.BackupLocation, _settingsService.Settings.NotesLocation, _settingsService.Settings.Backup.MaxRegularBackups);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

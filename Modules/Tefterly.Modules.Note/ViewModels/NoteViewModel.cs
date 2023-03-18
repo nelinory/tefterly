@@ -42,6 +42,8 @@ namespace Tefterly.Modules.Note.ViewModels
             set { SetProperty(ref _noteNotFoundMessage, value); }
         }
 
+        private bool _executeBackup;
+
         private readonly DispatcherTimer _autoSaveNoteTimer;
         private readonly DispatcherTimer _searchNoteResultsTimer;
         private readonly DispatcherTimer _notesBackupTimer;
@@ -102,6 +104,8 @@ namespace Tefterly.Modules.Note.ViewModels
                 _notesBackupTimer.Start();
 
             IsSpellCheckEnabled = false; // default
+
+            _executeBackup = false; // default
         }
 
         private void LoadNote(Guid noteId)
@@ -216,6 +220,9 @@ namespace Tefterly.Modules.Note.ViewModels
 
                 // note have change content
                 _eventAggregator.GetEvent<NoteChangedEvent>().Publish(String.Empty);
+
+                // backup will execute due to note change
+                _executeBackup = true;
             }
         }
 
@@ -235,9 +242,12 @@ namespace Tefterly.Modules.Note.ViewModels
 
         private void NotesBackupHandler(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - [Action] Regular notes backup initiated");
-
-            BackupManager.RegularBackup(_settingsService.Settings.BackupLocation, _settingsService.Settings.NotesLocation, _settingsService.Settings.Backup.MaxRegularBackups);
+            // execute backup only when a note changes
+            if (_executeBackup == true)
+            {
+                BackupManager.RegularBackup(_settingsService.Settings.BackupLocation, _settingsService.Settings.NotesLocation, _settingsService.Settings.Backup.MaxRegularBackups);
+                _executeBackup = false;
+            }
         }
 
         #region Navigation Logic
