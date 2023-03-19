@@ -14,7 +14,7 @@ namespace Tefterly.Core.Resources.Controls
             // event handlers
             TextChanged += OnTextChanged;
             PreviewKeyDown += OnPreviewKeyDown;
-            PreviewMouseDown += OnPreviewMouseDown; // PreviewMouseDown for image resize adorner
+            PreviewMouseDown += OnPreviewMouseDown; // PreviewMouseDown for image resize adorner & hyperlink copy link context menu
 
             // Credit: http://social.msdn.microsoft.com/Forums/vstudio/en-US/0d672c70-d49d-4ebf-871d-420cc164f7d8/c-wpf-richtextbox-remove-formatting-and-line-spaces
             DataObject.AddPastingHandler(this, DataObjectPastingEventHandler);
@@ -109,8 +109,8 @@ namespace Tefterly.Core.Resources.Controls
         {
             TextPointer textPointer = GetPositionFromPoint(e.GetPosition(this), false);
 
-            // image BlockUIContainer
-            if (textPointer != null && textPointer.Parent is BlockUIContainer)
+            // image in BlockUIContainer element
+            if (e.ChangedButton == MouseButton.Left && textPointer != null && textPointer.Parent is BlockUIContainer)
             {
                 UIElement uiElement = (textPointer.Parent as BlockUIContainer).Child;
                 if (uiElement == null)
@@ -123,6 +123,21 @@ namespace Tefterly.Core.Resources.Controls
                     // update the flowdocument when the image is resized
                     ImageResizeHelper.ImageResized += () => SetValue(BoundFlowDocumentProperty, Document);
                     return;
+                }
+            }
+
+            // hyperlink support
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                Hyperlink hyperlink = (Mouse.DirectlyOver as Run)?.Parent as Hyperlink;
+                foreach (MenuItem item in ContextMenu.Items)
+                {
+                    if (item.Tag != null && item.Tag.ToString() == "miCopyLink")
+                    {
+                        item.CommandParameter = (hyperlink == null) ? String.Empty : hyperlink.NavigateUri.ToString();
+                        item.Visibility = (hyperlink == null) ? Visibility.Collapsed : Visibility.Visible;
+                        break;
+                    }
                 }
             }
 

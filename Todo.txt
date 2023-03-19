@@ -11,17 +11,11 @@ Notes Features:
 [X] Automatic notes backup at specified interval
 [X] Automatic notes backup on startup if the version of the app settings is different since the last run
 [X] Ability to resize image
-[ ] Attach categories to a note
 [ ] Dark/Light theme support
+[ ] Attach categories to a note
 [ ] Export note to: RTF, HTML and TXT
 [ ] Encrypt/decrypt notes with a password
-
-Future Roadmap - Note Elements:
-===============================
-[ ] Todo
-[ ] Line
-[ ] Quote
-[ ] Code segment
+[ ] Todo items support
 
 Settings
 =======

@@ -4,6 +4,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
+using System.Windows;
 using System.Windows.Threading;
 using Tefterly.Core;
 using Tefterly.Core.Events;
@@ -62,6 +63,7 @@ namespace Tefterly.Modules.Note.ViewModels
         public DelegateCommand PermanentlyDeleteNoteCommand { get; set; }
         public DelegateCommand ToggleSpellCheckCommand { get; set; }
         public DelegateCommand PrintNoteCommand { get; set; }
+        public DelegateCommand<string> CopyHyperlinkCommand { get; set; }
 
         public NoteViewModel(INoteService noteService, IEventAggregator eventAggregator, ISearchService searchService, ISettingsService settingsService)
         {
@@ -79,6 +81,7 @@ namespace Tefterly.Modules.Note.ViewModels
             PermanentlyDeleteNoteCommand = new DelegateCommand(() => ExecutePermanentlyDeleteNoteCommand());
             ToggleSpellCheckCommand = new DelegateCommand(() => ExecuteToggleSpellCheckCommand());
             PrintNoteCommand = new DelegateCommand(() => ExecutePrintNoteCommand());
+            CopyHyperlinkCommand = new DelegateCommand<string>(commandParameter => ExecuteCopyHyperlinkCommand(commandParameter));
 
             // event handlers
             _searchService.Search += (sender, e) => _searchNoteResultsTimer.Start(); // search started
@@ -117,7 +120,7 @@ namespace Tefterly.Modules.Note.ViewModels
                 CurrentNote.TrackChanges = true;
                 CurrentNote.ModelChanged += (sender, e) => _autoSaveNoteTimer.Start();
 
-                // Obey spellcheck settings only if the current note is not archived
+                // Apply spellcheck settings only if the current note is not archived
                 if (CurrentNote.NotebookCategory != NotebookCategories.Archived)
                     IsSpellCheckEnabled = _settingsService.Settings.Notes.IsSpellCheckEnabled;
             }
@@ -195,6 +198,15 @@ namespace Tefterly.Modules.Note.ViewModels
                 return;
 
             PrintManager.PrintNote(CurrentNote.Title, CurrentNote.Document);
+        }
+
+        private void ExecuteCopyHyperlinkCommand(string commandParameter)
+        {
+            if (CurrentNote == null)
+                return;
+
+            if (String.IsNullOrWhiteSpace(commandParameter) == false)
+                Clipboard.SetText(commandParameter);
         }
 
         private void NoteHasChanged()

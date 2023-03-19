@@ -19,6 +19,12 @@
                     <ui:FontIcon Glyph="&#xF87B;" />
                 </MenuItem.Icon>
             </MenuItem>
+            <MenuItem x:Key="CopyLinkMenuItem" x:Shared="false" Tag="miCopyLink"
+                      Command="{Binding CopyHyperlinkCommand}" Header="Copy link">
+                <MenuItem.Icon>
+                    <ui:FontIcon Glyph="&#xE167;" />
+                </MenuItem.Icon>
+            </MenuItem>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Tefterly.Core;component/Resources/Styles/ChromelessButton.xaml" />
@@ -109,6 +115,7 @@
                 <controls:NoteEditor.ContextMenu>
                     <ui:TextContextMenu>
                         <StaticResource ResourceKey="SpellcheckMenuItem"/>
+                        <StaticResource ResourceKey="CopyLinkMenuItem"/>
                     </ui:TextContextMenu>
                 </controls:NoteEditor.ContextMenu>
             </controls:NoteEditor>
