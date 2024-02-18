@@ -142,7 +142,7 @@ namespace Tefterly.Services
                     {
                         SaveNoteXaml(note);
 
-                        System.Diagnostics.Debug.WriteLine($"{DateTime.Now.TimeOfDay} - [Action] '{note.Title}' saved");
+                        Debug.WriteLine($"{DateTime.Now.TimeOfDay} - [Action] '{note.Title}' saved");
 
                         changesSaved = true;
                     }
@@ -256,10 +256,10 @@ namespace Tefterly.Services
             Utilities.EnsureTargetFolderExists(_settingsService.Settings.NotesFileLocation);
 
             string noteFileName = GetNoteFileName(note.Id, _settingsService.Settings.NotesLocation);
-            TextRange textRange = new TextRange(note.Document.ContentStart, note.Document.ContentEnd);
 
             using (FileStream fileStream = new FileStream(noteFileName, FileMode.Create))
             {
+                TextRange textRange = new TextRange(note.Document.ContentStart, note.Document.ContentEnd);
                 textRange.Save(fileStream, System.Windows.DataFormats.XamlPackage);
             }
 
@@ -273,9 +273,9 @@ namespace Tefterly.Services
 
             if (File.Exists(noteFileName) == true)
             {
-                TextRange textRange = new TextRange(document.ContentStart, document.ContentEnd);
                 using (FileStream fileStream = new FileStream(noteFileName, FileMode.Open))
                 {
+                    TextRange textRange = new TextRange(document.ContentStart, document.ContentEnd);
                     textRange.Load(fileStream, System.Windows.DataFormats.XamlPackage);
                 }
             }

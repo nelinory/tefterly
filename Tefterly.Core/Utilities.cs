@@ -88,7 +88,6 @@ namespace Tefterly.Core
             // clone original document
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                // Xaml format - no support for images
                 TextRange sourceTextRange = new TextRange(sourceDocument.ContentStart, sourceDocument.ContentEnd);
                 sourceTextRange.Save(memoryStream, DataFormats.XamlPackage, true);
 
