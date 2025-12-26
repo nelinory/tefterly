@@ -1,4 +1,4 @@
-﻿using Prism.Regions;
+﻿using Prism.Navigation;
 
 namespace Tefterly.Core.Navigation
 {
